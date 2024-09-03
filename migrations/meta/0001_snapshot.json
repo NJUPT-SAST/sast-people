@@ -1,6 +1,6 @@
 {
-  "id": "9e8fcf44-5fbc-488e-97de-740657323f7a",
-  "prevId": "00e217d4-c8e6-405b-a7f8-d3c98f02750b",
+  "id": "52b7dc12-94ee-44b4-bbad-b7d51cc494eb",
+  "prevId": "fbecdb5f-f10c-4b1b-b655-975168d64e58",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -200,7 +200,8 @@
         },
         "status": {
           "name": "status",
-          "type": "text",
+          "type": "status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
@@ -561,15 +562,13 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "department": {
           "name": "department",
@@ -652,7 +651,18 @@
       }
     }
   },
-  "enums": {},
+  "enums": {
+    "public.status": {
+      "name": "status",
+      "schema": "public",
+      "values": [
+        "pending",
+        "accepted",
+        "rejected",
+        "ongoing"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "_meta": {

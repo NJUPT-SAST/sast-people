@@ -1,6 +1,6 @@
 {
-  "id": "95456338-2f46-42ae-b8af-b2cc8116fd1f",
-  "prevId": "9e8fcf44-5fbc-488e-97de-740657323f7a",
+  "id": "730490ad-f359-4721-b6fd-c471be04da16",
+  "prevId": "52b7dc12-94ee-44b4-bbad-b7d51cc494eb",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -200,7 +200,8 @@
         },
         "status": {
           "name": "status",
-          "type": "text",
+          "type": "status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
@@ -561,25 +562,23 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "department": {
           "name": "department",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
         "group": {
           "name": "group",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },

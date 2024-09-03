@@ -1,6 +1,6 @@
 {
-  "id": "fbecdb5f-f10c-4b1b-b655-975168d64e58",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "18628fd7-4925-45d1-b6c6-db8729a44c85",
+  "prevId": "730490ad-f359-4721-b6fd-c471be04da16",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -264,15 +264,13 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "is_deleted": {
           "name": "is_deleted",
@@ -562,25 +560,23 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "department": {
           "name": "department",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
         "group": {
           "name": "group",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },

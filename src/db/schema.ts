@@ -9,10 +9,15 @@ import {
 	varchar,
 	uniqueIndex,
 	serial,
-    pgEnum,
+	pgEnum,
 } from "drizzle-orm/pg-core";
 
-export const status = pgEnum("status", ["pending", "accepted", "rejected", "ongoing"]);
+export const status = pgEnum("status", [
+	"pending",
+	"accepted",
+	"rejected",
+	"ongoing",
+]);
 
 // user 表
 export const user = pgTable("user", {
@@ -28,10 +33,10 @@ export const user = pgTable("user", {
 	personalStatement: text("personal_statement"),
 	birthday: date("birthday"),
 	isDeleted: boolean("is_deleted").default(false),
-	createdAt: timestamp("created_at").default(sql`now()`),
-	updatedAt: timestamp("updated_at").default(sql`now()`),
-	department: text("department"),
-	group: text("group"),
+	createdAt: timestamp("created_at"),
+	updatedAt: timestamp("updated_at"),
+	department: varchar("department", { length: 255 }),
+	group: varchar("group", { length: 255 }),
 	role: integer("role").default(0),
 	feishuOpenId: varchar("feishu_open_id", { length: 255 }).unique(),
 	sastLinkOpenId: varchar("sast_link_open_id", { length: 255 }).unique(),
@@ -43,8 +48,8 @@ export const flowType = pgTable("flow_type", {
 	id: serial("id").primaryKey(),
 	name: text("name").notNull(),
 	description: text("description"),
-	createdAt: timestamp("created_at").default(sql`now()`), // 使用 timestamp 类型和 SQL 默认值
-	updatedAt: timestamp("updated_at").default(sql`now()`),
+	createdAt: timestamp("created_at"), // 使用 timestamp 类型和 SQL 默认值
+	updatedAt: timestamp("updated_at"),
 	isDeleted: boolean("is_deleted").default(false),
 	createBy: integer("create_by").references(() => user.id), // 外键关联到 user 表的 id
 });
@@ -69,7 +74,6 @@ export const steps = pgTable(
 		};
 	}
 );
-
 // Problem 表
 export const problem = pgTable("problem", {
 	id: serial("id").primaryKey(),
@@ -91,7 +95,7 @@ export const flowStep = pgTable("flow_step", {
 	flowId: integer("flow_id").references(() => flow.id), // 外键关联 Flow 表
 	stepId: integer("step_id").references(() => steps.id), // 外键关联 Steps 表
 	label: text("label").notNull(), // 步骤标签
-	status: text("status").notNull(), // 步骤状态
+	status: status("status").notNull(), // 步骤状态
 });
 
 export const examMap = pgTable("exam_map", {

@@ -1,0 +1,115 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { Input } from "@/app/components/ui/input";
+import {
+	Package2,
+	Bell,
+	ShoppingCart,
+	Badge,
+	Package,
+	Users,
+	LineChart,
+	Menu,
+	Search,
+	CircleUser,
+	Home as HomeIcon,
+	TicketsPlane,
+	UserPen,
+	Workflow,
+	FilePenLine,
+	SquareChartGantt,
+} from "lucide-react";
+import {
+	Card,
+	CardHeader,
+	CardTitle,
+	CardDescription,
+	CardContent,
+} from "@/app/components/ui/card";
+import {
+	Sheet,
+	SheetContent,
+	SheetTitle,
+	SheetTrigger,
+} from "@/app/components/ui/sheet";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu";
+import Link from "next/link";
+import { Button } from "@/app/components/ui/button";
+import { Header, PageTitle } from "@/app/components/route";
+import { FeishuSDKInject } from "@/app/components/feishuInject";
+import { UserCard } from "../components/userCard";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+	title: "SAST 招新",
+	description: "南京邮电大学大学生科学技术协会招新平台",
+};
+
+export default async function RootLayout({
+	children,
+}: Readonly<{
+	children: React.ReactNode;
+}>) {
+	return (
+		<html lang="zh-cn">
+			<body className={inter.className}>
+				<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+					<div className="hidden border-r bg-muted/40 md:block">
+						<div className="flex h-full max-h-screen flex-col gap-2">
+							<div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+								<Link
+									href="/"
+									className="flex items-center gap-2 font-semibold"
+								>
+									<TicketsPlane className="h-6 w-6" />
+									<span className="">SAST 招新</span>
+								</Link>
+							</div>
+							<Header type={"pc"} />
+							<div className="mt-auto p-4">
+								<UserCard />
+							</div>
+						</div>
+					</div>
+					<div className="flex flex-col md:overflow-y-auto md:h-screen">
+						<header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:hidden md:hidden">
+							<Sheet>
+								<SheetTrigger asChild>
+									<Button
+										variant="outline"
+										size="icon"
+										className="shrink-0 md:hidden"
+									>
+										<Menu className="h-5 w-5" />
+										<span className="sr-only">
+											点击打开菜单
+										</span>
+									</Button>
+								</SheetTrigger>
+								<SheetTitle>SAST Pass</SheetTitle>
+								<SheetContent
+									side="left"
+									className="flex flex-col"
+								>
+									<Header type={"mobile"} />
+									<UserCard />
+								</SheetContent>
+							</Sheet>
+						</header>
+						<main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+							{children}
+						</main>
+					</div>
+				</div>
+			</body>
+		</html>
+	);
+}
