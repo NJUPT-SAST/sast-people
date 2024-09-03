@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SAST Pass(People)
 
-## Getting Started
+[![License](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://choosealicense.com/licenses/agpl-3.0/)
 
-First, run the development server:
+SAST Pass(People) is a all in one platform for all post or pre SASTer to manage their profile.
+
+> [!WARNING]
+> This repo is under active development! Formats, schemas, and APIs are subject to rapid and backward incompatible changes!
+
+## Get Started
+
+### Pre-requisites
+
+- Node.js >= 20
+- pnpm >= 8
+
+### Clone and Run
+
+To get started, clone the repository and install dependencies with:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm intsall
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To start a dev server, run:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To compile for production deployment, run:
 
-## Learn More
+```bash
+pnpm build
+```
 
-To learn more about Next.js, take a look at the following resources:
+The output will be in the `.next` directory, you can run it with:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Development
 
-## Deploy on Vercel
+## Roadmap
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Goals and Vision for SAST People
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[SAST People PRD](https://njupt-sast.feishu.cn/wiki/BVcSwcRu2ixn84k5yjFcnaYInkg?from=from_copylink)
+
+## Contributing
+
+Pull requests and any feedback are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+> [!warning]
+> Prior to submitting a pull request, please ensure that your code is properly formatted, linted and builds successfully.
+
+## License
+
+[AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
