@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://choosealicense.com/licenses/agpl-3.0/)
 
-SAST Pass(People) is a all in one platform for all post or pre SASTer to manage their profile.
+SAST Pass(People) is an all in one platform for all post or pre SASTer to manage their profile.
 
 > [!WARNING]
 > This repo is under active development! Formats, schemas, and APIs are subject to rapid and backward incompatible changes!
@@ -21,6 +21,37 @@ To get started, clone the repository and install dependencies with:
 ```bash
 pnpm intsall
 ```
+
+prepare postgresql database and drizzle with the following command:
+
+```bash
+docker run --name postgres-server --restart=always -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+```
+
+after database is ready, run the following command to create the database and tables:
+
+```bash
+npx drizzle-kit generate
+npx drizzle-kit migrate
+npx drizzle-kit push
+```
+
+if you want to view tables
+
+```bash
+npx drizzle-kit studio
+```
+
+copy `.env.example` to `.env` and fill in the required environment variables.
+
+> [!NOTE]
+> 
+> DATABASE_URL example: postgres://postgres:postgres@127.0.0.1:5432/sast-people
+>
+> it's convenient to use openssl to generate a secrets
+> ```bash
+> openssl rand -base64 32  
+> ```
 
 To start a dev server, run:
 
