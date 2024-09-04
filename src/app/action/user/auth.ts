@@ -10,7 +10,7 @@ export async function loginFromX(
 	userIdentifier: string,
 	type: "feishu" | "link"
 ) {
-	console.log("loginFromX", openid, userIdentifier, type);
+	console.log("loginFrom", type, openid, userIdentifier);
 	let uidList: { uid: number }[] | null = null;
 	// check if openid exists
 	if (type === "feishu") {
@@ -26,6 +26,7 @@ export async function loginFromX(
 				.values({
 					feishuOpenId: openid,
 					name: userIdentifier,
+					createdAt: new Date(),
 				})
 				.returning({ uid: user.id });
 		}
@@ -43,6 +44,7 @@ export async function loginFromX(
 					sastLinkOpenId: openid,
 					name: userIdentifier,
 					studentId: userIdentifier,
+					createdAt: new Date(),
 				})
 				.returning({ uid: user.id });
 		}

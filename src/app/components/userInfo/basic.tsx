@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { number, z } from "zod";
 import { user } from "../../../../migrations/schema";
 import { Button } from "../ui/button";
 import {
@@ -32,6 +32,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
+import { InferColumnsDataTypes, InferInsertModel, InferModelFromColumns, InferSelectModel } from "drizzle-orm";
+import type { userType } from "@/app/types/user";
+import { collegeType } from "@/app/types/college";
 
 export const fullUserSchema = createInsertSchema(user, {
 	email: z.string().email("请输入正确的邮箱地址").trim(),
@@ -54,6 +57,7 @@ export const fullUserSchema = createInsertSchema(user, {
 			"请输入正确的学号"
 		)
 		.trim(),
+	college: z.string().trim().transform((arg) => Number(arg)),
 });
 export const basicInfoSchema = fullUserSchema.pick({
 	name: true,
@@ -64,10 +68,12 @@ export const basicInfoSchema = fullUserSchema.pick({
 	college: true,
 	major: true,
 });
-export const BasicInfo = () => {
+export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, collegeList: collegeType[]}) => {
 	const basicInfoForm = useForm<z.infer<typeof basicInfoSchema>>({
 		resolver: zodResolver(basicInfoSchema),
-		defaultValues: {},
+		defaultValues: {
+			...Object.fromEntries(Object.entries(initialInfo).map(([key, value]) => [key, value ?? ""])),
+		},
 	});
 	return (
 		<Card>
@@ -165,7 +171,7 @@ export const BasicInfo = () => {
 								<FormItem>
 									<FormLabel>学院</FormLabel>
 									<Select
-										value={field.value}
+										value={field.value?.toString()}
 										name={field.name}
 										onValueChange={field.onChange}
 									>
@@ -175,15 +181,13 @@ export const BasicInfo = () => {
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											<SelectItem value="0">
-												自动化学院、人工智能学院
-											</SelectItem>
-											<SelectItem value="1">
-												计算机
-											</SelectItem>
-											<SelectItem value="2">
-												通信
-											</SelectItem>
+											{
+												collegeList.map((college) => (
+													<SelectItem key={`college${college.id}`} value={college.id.toString()}>
+														{college.name}
+													</SelectItem>
+												))
+											}
 										</SelectContent>
 									</Select>
 									<FormMessage />
@@ -210,7 +214,7 @@ export const BasicInfo = () => {
 				</Form>
 			</CardContent>
 			<CardFooter>
-				<Button onClick={basicInfoForm.handleSubmit(editBasicInfo)}>
+				<Button onClick={basicInfoForm.handleSubmit((val)=>editBasicInfo(val))}>
 					保存
 				</Button>
 			</CardFooter>

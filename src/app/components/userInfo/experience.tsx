@@ -1,5 +1,5 @@
 "use client";
-import { editBasicInfo } from "@/app/action/user/userInfo";
+import { editBasicInfo, editExperience } from "@/app/action/user/userInfo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import React from "react";
@@ -24,39 +24,26 @@ import {
 	FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { Textarea } from "@/app/components/ui/textarea";
+import { InferInsertModel } from "drizzle-orm";
+import { userType } from "@/app/types/user";
 
 export const fullUserSchema = createInsertSchema(user, {
-	email: z.string().email("请输入正确的邮箱地址"),
-	phoneNumber: z
-		.string()
-		.regex(
-			/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
-			"请输入正确的手机号码"
-		),
-	birthday: z
-		.string()
-		.regex(/^\d{4}-\d{2}-\d{2}$/, "请输入以YYYY-MM-DD格式的生日"),
-	name: z.string().min(2, "姓名至少两个字符"),
-	studentId: z
-		.string()
-		.regex(
-			/^([BPQF](1[89]|2[0-5])(0[0-9]|1[0-7])([0-2]\d|3[01])\d{2}|\d{11})$/i,
-			"请输入正确的学号"
-		),
+	github: z.string().url().transform((arg)=>arg?arg:null),
+	blog: z.string().url().transform((arg)=>arg?arg:null),
+	personalStatement: z.string().transform((arg)=>arg?arg:null),
 });
-export const basicInfoSchema = fullUserSchema.pick({
-	name: true,
-	studentId: true,
-	phoneNumber: true,
-	email: true,
-	birthday: true,
-	college: true,
-	major: true,
+export const experienceSchema = fullUserSchema.pick({
+	github: true,
+	blog: true,
+	personalStatement: true,
 });
-export const ExperienceInfo = () => {
-	const basicInfoForm = useForm<z.infer<typeof basicInfoSchema>>({
-		resolver: zodResolver(basicInfoSchema),
-		defaultValues: {},
+export const ExperienceInfo = ({initialInfo}:{initialInfo: userType}) => {
+	const basicInfoForm = useForm<z.infer<typeof experienceSchema>>({
+		resolver: zodResolver(experienceSchema),
+		defaultValues: {
+			...Object.fromEntries(Object.entries(initialInfo).map(([key, value]) => [key, value ?? ""]))
+		},
 	});
 	return (
 		<Card>
@@ -71,13 +58,13 @@ export const ExperienceInfo = () => {
 					<div className="space-y-2">
 						<FormField
 							control={basicInfoForm.control}
-							name="name"
+							name="github"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>姓名</FormLabel>
+									<FormLabel>GitHub 主页地址</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="请填写你的真实姓名"
+											placeholder="请填写你的GitHub主页地址"
 											{...field}
 										/>
 									</FormControl>
@@ -87,13 +74,13 @@ export const ExperienceInfo = () => {
 						/>
 						<FormField
 							control={basicInfoForm.control}
-							name="studentId"
+							name="blog"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>学号</FormLabel>
+									<FormLabel>博客地址</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="请填写你的学号"
+											placeholder="请填写你的博客地址"
 											{...field}
 										/>
 									</FormControl>
@@ -103,46 +90,15 @@ export const ExperienceInfo = () => {
 						/>
 						<FormField
 							control={basicInfoForm.control}
-							name="phoneNumber"
+							name="personalStatement"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>手机号码</FormLabel>
+									<FormLabel>自我介绍</FormLabel>
 									<FormControl>
-										<Input
-											placeholder="请填写你的手机号"
+										<Textarea
+											placeholder="请填写你的个人介绍"
 											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={basicInfoForm.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>邮箱</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="请填写你的邮箱地址"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={basicInfoForm.control}
-							name="birthday"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>生日</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="请使用 YYYY-MM-DD 的格式输入你的生日"
+											className="min-h-80"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -153,7 +109,7 @@ export const ExperienceInfo = () => {
 				</Form>
 			</CardContent>
 			<CardFooter>
-				<Button onClick={basicInfoForm.handleSubmit(editBasicInfo)}>
+				<Button onClick={basicInfoForm.handleSubmit((val)=>editExperience(val))}>
 					保存
 				</Button>
 			</CardFooter>

@@ -13,5 +13,10 @@ export const verifySession = cache(async () => {
 		redirect("/login");
 	}
 
-	return { isAuth: true, uid: session.uid, role: session.role, name: session.name };
+	return {
+		isAuth: true,
+		uid: Number(session.uid),
+		role: session.role as number,
+		name: session.name as string,
+	};
 });

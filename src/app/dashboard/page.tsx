@@ -1,33 +1,13 @@
 import { PageTitle } from "@/app/components/route";
-import { Button } from "@/app/components/ui/button";
-import { Label } from "@/app/components/ui/label";
-import { Input } from "@/app/components/ui/input";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/app/components/ui/card";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/app/components/ui/form";
-import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
-import { user } from "@/db/schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { BasicInfo } from "@/app/components/userInfo/basic";
 import { ExperienceInfo } from "@/app/components/userInfo/experience";
+import { useUserInfo } from "../hooks/useUserInfo";
+import { useCollegeList } from "../hooks/useCollegeList";
 
-export default function Home() {
+export default async function Home() {
+	const userInfo = await useUserInfo()
+	const collegeList = await useCollegeList()
+	
 	return (
 		<>
 			<div className="flex items-center h-10">
@@ -48,8 +28,8 @@ export default function Home() {
 				</div>
 			</div> */}
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-				<BasicInfo />
-				<ExperienceInfo />
+				<BasicInfo initialInfo={userInfo} collegeList={collegeList} />
+				<ExperienceInfo initialInfo={userInfo} />
 			</div>
 		</>
 	);
