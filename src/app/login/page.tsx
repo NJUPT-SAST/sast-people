@@ -1,6 +1,6 @@
-import { FeishuSDKInject } from "@/app/components/feishuInject";
-import { Button } from "@/app/components/ui/button";
-import { verifySession } from "@/app/lib/dal";
+import { FeishuSDKInject } from "@/components/feishuInject";
+import { Button } from "@/components/ui/button";
+import { verifySession } from "@/lib/dal";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 

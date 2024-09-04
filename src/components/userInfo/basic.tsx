@@ -1,10 +1,9 @@
-"use client";
+"use client";;
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
-import React from "react";
 import { useForm } from "react-hook-form";
-import { number, z } from "zod";
-import { user } from "../../../../migrations/schema";
+import { z } from "zod";
+import { user } from "../../../migrations/schema";
 import { Button } from "../ui/button";
 import {
 	Card,
@@ -14,17 +13,9 @@ import {
 	CardContent,
 	CardFooter,
 } from "../ui/card";
-import {
-	Form,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormControl,
-	FormDescription,
-	FormMessage,
-} from "../ui/form";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { editBasicInfo } from "@/app/action/user/userInfo";
+import { editBasicInfo } from "@/action/user/userInfo";
 import {
 	Select,
 	SelectContent,
@@ -32,9 +23,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
-import { InferColumnsDataTypes, InferInsertModel, InferModelFromColumns, InferSelectModel } from "drizzle-orm";
-import type { userType } from "@/app/types/user";
-import { collegeType } from "@/app/types/college";
+import type { userType } from "@/types/user";
+import { collegeType } from "@/types/college";
+import { toast } from "sonner";
 
 export const fullUserSchema = createInsertSchema(user, {
 	email: z.string().email("请输入正确的邮箱地址").trim(),
@@ -57,7 +48,6 @@ export const fullUserSchema = createInsertSchema(user, {
 			"请输入正确的学号"
 		)
 		.trim(),
-	college: z.string().trim().transform((arg) => Number(arg)),
 });
 export const basicInfoSchema = fullUserSchema.pick({
 	name: true,
@@ -68,13 +58,25 @@ export const basicInfoSchema = fullUserSchema.pick({
 	college: true,
 	major: true,
 });
-export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, collegeList: collegeType[]}) => {
+export const BasicInfo = ({
+	initialInfo,
+	collegeList,
+}: {
+	initialInfo: userType;
+	collegeList: collegeType[];
+}) => {
 	const basicInfoForm = useForm<z.infer<typeof basicInfoSchema>>({
 		resolver: zodResolver(basicInfoSchema),
 		defaultValues: {
-			...Object.fromEntries(Object.entries(initialInfo).map(([key, value]) => [key, value ?? ""])),
+			...Object.fromEntries(
+				Object.entries(initialInfo).map(([key, value]) => [
+					key,
+					value ?? "",
+				])
+			),
 		},
 	});
+	const { isSubmitting, errors } = basicInfoForm.formState;
 	return (
 		<Card>
 			<CardHeader>
@@ -87,6 +89,7 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 						<FormField
 							control={basicInfoForm.control}
 							name="name"
+							disabled={isSubmitting}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>姓名</FormLabel>
@@ -103,6 +106,7 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 						<FormField
 							control={basicInfoForm.control}
 							name="studentId"
+							disabled={isSubmitting}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>学号</FormLabel>
@@ -119,6 +123,7 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 						<FormField
 							control={basicInfoForm.control}
 							name="phoneNumber"
+							disabled={isSubmitting}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>手机号码</FormLabel>
@@ -134,6 +139,7 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 						/>
 						<FormField
 							control={basicInfoForm.control}
+							disabled={isSubmitting}
 							name="email"
 							render={({ field }) => (
 								<FormItem>
@@ -150,6 +156,7 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 						/>
 						<FormField
 							control={basicInfoForm.control}
+							disabled={isSubmitting}
 							name="birthday"
 							render={({ field }) => (
 								<FormItem>
@@ -166,6 +173,7 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 						/>
 						<FormField
 							control={basicInfoForm.control}
+							disabled={isSubmitting}
 							name="college"
 							render={({ field }) => (
 								<FormItem>
@@ -181,13 +189,14 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											{
-												collegeList.map((college) => (
-													<SelectItem key={`college${college.id}`} value={college.id.toString()}>
-														{college.name}
-													</SelectItem>
-												))
-											}
+											{collegeList.map((college) => (
+												<SelectItem
+													key={`college${college.id}`}
+													value={college.id.toString()}
+												>
+													{college.name}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 									<FormMessage />
@@ -196,6 +205,7 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 						/>
 						<FormField
 							control={basicInfoForm.control}
+							disabled={isSubmitting}
 							name="major"
 							render={({ field }) => (
 								<FormItem>
@@ -214,7 +224,14 @@ export const BasicInfo = ({initialInfo, collegeList}:{initialInfo: userType, col
 				</Form>
 			</CardContent>
 			<CardFooter>
-				<Button onClick={basicInfoForm.handleSubmit((val)=>editBasicInfo(val))}>
+				<Button
+					onClick={basicInfoForm.handleSubmit(async (val) => {
+						await editBasicInfo(val);
+						toast.success("个人信息保存成功");
+					})}
+					loading={isSubmitting}
+					disabled={isSubmitting}
+				>
 					保存
 				</Button>
 			</CardFooter>

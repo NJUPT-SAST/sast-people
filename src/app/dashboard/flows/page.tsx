@@ -1,5 +1,5 @@
-import { PageTitle } from "@/app/components/route";
-import { Button } from "@/app/components/ui/button";
+import { PageTitle } from "@/components/route";
+import { Button } from "@/components/ui/button";
 import React from "react";
 
 const Flows = () => {

@@ -1,8 +1,8 @@
-import { PageTitle } from "@/app/components/route";
-import { BasicInfo } from "@/app/components/userInfo/basic";
-import { ExperienceInfo } from "@/app/components/userInfo/experience";
-import { useUserInfo } from "../hooks/useUserInfo";
-import { useCollegeList } from "../hooks/useCollegeList";
+import { PageTitle } from "@/components/route";
+import { BasicInfo } from "@/components/userInfo/basic";
+import { ExperienceInfo } from "@/components/userInfo/experience";
+import { useUserInfo } from "../../hooks/useUserInfo";
+import { useCollegeList } from "../../hooks/useCollegeList";
 
 export default async function Home() {
 	const userInfo = await useUserInfo()

@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 import * as lark from "@larksuiteoapi/node-sdk";
 import axios from "axios";
 import SHA1 from "crypto-js/sha1";

@@ -1,4 +1,4 @@
-import { getSignature } from "@/app/action/user/feishu";
+import { getSignature } from "@/action/user/feishu";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

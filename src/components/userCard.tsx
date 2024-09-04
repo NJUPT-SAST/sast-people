@@ -8,8 +8,8 @@ import {
 	CardDescription,
 	CardContent,
 } from "./ui/card";
-import { verifySession } from "@/app/lib/dal";
-import { logout } from "@/app/action/user/auth";
+import { verifySession } from "@/lib/dal";
+import { logout } from "@/action/user/auth";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";

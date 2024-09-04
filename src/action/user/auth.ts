@@ -1,8 +1,8 @@
-import "server-only";
+"use server";
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
-import { createSession, deleteSession } from "@/app/lib/session";
+import { createSession, deleteSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export async function loginFromX(

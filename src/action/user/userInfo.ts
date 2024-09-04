@@ -1,7 +1,7 @@
 "use server";
-import { basicInfoSchema } from "@/app/components/userInfo/basic";
-import { experienceSchema } from "@/app/components/userInfo/experience";
-import { verifySession } from "@/app/lib/dal";
+import { basicInfoSchema } from "@/components/userInfo/basic";
+import { experienceSchema } from "@/components/userInfo/experience";
+import { verifySession } from "@/lib/dal";
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
