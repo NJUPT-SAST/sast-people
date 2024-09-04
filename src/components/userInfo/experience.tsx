@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { editExperience } from "@/action/user/userInfo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
@@ -78,6 +78,7 @@ export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
 										<Input
 											placeholder="请填写你的GitHub主页地址"
 											{...field}
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -95,6 +96,7 @@ export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
 										<Input
 											placeholder="请填写你的博客地址"
 											{...field}
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -113,6 +115,7 @@ export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
 											placeholder="请填写你的个人介绍"
 											{...field}
 											className="min-h-80"
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -126,7 +129,9 @@ export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
 				<Button
 					onClick={basicInfoForm.handleSubmit(async (val) => {
 						await editExperience(val);
-						toast.success("个人信息保存成功");
+						toast.success("个人信息保存成功", {
+							position: "top-center",
+						});
 					})}
 					disabled={isSubmitting}
 					loading={isSubmitting}

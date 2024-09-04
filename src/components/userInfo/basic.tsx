@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import { useForm } from "react-hook-form";
@@ -13,7 +13,14 @@ import {
 	CardContent,
 	CardFooter,
 } from "../ui/card";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../ui/form";
+import {
+	Form,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormControl,
+	FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import { editBasicInfo } from "@/action/user/userInfo";
 import {
@@ -26,6 +33,7 @@ import {
 import type { userType } from "@/types/user";
 import { collegeType } from "@/types/college";
 import { toast } from "sonner";
+import originalDayjs from "@/lib/dayjs";
 
 export const fullUserSchema = createInsertSchema(user, {
 	email: z.string().email("请输入正确的邮箱地址").trim(),
@@ -38,8 +46,27 @@ export const fullUserSchema = createInsertSchema(user, {
 		.trim(),
 	birthday: z
 		.string()
-		.regex(/^\d{4}-\d{2}-\d{2}$/, "请输入以YYYY-MM-DD格式的生日")
-		.trim(),
+		.refine(
+			(val) => {
+				const parsedDate = originalDayjs(val, "YYYY-MM-DD", true);
+				return parsedDate.isValid();
+			},
+			{
+				message: "请输入有效的日期格式 (YYYY-MM-DD)",
+			}
+		)
+		.refine(
+			(val) => {
+				const parsedDate = originalDayjs(val, "YYYY-MM-DD");
+				return (
+					parsedDate.isAfter("1900-01-01") &&
+					parsedDate.isBefore(originalDayjs())
+				);
+			},
+			{
+				message: "请输入 1900 年至今的日期",
+			}
+		),
 	name: z.string().min(2, "姓名至少两个字符").trim(),
 	studentId: z
 		.string()
@@ -114,6 +141,7 @@ export const BasicInfo = ({
 										<Input
 											placeholder="请填写你的学号"
 											{...field}
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -131,6 +159,7 @@ export const BasicInfo = ({
 										<Input
 											placeholder="请填写你的手机号"
 											{...field}
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -148,6 +177,7 @@ export const BasicInfo = ({
 										<Input
 											placeholder="请填写你的邮箱地址"
 											{...field}
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -164,6 +194,7 @@ export const BasicInfo = ({
 									<FormControl>
 										<Input
 											{...field}
+											value={field.value || ""}
 											placeholder="请使用 YYYY-MM-DD 的格式输入你的生日"
 										/>
 									</FormControl>
@@ -214,6 +245,7 @@ export const BasicInfo = ({
 										<Input
 											{...field}
 											placeholder="请填写你目前所在的专业"
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -227,7 +259,9 @@ export const BasicInfo = ({
 				<Button
 					onClick={basicInfoForm.handleSubmit(async (val) => {
 						await editBasicInfo(val);
-						toast.success("个人信息保存成功");
+						toast.success("个人信息保存成功", {
+							position: "top-center",
+						});
 					})}
 					loading={isSubmitting}
 					disabled={isSubmitting}
