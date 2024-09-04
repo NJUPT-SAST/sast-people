@@ -8,7 +8,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { QrCode } from "lucide-react";
 import QRCode from "react-qr-code";
 import originalDayjs from "@/lib/dayjs";

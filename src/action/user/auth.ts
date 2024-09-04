@@ -27,6 +27,7 @@ export async function loginFromX(
 					feishuOpenId: openid,
 					name: userIdentifier,
 					createdAt: new Date(),
+					updatedAt: new Date(),
 				})
 				.returning({ uid: user.id });
 		}
@@ -45,6 +46,7 @@ export async function loginFromX(
 					name: userIdentifier,
 					studentId: userIdentifier,
 					createdAt: new Date(),
+					updatedAt: new Date(),
 				})
 				.returning({ uid: user.id });
 		}

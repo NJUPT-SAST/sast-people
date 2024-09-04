@@ -4,7 +4,7 @@ import { ExperienceInfo } from "@/components/userInfo/experience";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import { useCollegeList } from "../../hooks/useCollegeList";
 import dayjs from "@/lib/dayjs";
-import { ShowQrCode } from "@/components/showQrCode";
+import { ShowQrCode } from "@/components/userInfo/showQrCode";
 
 export default async function Home() {
 	const userInfo = await useUserInfo();

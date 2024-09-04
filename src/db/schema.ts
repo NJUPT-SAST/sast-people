@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	integer,
 	text,
@@ -33,8 +33,8 @@ export const user = pgTable("user", {
 	personalStatement: text("personal_statement"),
 	birthday: date("birthday"),
 	isDeleted: boolean("is_deleted").default(false),
-	createdAt: timestamp("created_at"),
-	updatedAt: timestamp("updated_at"),
+	createdAt: timestamp("created_at").notNull(),
+	updatedAt: timestamp("updated_at").notNull(),
 	department: varchar("department", { length: 255 }),
 	group: varchar("group", { length: 255 }),
 	role: integer("role").default(0),
@@ -48,10 +48,12 @@ export const flowType = pgTable("flow_type", {
 	id: serial("id").primaryKey(),
 	name: text("name").notNull(),
 	description: text("description"),
-	createdAt: timestamp("created_at"), // 使用 timestamp 类型和 SQL 默认值
-	updatedAt: timestamp("updated_at"),
+	createdAt: timestamp("created_at").notNull(), // 使用 timestamp 类型和 SQL 默认值
+	updatedAt: timestamp("updated_at").notNull(),
 	isDeleted: boolean("is_deleted").default(false),
-	createBy: integer("create_by").references(() => user.id), // 外键关联到 user 表的 id
+	createBy: integer("create_by")
+		.references(() => user.id)
+		.notNull(), // 外键关联到 user 表的 id
 });
 
 // Steps 表
@@ -74,6 +76,7 @@ export const steps = pgTable(
 		};
 	}
 );
+
 // Problem 表
 export const problem = pgTable("problem", {
 	id: serial("id").primaryKey(),

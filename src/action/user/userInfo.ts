@@ -10,8 +10,6 @@ import { z } from "zod";
 export async function editBasicInfo(values: z.infer<typeof basicInfoSchema>) {
 	const session = await verifySession();
 
-	console.log("editBasicInfo", values);
-
 	await db
 		.update(user)
 		.set({
