@@ -1,9 +1,12 @@
 import { db } from "@/db/drizzle";
 import { flowType, user } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const useFlowTypeList = async () => {
-	const flowTypeList = await db.select().from(flowType).orderBy(flowType.id);
+	const flowTypeList = await db
+		.select()
+		.from(flowType)
+		.orderBy(desc(flowType.createdAt));
 	const res = await Promise.all(
 		flowTypeList.map(async (college) => {
 			const userInfo = await db

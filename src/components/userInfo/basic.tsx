@@ -259,9 +259,7 @@ export const BasicInfo = ({
 				<Button
 					onClick={basicInfoForm.handleSubmit(async (val) => {
 						await editBasicInfo(val);
-						toast.success("个人信息保存成功", {
-							position: "top-center",
-						});
+						toast.success("个人信息保存成功");
 					})}
 					loading={isSubmitting}
 					disabled={isSubmitting}

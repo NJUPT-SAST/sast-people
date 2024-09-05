@@ -1,8 +1,16 @@
-"use client";;
+"use client";
 import { usePathname, useRouter } from "next/navigation";
-import { UserPen, Workflow, FilePenLine, Users, SquareChartGantt, TicketsPlane } from "lucide-react";
+import {
+	UserPen,
+	Workflow,
+	FilePenLine,
+	Users,
+	SquareChartGantt,
+	TicketsPlane,
+} from "lucide-react";
 import Link from "next/link";
 import { createElement } from "react";
+import { SheetClose } from "./ui/sheet";
 
 const menuItems = [
 	{
@@ -70,20 +78,22 @@ export const Header = ({ type }: { type: "pc" | "mobile" }) => {
 						<span className="sr-only">SAST Pass 招新系统</span>
 					</Link>
 					{menuItems.map((item, index) => (
-						<Link
-							key={item.title}
-							href={`/dashboard${item.path}`}
-							className={
-								pathname === `/dashboard${item.path}`
-									? "mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-									: "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-							}
-						>
-							{createElement(item.icon, {
-								className: "h-5 w-5",
-							})}
-							{item.title}
-						</Link>
+						<SheetClose key={item.title} asChild>
+							<Link
+								key={item.title}
+								href={`/dashboard${item.path}`}
+								className={
+									pathname === `/dashboard${item.path}`
+										? "mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
+										: "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+								}
+							>
+								{createElement(item.icon, {
+									className: "h-5 w-5",
+								})}
+								{item.title}
+							</Link>
+						</SheetClose>
 					))}
 				</nav>
 			);

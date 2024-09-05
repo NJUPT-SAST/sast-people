@@ -16,13 +16,10 @@ import {
 	TableCell,
 } from "../ui/table";
 import originalDayjs from "@/lib/dayjs";
+import { Button } from "../ui/button";
+import { Operations } from "./operations";
 
 export const FlowTypeTableColumns: ColumnDef<flowTypeType>[] = [
-	{
-		accessorKey: "id",
-		header: "序号",
-		accessorFn: (data) => data.id,
-	},
 	{
 		accessorKey: "name",
 		header: "名称",
@@ -45,9 +42,10 @@ export const FlowTypeTableColumns: ColumnDef<flowTypeType>[] = [
 	{
 		accessorKey: "operations",
 		header: "操作",
-        cell({row}) {
-            const id = row.getValue('id')
-        }
+		cell({ row }) {
+			const data = row.original;
+			return <Operations data={data} />;
+		},
 	},
 ];
 
@@ -68,7 +66,7 @@ export function FlowTypeTable<TData, TValue>({
 
 	return (
 		<div className="rounded-md border">
-			<Table>
+			<Table className="min-w-[672px] scroll-auto">
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
@@ -111,7 +109,7 @@ export function FlowTypeTable<TData, TValue>({
 								colSpan={columns.length}
 								className="h-24 text-center"
 							>
-								No results.
+								暂时没有内容
 							</TableCell>
 						</TableRow>
 					)}

@@ -20,3 +20,10 @@ export const verifySession = cache(async () => {
 		name: session.name as string,
 	};
 });
+
+export const verifyRole = cache(async (role: number) => {
+	const session = await verifySession();
+	if (session.role < role) {
+		throw new Error("Unauthorized operation");
+	}
+});

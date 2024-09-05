@@ -1,49 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Input } from "@/components/ui/input";
-import {
-	Package2,
-	Bell,
-	ShoppingCart,
-	Badge,
-	Package,
-	Users,
-	LineChart,
-	Menu,
-	Search,
-	CircleUser,
-	Home as HomeIcon,
-	TicketsPlane,
-	UserPen,
-	Workflow,
-	FilePenLine,
-	SquareChartGantt,
-} from "lucide-react";
-import {
-	Card,
-	CardHeader,
-	CardTitle,
-	CardDescription,
-	CardContent,
-} from "@/components/ui/card";
+import { Menu, TicketsPlane } from "lucide-react";
 import {
 	Sheet,
 	SheetContent,
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Header, PageTitle } from "@/components/route";
-import { FeishuSDKInject } from "@/components/feishuInject";
+import { Header } from "@/components/route";
 import { UserCard } from "../../components/userCard";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -77,8 +43,8 @@ export default async function RootLayout({
 					</div>
 				</div>
 			</div>
-			<div className="flex flex-col md:overflow-y-auto md:h-screen">
-				<header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:hidden md:hidden">
+			<div className="flex flex-col md:overflow-y-auto md:h-screen w-screen md:w-full">
+				<header className="flex h-14 items-center gap-4 border-b bg-muted/80 backdrop-blur-lg px-4 lg:hidden md:hidden sticky top-0">
 					<Sheet>
 						<SheetTrigger asChild>
 							<Button
@@ -97,7 +63,7 @@ export default async function RootLayout({
 						</SheetContent>
 					</Sheet>
 				</header>
-				<main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+				<main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 w-full">
 					{children}
 				</main>
 			</div>

@@ -44,7 +44,7 @@ export const AddFlowType = () => {
 	const addFlowForm = useForm<z.infer<typeof addFlowTypeSchema>>({
 		resolver: zodResolver(addFlowTypeSchema),
 	});
-	const { isSubmitting, errors } = addFlowForm.formState;
+	const { isSubmitting } = addFlowForm.formState;
 	const [open, setOpen] = useState(false);
 
 	return (
@@ -109,13 +109,13 @@ export const AddFlowType = () => {
 								async () => {
 									await addFlowType(val).then(() => {
 										setOpen(false);
+										addFlowForm.reset();
 									});
 								},
 								{
 									loading: "正在添加",
 									success: `${val.name} 已添加成功`,
 									error: "添加的时候出现了问题，稍后重试",
-									position: "top-center",
 								}
 							);
 						})}

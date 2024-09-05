@@ -12,7 +12,7 @@ const FlowTypes = async () => {
 	const data = await useFlowTypeList();
 	return (
 		<>
-			<div className="flex items-center justify-between">
+			<div className="flex items-center justify-between w-full">
 				<PageTitle />
 				<AddFlowType />
 			</div>

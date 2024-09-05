@@ -129,9 +129,7 @@ export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
 				<Button
 					onClick={basicInfoForm.handleSubmit(async (val) => {
 						await editExperience(val);
-						toast.success("个人信息保存成功", {
-							position: "top-center",
-						});
+						toast.success("个人信息保存成功");
 					})}
 					disabled={isSubmitting}
 					loading={isSubmitting}
