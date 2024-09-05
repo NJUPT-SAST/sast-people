@@ -28,6 +28,17 @@ prepare postgresql database and drizzle with the following command:
 docker run --name postgres-server --restart=always -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
 ```
 
+copy `.env.example` to `.env` and fill in the required environment variables.
+
+> [!NOTE]
+> 
+> DATABASE_URL example: postgres://postgres:postgres@127.0.0.1:5432/sast-people
+>
+> it's convenient to use openssl to generate a secrets
+> ```bash
+> openssl rand -base64 32  
+> ```
+
 after database is ready, run the following command to create the database and tables:
 
 ```bash
@@ -41,17 +52,6 @@ if you want to view tables
 ```bash
 npx drizzle-kit studio
 ```
-
-copy `.env.example` to `.env` and fill in the required environment variables.
-
-> [!NOTE]
-> 
-> DATABASE_URL example: postgres://postgres:postgres@127.0.0.1:5432/sast-people
->
-> it's convenient to use openssl to generate a secrets
-> ```bash
-> openssl rand -base64 32  
-> ```
 
 To start a dev server, run:
 
