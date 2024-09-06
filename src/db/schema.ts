@@ -71,10 +71,10 @@ export const steps = pgTable(
 		return {
 			uniqueFlowTypeOrder: uniqueIndex("unique_flow_type_order_index").on(
 				steps.flowTypeId,
-				steps.order
+				steps.order,
 			),
 		};
-	}
+	},
 );
 
 // Problem 表

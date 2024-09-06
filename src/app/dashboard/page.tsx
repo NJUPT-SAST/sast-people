@@ -3,13 +3,13 @@ import { BasicInfo } from "@/components/userInfo/basic";
 import { ExperienceInfo } from "@/components/userInfo/experience";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import { useCollegeList } from "../../hooks/useCollegeList";
-import dayjs from "@/lib/dayjs";
+import originalDayjs from "@/lib/dayjs";
 import { ShowQrCode } from "@/components/userInfo/showQrCode";
 
 export default async function Home() {
 	const userInfo = await useUserInfo();
 	const collegeList = await useCollegeList();
-
+	console.log(userInfo);
 	return (
 		<>
 			<div className="flex justify-between">
@@ -18,7 +18,7 @@ export default async function Home() {
 					<div className="text-sm text-muted-foreground">
 						上次更新时间：
 						{userInfo.updatedAt &&
-							dayjs().calendar(dayjs(userInfo.updatedAt))}
+							originalDayjs(userInfo.updatedAt).format("YYYY-MM-DD HH:mm")}
 					</div>
 				</div>
 				<div className="flex items-center">
