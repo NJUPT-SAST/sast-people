@@ -40,6 +40,7 @@ export const user = pgTable("user", {
 	role: integer("role").default(0),
 	feishuOpenId: varchar("feishu_open_id", { length: 255 }).unique(),
 	sastLinkOpenId: varchar("sast_link_open_id", { length: 255 }).unique(),
+	wechatOpenId: varchar("wechat_open_id", { length: 255 }).unique(),
 	// flow todo
 });
 
@@ -61,7 +62,7 @@ export const steps = pgTable(
 	"steps",
 	{
 		id: serial("id").primaryKey(),
-		flowTypeId: integer("flow_type_id").references(() => flowType.id), // 外键关联 FlowType 表
+		flowTypeId: integer("flow_type_id").references(() => flowType.id).notNull(), // 外键关联 FlowType 表
 		order: integer("order").notNull(),
 		label: text("label").notNull(),
 		name: text("name").notNull(),
@@ -81,6 +82,7 @@ export const steps = pgTable(
 export const problem = pgTable("problem", {
 	id: serial("id").primaryKey(),
 	stepId: integer("step_id").references(() => steps.id), // 外键关联 Steps 表
+	class: text("class").notNull(), // 问题类别
 	name: text("name").notNull(), // 问题名称
 	maxScore: integer("max_score").notNull(), // 最大得分
 });

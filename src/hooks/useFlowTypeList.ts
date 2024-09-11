@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { flowType, user } from "@/db/schema";
+import { flowType, steps, user } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 
 export const useFlowTypeList = async () => {
@@ -8,17 +8,19 @@ export const useFlowTypeList = async () => {
 		.from(flowType)
 		.orderBy(desc(flowType.createdAt));
 	const res = await Promise.all(
-		flowTypeList.map(async (college) => {
+		flowTypeList.map(async (flowType) => {
 			const userInfo = await db
 				.select({
 					name: user.name,
 				})
 				.from(user)
-				.where(eq(user.id, college.createBy))
+				.where(eq(user.id, flowType.createBy))
 				.limit(1);
+			const stepsList = await db.select().from(steps).where(eq(steps.flowTypeId, flowType.id))
 			return {
-				...college,
+				...flowType,
 				createBy: userInfo[0].name,
+				steps: stepsList,
 			};
 		})
 	);
