@@ -17,7 +17,6 @@ export default async function Home({
 }) {
 	const userInfo = await useUserInfo();
 	const collegeList = await useCollegeList();
-	console.log(userInfo);
 	return (
 		<>
 			<div className="flex justify-between">
