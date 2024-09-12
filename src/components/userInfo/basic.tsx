@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { number, z } from "zod";
 import { user } from "../../../migrations/schema";
 import { Button } from "../ui/button";
 import {
@@ -75,6 +75,11 @@ export const fullUserSchema = createInsertSchema(user, {
 			"请输入正确的学号"
 		)
 		.trim(),
+	college: z
+		.number({
+			invalid_type_error: "请选择你所在的学院",
+		})
+		.transform((val) => val.toString()),
 });
 export const basicInfoSchema = fullUserSchema.pick({
 	name: true,
@@ -212,7 +217,9 @@ export const BasicInfo = ({
 									<Select
 										value={field.value?.toString()}
 										name={field.name}
-										onValueChange={field.onChange}
+										onValueChange={(val) => {
+											field.onChange(parseInt(val));
+										}}
 									>
 										<FormControl>
 											<SelectTrigger>
