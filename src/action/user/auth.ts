@@ -69,6 +69,7 @@ export async function loginFromTest(formData: FormData) {
     .where(eq(user.studentId, studentId));
   if (uidList && uidList.length > 0) {
     await createSession(uidList[0].uid, studentId, "test");
+	return uidList[0].uid;
   } else {
     throw new Error("login failed");
   }
