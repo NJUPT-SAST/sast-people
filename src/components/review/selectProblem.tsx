@@ -8,44 +8,50 @@ import {
   } from "@/components/ui/select"
 import { db } from "@/db/drizzle";
 import { flowType, problem, steps } from "@/db/schema";
-import { useFlowTypeList } from "@/hooks/useFlowTypeList";
-import { desc, eq } from "drizzle-orm";
+import { flowTypeType } from "@/types/flowType";
+import { eq } from "drizzle-orm";
 import { useEffect , useState} from "react";
+import getProbList from "./getProbList";
+import ProbCheckBox from "./probCheckBox";
   
-export default  function SelectProblem() {
-    const [selectedFlow, setSelectedFlow] = useState() ;
-    const [probList,setProbList] = useState([]);
-    const flow = useFlowTypeList();
+const SelectProblem = (data: any)=> {
+    const {flow}=data;
+    const [selectedFlow, setSelectedFlow] = useState<number >(0);
+    const handleSelectChange = (value:string) => {
+        setSelectedFlow(value ? parseInt(value) : 0);
+    }
+    var probList:any = [];
+
     useEffect(()=>{
-        if(selectedFlow)
-        {
-            
-            const probList = await db 
-            .select ()
-            .from(problem)
-            .where(eq(problem.stepId,await db
-                .select()
-                .from(steps)
-                .where(eq(steps.flowTypeId,selectedFlow
-                ))
-                .first()
-                ))
-        }
-    })
+         probList = getProbList(selectedFlow);
+    },[selectedFlow])
+
     return (
-       <div>
-         {flow?<Select>
+       <div
+       className="mt-3 flex flex-column">
+        <Select onValueChange={handleSelectChange}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="请选择试卷" />
             </SelectTrigger>
             <SelectContent>
-                {(flow as any).map((flow: { id: number; name: string }) => (
+                {flow .map((flow:{
+                id: number;
+                name: string;
+                isDeleted: boolean | null;
+                createdAt: Date;
+                updatedAt: Date;
+                description: string | null;
+                createBy: number;
+                }) => (
                     <SelectItem key={flow.id} value={flow.id.toString()}> 
                         {flow.name}
                     </SelectItem>
                 ))}
             </SelectContent>
-        </Select>:null}
+        </Select>
+        <ProbCheckBox probList={probList}/>
+        <text>{JSON.stringify(probList)}{JSON.stringify(selectedFlow)}</text>
        </div>
     );
 }
+export default SelectProblem;
