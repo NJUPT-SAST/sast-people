@@ -14,21 +14,28 @@ import { useEffect , useState} from "react";
 import getProbList from "./getProbList";
 import ProbCheckBox from "./probCheckBox";
   
-const SelectProblem = (data: any)=> {
-    const {flow}=data;
+interface SelectProblemProps {
+    flow: any;
+}
+const SelectProblem : React.FC<SelectProblemProps> = ({flow}) => {
     const [selectedFlow, setSelectedFlow] = useState<number >(0);
     const handleSelectChange = (value:string) => {
         setSelectedFlow(value ? parseInt(value) : 0);
     }
-    var probList:any = [];
+    const [probList, setProbList] = useState<{name:string;id:number}[]>([]);
 
     useEffect(()=>{
-         probList = getProbList(selectedFlow);
-    },[selectedFlow])
+        localStorage.setItem('task',selectedFlow.toString());
+        const getProbListAsync = async (selectedFlow: number) => {
+         const getedProbList = await getProbList(selectedFlow)
+            .then (getedProbList => { setProbList(getedProbList); })
+        }
+        getProbListAsync(selectedFlow);
+    },[selectedFlow]) 
 
     return (
        <div
-       className="mt-3 flex flex-column">
+       className="mt-3 flex-row">
         <Select onValueChange={handleSelectChange}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="请选择试卷" />
@@ -49,8 +56,7 @@ const SelectProblem = (data: any)=> {
                 ))}
             </SelectContent>
         </Select>
-        <ProbCheckBox probList={probList}/>
-        <text>{JSON.stringify(probList)}{JSON.stringify(selectedFlow)}</text>
+        {probList[0]?.id?<ProbCheckBox probList={probList} task={selectedFlow.toString()}/>:null}
        </div>
     );
 }

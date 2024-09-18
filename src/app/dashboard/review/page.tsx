@@ -22,11 +22,11 @@ const Review: React.FC = async() => {
 							<SheetHeader className="text-2xl font-semibold">
 								设置阅卷范围
 							</SheetHeader>
-							<SelectProblem flow={flow}/>
+							<SelectProblem flow={flow} />
 						</SheetContent>
 					</Sheet>					
 			</div>
-			<QRCodeScanner />
+			<QRCodeScanner/>
 			<div></div>
 		</>
 	);

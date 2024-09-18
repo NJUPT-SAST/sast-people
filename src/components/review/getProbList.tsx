@@ -5,13 +5,11 @@ import { eq } from "drizzle-orm";
 
 const getProbList = async (selectedFlow: number)=>{
     try{
-        console.log("114514")
         const stepId=await db
             .select()
             .from(steps)
             .where(eq(steps.flowTypeId,selectedFlow
         ));
-        console.log('1145514',JSON.stringify(stepId));
         return await db 
             .select ()
             .from(problem)
