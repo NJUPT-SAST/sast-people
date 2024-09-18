@@ -14,7 +14,7 @@ export async function editBasicInfo(values: z.infer<typeof basicInfoSchema>) {
 		.update(user)
 		.set({
 			...values,
-			college: values.college ?? null,
+			college: Number(values.college) ?? null,
 			updatedAt: new Date(),
 		})
 		.where(eq(user.id, session.uid));

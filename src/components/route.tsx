@@ -9,7 +9,7 @@ import {
 	TicketsPlane,
 } from "lucide-react";
 import Link from "next/link";
-import { createElement } from "react";
+import { createElement, useMemo } from "react";
 import { SheetClose } from "./ui/sheet";
 
 const menuItems = [
@@ -40,15 +40,27 @@ const menuItems = [
 	},
 ];
 
-export const Header = ({ type }: { type: "pc" | "mobile" }) => {
+export const Header = ({
+	type,
+	role,
+}: {
+	type: "pc" | "mobile";
+	role: number;
+}) => {
 	const pathname = usePathname();
 	const router = useRouter();
+	const authRoutes = useMemo(() => {
+		if (!role) {
+			return menuItems.slice(0, 2);
+		}
+		return menuItems;
+	}, [role]);
 	switch (type) {
 		case "pc":
 			return (
 				<div className="flex-1">
 					<nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-						{menuItems.map((item, index) => (
+						{authRoutes.map((item, index) => (
 							<Link
 								key={item.title}
 								href={`/dashboard${item.path}`}
@@ -77,7 +89,7 @@ export const Header = ({ type }: { type: "pc" | "mobile" }) => {
 						<TicketsPlane className="h-6 w-6" />
 						<span className="sr-only">SAST Pass 招新系统</span>
 					</Link>
-					{menuItems.map((item, index) => (
+					{authRoutes.map((item, index) => (
 						<SheetClose key={item.title} asChild>
 							<Link
 								key={item.title}
