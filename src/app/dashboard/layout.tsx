@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Menu, TicketsPlane } from "lucide-react";
 import {
 	Sheet,
@@ -11,8 +10,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/route";
 import { UserCard } from "../../components/userCard";
-
-const inter = Inter({ subsets: ["latin"] });
+import { verifySession } from "@/lib/dal";
 
 export const metadata: Metadata = {
 	title: "SAST 招新",
@@ -24,6 +22,7 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const session = await verifySession();
 	return (
 		<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
 			<div className="hidden border-r bg-muted/40 md:block">
@@ -37,7 +36,7 @@ export default async function RootLayout({
 							<span className="">SAST 招新</span>
 						</Link>
 					</div>
-					<Header type={"pc"} />
+					<Header type={"pc"} role={session.role} />
 					<div className="mt-auto p-4">
 						<UserCard />
 					</div>
@@ -58,7 +57,7 @@ export default async function RootLayout({
 						</SheetTrigger>
 						<SheetTitle>SAST Pass</SheetTitle>
 						<SheetContent side="left" className="flex flex-col">
-							<Header type={"mobile"} />
+							<Header type={"mobile"} role={session.role} />
 							<UserCard />
 						</SheetContent>
 					</Sheet>
