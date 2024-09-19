@@ -22,13 +22,13 @@ const SelectProblem : React.FC<SelectProblemProps> = ({flow}) => {
     const handleSelectChange = (value:string) => {
         setSelectedFlow(value ? parseInt(value) : 0);
     }
-    const [probList, setProbList] = useState<{name:string;id:number}[]>([]);
+    const [probList, setProbList] = useState<flowTypeType[]>([]);
 
     useEffect(()=>{
         localStorage.setItem('task',selectedFlow.toString());
         const getProbListAsync = async (selectedFlow: number) => {
          const getedProbList = await getProbList(selectedFlow)
-            .then (getedProbList => { setProbList(getedProbList); })
+            .then (getedProbList => { if(getedProbList) setProbList(getedProbList as flowTypeType[]); })
         }
         getProbListAsync(selectedFlow);
     },[selectedFlow]) 

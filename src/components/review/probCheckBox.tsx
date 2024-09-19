@@ -12,14 +12,14 @@ const ProbCheckBox: React.FC<ProbCheckBoxProps> = ({probList,task}) => {
     }
     return (
         <div className="mt-5 flex-column">
-            {probList.map((prob: {name:string;id:number})=>(
+            {probList.map((prob: {name:string;id:number}) => (
                 
                      <div className="mt-3">
                      <Checkbox 
                      id={prob.id.toString()} 
                      key={prob.id} 
                      className="mr-3"
-                     onCheckedChange={(value)=>{
+                     onCheckedChange={ (value)=>{
                         localStorage.setItem(task+prob.id.toString(),value.toString());
                         const selectedProbNum = localStorage.getItem(task);
                         if (value)
@@ -30,8 +30,11 @@ const ProbCheckBox: React.FC<ProbCheckBoxProps> = ({probList,task}) => {
                         {
                             localStorage.setItem(task,(parseInt(selectedProbNum??'0')-1).toString());
                         }
-                    }}
+                    }
+                    }
+                    
                      />
+
                      <label
                        htmlFor="terms"
                        className="text-md"

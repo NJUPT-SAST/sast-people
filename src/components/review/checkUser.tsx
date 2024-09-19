@@ -8,7 +8,7 @@ const checkUser =async(data: string) => {
         const userInfo = await db
             .select()
             .from(user)
-            .where(eq(user.student_id,data));
+            .where(eq(user.studentId,data));
         if (userInfo.length>0)
             return true;
         return false;

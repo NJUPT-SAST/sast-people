@@ -1,11 +1,12 @@
 "use client";
-import checkUser from "./review/checkUser";
+import checkUser from "./checkUser";
 import React, { useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./ui/dialog";
-import ReviewDialog from "./review/reviewDialog";
-import { DialogTitle } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "../ui/dialog";
+import ReviewDialog from "./reviewContent";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface ReviewProps {
     task: string;
@@ -15,12 +16,15 @@ const QRCodeScanner: React.FC =() => {
     const [data, setData] = useState("");
     const [checkUserResult, setCheckUserResult] = useState(false);
     const handleCheckUser = async (data: string) => {
-        const checkUserResult = await checkUser(data);
+         setCheckUserResult (await checkUser(data));
+        
         console.log('114515',checkUserResult);
     };
     useEffect (()=>{
         handleCheckUser(data);
     } ,[data]);
+
+
     return (
         <div >
             <div className='flex'>
@@ -41,26 +45,21 @@ const QRCodeScanner: React.FC =() => {
                     placeholder="请输入考生学号或扫描考生个人识别二维码"
                     
                 />
+                { checkUserResult?
+                    <Link href="/dashboard/review/marking">
+                    <div className="flex-none">  
+                        <Button size="sm" onClick={()=>{handleCheckUser}}>开始阅卷</Button>
+                    </div>
+                    </Link>
+                    :    
                 <Dialog>
                     <DialogTrigger>
-                        <div className="flex-none">  
-                            <Button size="sm" onClick={()=>{handleCheckUser}}>开始阅卷</Button>
-                        </div>
+                    <Button size="sm" onClick={()=>{handleCheckUser}}>开始阅卷</Button>
                     </DialogTrigger>
                     <DialogContent>
-                        {
-                            checkUserResult?
-                            <div>
-                                <DialogHeader className="text-xl">
-                                {data}
-                                </DialogHeader>
-                                <ReviewDialog/>
-                            </div>:<div>
                                 <text>错误的考生学号，请重新输入或扫描</text>
-                            </div>
-                        }
                     </DialogContent>
-                </Dialog>
+                </Dialog>}
             </div>
         <div style={{display: 'flex',justifyContent: 'center',flexDirection:'row'}}>
             <QrReader

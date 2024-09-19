@@ -1,7 +1,7 @@
 import { PageTitle } from "@/components/route";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import QRCodeScanner from "@/components/qrcodeScanner";
+import QRCodeScanner from "@/components/review/qrcodeScanner";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
 import SelectProblem from "@/components/review/selectProblem";
 import { useFlowTypeList } from "@/hooks/useFlowTypeList";
