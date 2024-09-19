@@ -48,6 +48,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.1",
     "@types/node": "^22",
     "@types/pg": "^8.11.10",
     "@types/react": "^18",

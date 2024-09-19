@@ -1,19 +1,19 @@
-"use server";
-import { db } from "@/db/drizzle";
-import { user } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
-import { createSession, deleteSession } from "@/lib/session";
-import { redirect } from "next/navigation";
+'use server';
+import { db } from '@/db/drizzle';
+import { user } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { createSession, deleteSession } from '@/lib/session';
+import { redirect } from 'next/navigation';
 
 export async function loginFromX(
   openid: string,
   userIdentifier: string,
-  type: "feishu" | "link"
+  type: 'feishu' | 'link',
 ) {
-  console.log("loginFrom", type, openid, userIdentifier);
+  console.log('loginFrom', type, openid, userIdentifier);
   let uidList: { uid: number }[] | null = null;
   // check if openid exists
-  if (type === "feishu") {
+  if (type === 'feishu') {
     uidList = await db
       .select({
         uid: user.id,
@@ -31,7 +31,7 @@ export async function loginFromX(
         })
         .returning({ uid: user.id });
     }
-  } else if (type === "link") {
+  } else if (type === 'link') {
     uidList = await db
       .select({
         uid: user.id,
@@ -54,13 +54,13 @@ export async function loginFromX(
   if (uidList && uidList.length > 0) {
     await createSession(uidList[0].uid, userIdentifier, type);
   } else {
-    throw new Error("login failed");
+    throw new Error('login failed');
   }
 }
 
 export async function loginFromTest(formData: FormData) {
-  const studentId = formData.get("studentId") as string;
-  console.log("loginFromTest", studentId);
+  const studentId = formData.get('studentId') as string;
+  console.log('loginFromTest', studentId);
   const uidList = await db
     .select({
       uid: user.id,
@@ -68,14 +68,14 @@ export async function loginFromTest(formData: FormData) {
     .from(user)
     .where(eq(user.studentId, studentId));
   if (uidList && uidList.length > 0) {
-    await createSession(uidList[0].uid, studentId, "test");
-	return uidList[0].uid;
+    await createSession(uidList[0].uid, studentId, 'test');
+    return uidList[0].uid;
   } else {
-    throw new Error("login failed");
+    throw new Error('login failed');
   }
 }
 
 export async function logout() {
   deleteSession();
-  redirect("/login");
+  redirect('/login');
 }
