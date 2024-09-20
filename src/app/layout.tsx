@@ -1,28 +1,28 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { VConsole } from "@/components/vconsole";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
+import { VConsole } from '@/components/vconsole';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: "SAST 招新",
-	description: "南京邮电大学大学生科学技术协会招新平台",
+  title: 'SAST 招新',
+  description: '南京邮电大学大学生科学技术协会招新平台',
 };
 
 export default async function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="zh-cn">
-			<body className={inter.className}>
-				{children}
-				<Toaster />
-				<VConsole />
-			</body>
-		</html>
-	);
+  return (
+    <html lang="zh-cn">
+      <body className={inter.className}>
+        {children}
+        <Toaster />
+        <VConsole />
+      </body>
+    </html>
+  );
 }

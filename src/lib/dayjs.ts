@@ -1,10 +1,10 @@
-import { default as originalDayjs } from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import calendar from "dayjs/plugin/calendar";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import "dayjs/locale/zh-cn";
+import { default as originalDayjs } from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import calendar from 'dayjs/plugin/calendar';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import 'dayjs/locale/zh-cn';
 originalDayjs.extend(advancedFormat);
 originalDayjs.extend(calendar);
-originalDayjs.locale("zh-cn");
+originalDayjs.locale('zh-cn');
 originalDayjs.extend(customParseFormat);
 export default originalDayjs;

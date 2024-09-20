@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
-import React from "react";
+import { redirect } from 'next/navigation';
+import React from 'react';
 const Default: React.FC = async () => {
-	return redirect("/dashboard");
+  return redirect('/dashboard');
 };
 export default Default;

@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { db } from "@/db/drizzle";
-import { problem } from "@/db/schema";
-import { verifyRole } from "@/lib/dal";
-import { problemType } from "@/types/problem";
-import { eq, and, notInArray, inArray } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { db } from '@/db/drizzle';
+import { problem } from '@/db/schema';
+import { verifyRole } from '@/lib/dal';
+import { problemType } from '@/types/problem';
+import { eq, and, notInArray, inArray } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 
 // 定义问题类型
 type ProblemType = typeof problem.$inferInsert;
@@ -13,7 +13,7 @@ type ProblemType = typeof problem.$inferInsert;
 export const updateProblems = async (
   stepId: number,
   problems: problemType,
-  flowTypeId: number
+  flowTypeId: number,
 ) => {
   await verifyRole(1);
 
@@ -32,12 +32,12 @@ export const updateProblems = async (
         class: category,
         name: p.name,
         maxScore: p.maxScore,
-      }))
+      })),
   );
 
   // 找出需要更新的现有问题
   const problemsToUpdate = newProblems.filter((p) =>
-    existingProblems.some((ep) => ep.id === p.id)
+    existingProblems.some((ep) => ep.id === p.id),
   );
 
   // 批量更新现有问题
@@ -60,7 +60,7 @@ export const updateProblems = async (
       .insert(problem)
       .values(problemsToInsert)
       .returning();
-    console.log("插入的新问题：", insertedProblems);
+    console.log('插入的新问题：', insertedProblems);
   }
 
   // 更新其他步骤中的问题
@@ -73,8 +73,8 @@ export const updateProblems = async (
     .where(
       and(
         inArray(problem.id, existingProblemIds),
-        notInArray(problem.stepId, [stepId])
-      )
+        notInArray(problem.stepId, [stepId]),
+      ),
     );
 
   // 删除不再存在的问题
@@ -87,8 +87,8 @@ export const updateProblems = async (
     .where(
       and(
         eq(problem.stepId, stepId),
-        notInArray(problem.id, problemIdsToKeep as number[])
-      )
+        notInArray(problem.id, problemIdsToKeep as number[]),
+      ),
     );
 
   revalidatePath(`/dashboard/flow-types/edit-exam?id=${flowTypeId}`);

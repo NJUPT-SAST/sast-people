@@ -1,18 +1,18 @@
-"use server";
+'use server';
 
-import { addFlowTypeSchema } from "@/components/flowTypes/add";
-import { db } from "@/db/drizzle";
-import { flowType, steps } from "@/db/schema";
-import { verifyRole, verifySession } from "@/lib/dal";
-import { stepType } from "@/types/step";
-import { and, eq, notInArray } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { addFlowTypeSchema } from '@/components/flowTypes/add';
+import { db } from '@/db/drizzle';
+import { flowType, steps } from '@/db/schema';
+import { verifyRole, verifySession } from '@/lib/dal';
+import { stepType } from '@/types/step';
+import { and, eq, notInArray } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
 export const updateFlowType = async (
   id: number,
   values: z.infer<typeof addFlowTypeSchema>,
-  stepList: stepType[]
+  stepList: stepType[],
 ) => {
   await verifyRole(1);
 
@@ -44,9 +44,9 @@ export const updateFlowType = async (
       eq(steps.flowTypeId, id),
       notInArray(
         steps.order,
-        stepList.map((step) => step.order)
-      )
-    )
+        stepList.map((step) => step.order),
+      ),
+    ),
   );
 
   // 添加新的steps
@@ -56,16 +56,16 @@ export const updateFlowType = async (
     .where(eq(steps.flowTypeId, id));
   const newSteps = stepList.filter(
     (step) =>
-      !existingSteps.some((existingStep) => existingStep.order === step.order)
+      !existingSteps.some((existingStep) => existingStep.order === step.order),
   );
   if (newSteps.length > 0) {
     await db.insert(steps).values(
       newSteps.map((step) => ({
         ...step,
         flowTypeId: id,
-      }))
+      })),
     );
   }
 
-  revalidatePath("/dashboard/flow-types");
+  revalidatePath('/dashboard/flow-types');
 };
