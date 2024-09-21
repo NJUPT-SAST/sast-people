@@ -1,8 +1,10 @@
-import { db } from '@/db/drizzle';
-import { flowType, steps, user } from '@/db/schema';
-import { desc, eq } from 'drizzle-orm';
+import { db } from "@/db/drizzle";
+import { flowType, steps, user } from "@/db/schema";
+import { displayFlowType } from "@/types/flow";
+import { flowTypeType } from "@/types/flowType";
+import { desc, eq } from "drizzle-orm";
 
-export const useFlowTypeList = async () => {
+export const useFlowTypeList = async (): Promise<flowTypeType[]> => {
   const flowTypeList = await db
     .select()
     .from(flowType)
@@ -25,7 +27,7 @@ export const useFlowTypeList = async () => {
         createBy: userInfo[0].name,
         steps: stepsList,
       };
-    }),
+    })
   );
   return res;
 };
