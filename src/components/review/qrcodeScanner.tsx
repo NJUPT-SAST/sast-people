@@ -46,7 +46,7 @@ const QRCodeScanner: React.FC =() => {
                     
                 />
                 { checkUserResult?
-                    <Link href="/dashboard/review/marking">
+                    <Link href={"/dashboard/review/marking?user="+data}>
                     <div className="flex-none">  
                         <Button size="sm" onClick={()=>{handleCheckUser}}>开始阅卷</Button>
                     </div>
