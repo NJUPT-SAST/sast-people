@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   useCallback,
@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 interface FlickeringGridProps {
   squareSize?: number;
@@ -23,7 +23,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
   squareSize = 4,
   gridGap = 6,
   flickerChance = 0.3,
-  color = "rgb(0, 0, 0)",
+  color = 'rgb(0, 0, 0)',
   width,
   height,
   className,
@@ -34,13 +34,13 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
   const memoizedColor = useMemo(() => {
     const toRGBA = (color: string) => {
-      if (typeof window === "undefined") {
+      if (typeof window === 'undefined') {
         return `rgba(0, 0, 0,`;
       }
-      const canvas = document.createElement("canvas");
+      const canvas = document.createElement('canvas');
       canvas.width = canvas.height = 1;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return "rgba(255, 0, 0,";
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return 'rgba(255, 0, 0,';
       ctx.fillStyle = color;
       ctx.fillRect(0, 0, 1, 1);
       // @ts-ignore
@@ -101,7 +101,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       dpr: number,
     ) => {
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = "transparent";
+      ctx.fillStyle = 'transparent';
       ctx.fillRect(0, 0, width, height);
 
       for (let i = 0; i < cols; i++) {
@@ -124,7 +124,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId: number;
@@ -155,14 +155,14 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
     observer.observe(canvas);
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     if (isInView) {
       animationFrameId = requestAnimationFrame(animate);
     }
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
     };
@@ -173,8 +173,8 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       ref={canvasRef}
       className={`size-full pointer-events-none ${className}`}
       style={{
-        width: width || "100%",
-        height: height || "100%",
+        width: width || '100%',
+        height: height || '100%',
       }}
       width={width}
       height={height}
