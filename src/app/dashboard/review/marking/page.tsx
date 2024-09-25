@@ -4,15 +4,22 @@ import { PageTitle } from "@/components/route";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+
 interface MarkingProps {
     user: string;
 }
-const marking: React.FC <MarkingProps> = (searchParams) => {
+export default function marking ({
+    searchParams
+}:{
+    searchParams:{user:string}
+}){
+    
+    console.log("114515",searchParams.user);
     return (
         <div>
             <PageTitle />
             <div className="flex items-center justify-between">
-                <text className=" text-2xl">{"正在批改："+user}</text>
+                <text className=" text-2xl">{"正在批改："+searchParams.user}</text>
                 <Link href="/dashboard/review">
                     <Button>返回</Button>
                 </Link>
@@ -21,4 +28,3 @@ const marking: React.FC <MarkingProps> = (searchParams) => {
         </div>
     );
 }
-export default marking;
