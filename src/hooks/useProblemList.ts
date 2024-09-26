@@ -1,3 +1,4 @@
+'use server';
 import { db } from '@/db/drizzle';
 import { problem } from '@/db/schema';
 import { problemType } from '@/types/problem';
