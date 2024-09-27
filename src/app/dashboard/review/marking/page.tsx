@@ -6,25 +6,23 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 interface MarkingProps {
-    user: string;
+  user: string;
 }
-export default function marking ({
-    searchParams
-}:{
-    searchParams:{user:string}
-}){
-    
-    console.log("114515",searchParams.user);
-    return (
-        <div>
-            <PageTitle />
-            <div className="flex items-center justify-between">
-                <text className=" text-2xl">{"正在批改："+searchParams.user}</text>
-                <Link href="/dashboard/review">
-                    <Button>返回</Button>
-                </Link>
-            </div>
-            <ReviewContent/>
-        </div>
-    );
+export default function marking({
+  searchParams,
+}: {
+  searchParams: { user: string };
+}) {
+  return (
+    <div>
+      <PageTitle />
+      <div className="flex items-center justify-between">
+        <text className=" text-2xl">{"正在批改：" + searchParams.user}</text>
+        <Link href="/dashboard/review">
+          <Button>返回</Button>
+        </Link>
+      </div>
+      <ReviewContent />
+    </div>
+  );
 }

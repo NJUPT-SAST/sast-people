@@ -6,12 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { db } from "@/db/drizzle";
-import { flowType, problem, steps } from "@/db/schema";
-import { flowTypeType } from "@/types/flowType";
-import { eq } from "drizzle-orm";
-import { useEffect, useState } from "react";
-import getProbList from "./getProbList";
+import { useState } from "react";
 import ProbCheckBox from "./probCheckBox";
 import { useStepWithProblem } from "@/hooks/useStepWithProblem";
 import { useProblemList } from "@/hooks/useProblemList";
@@ -21,24 +16,17 @@ interface SelectProblemProps {
   flow: any;
 }
 const SelectProblem: React.FC<SelectProblemProps> = ({ flow }) => {
-  const [selectedFlow, setSelectedFlow] = useState<number>(0);
-  const handleSelectChange = (value: string) => {
-    setSelectedFlow(value ? parseInt(value) : 0);
-  };
   const [probList, setProbList] = useState<problemType | null>(null);
+  const [selectedProbs, setSelectedProbs] = useState<string[]>([]);
 
-  useEffect(() => {
-    localStorage.setItem("task", selectedFlow.toString());
-    const getProbListAsync = async (selectedFlow: number) => {
-      const { stepWithProblemId } = await useStepWithProblem(selectedFlow);
-      if (!stepWithProblemId) {
-        return;
-      }
-      const probList = await useProblemList(stepWithProblemId);
-      setProbList(probList);
-    };
-    getProbListAsync(selectedFlow);
-  }, [selectedFlow]);
+  const handleSelectChange = async (value: string) => {
+    const { stepWithProblemId } = await useStepWithProblem(Number(value));
+    if (!stepWithProblemId) {
+      return;
+    }
+    const probList = await useProblemList(stepWithProblemId);
+    setProbList(probList);
+  };
 
   return (
     <div className="mt-3 flex-row">
@@ -65,7 +53,11 @@ const SelectProblem: React.FC<SelectProblemProps> = ({ flow }) => {
         </SelectContent>
       </Select>
       {probList ? (
-        <ProbCheckBox probList={probList} task={selectedFlow.toString()} />
+        <ProbCheckBox
+          probList={probList}
+          selectedProbs={selectedProbs}
+          setSelectedProbs={setSelectedProbs}
+        />
       ) : null}
     </div>
   );
