@@ -94,7 +94,7 @@ export const flow = pgTable('flow', {
   uid: integer('uid').references(() => user.id).notNull(), // 外键关联到 user 表
   flowTypeId: integer('flow_type_id').references(() => flowType.id).notNull(), // 外键关联 FlowType 表
   currentStepId: integer('current_step_id').references(() => steps.id), // 当前步骤
-  isAccepted: boolean('is_accepted').default(false), // 是否被接受
+  isAccepted: boolean('is_accepted'), // 是否被接受
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
