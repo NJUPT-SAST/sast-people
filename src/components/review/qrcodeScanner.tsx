@@ -1,7 +1,7 @@
 "use client";
 import checkUser from "./checkUser";
 import React, { useEffect, useState } from "react";
-import { QrReader } from "react-qr-reader";
+import { useZxing } from "react-zxing";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +21,12 @@ interface ReviewProps {
 
 const QRCodeScanner: React.FC = () => {
   const [data, setData] = useState("");
+  const { ref } = useZxing({
+    onDecodeResult(result) {
+      setData(result.getText());
+      console.log(result.getText());
+    },
+  });
   const [checkUserResult, setCheckUserResult] = useState(false);
   const handleCheckUser = async (data: string) => {
     setCheckUserResult(await checkUser(data));
@@ -78,24 +84,7 @@ const QRCodeScanner: React.FC = () => {
           flexDirection: "row",
         }}
       >
-        <QrReader
-          onResult={(result, error) => {
-            if (!!result) {
-              setData(result?.getText());
-            }
-
-            if (!!error) {
-              console.info(error);
-            }
-          }}
-          constraints={{ facingMode: "user" }}
-          containerStyle={{
-            width: "80%",
-            height: "60vw",
-            maxWidth: "400px",
-            maxHeight: "300px",
-          }} // 设置宽度为最大宽度的80%，高度为宽度的60%
-        />
+        <video ref={ref} />
       </div>
     </div>
   );
