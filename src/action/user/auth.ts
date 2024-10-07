@@ -11,12 +11,13 @@ export async function loginFromX(
   type: 'feishu' | 'link',
 ) {
   console.log('loginFrom', type, openid, userIdentifier);
-  let uidList: { uid: number }[] | null = null;
+  let uidList: { uid: number, isDeleted: boolean|null }[] | null = null;
   // check if openid exists
   if (type === 'feishu') {
     uidList = await db
       .select({
         uid: user.id,
+        isDeleted: user.isDeleted
       })
       .from(user)
       .where(eq(user.feishuOpenId, openid));
@@ -29,12 +30,13 @@ export async function loginFromX(
           createdAt: new Date(),
           updatedAt: new Date(),
         })
-        .returning({ uid: user.id });
+        .returning({ uid: user.id, isDeleted: user.isDeleted });
     }
   } else if (type === 'link') {
     uidList = await db
       .select({
         uid: user.id,
+        isDeleted: user.isDeleted
       })
       .from(user)
       .where(eq(user.sastLinkOpenId, openid));
@@ -48,10 +50,10 @@ export async function loginFromX(
           createdAt: new Date(),
           updatedAt: new Date(),
         })
-        .returning({ uid: user.id });
+        .returning({ uid: user.id, isDeleted: user.isDeleted });
     }
   }
-  if (uidList && uidList.length > 0) {
+  if (uidList && uidList.length > 0&&!uidList[0].isDeleted) {
     await createSession(uidList[0].uid, userIdentifier, type);
   } else {
     throw new Error('login failed');
