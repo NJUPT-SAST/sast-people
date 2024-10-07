@@ -46,6 +46,7 @@
     "react-qr-code": "^2.0.15",
     "react-qr-reader": "3.0.0-beta-1",
     "sonner": "^1.5.0",
+    "swr": "^2.2.5",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
