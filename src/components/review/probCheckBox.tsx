@@ -1,55 +1,73 @@
-"use client";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FormField, FormItem } from "../ui/form";
-import { Form } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { problemType } from "@/types/problem";
-import { Label } from "../ui/label";
-import { Dispatch, SetStateAction, useState } from "react";
+'use client';
+import { Checkbox } from '@/components/ui/checkbox';
+import { FormField, FormItem } from '../ui/form';
+import { Form } from '../ui/form';
+import { useForm } from 'react-hook-form';
+import { problemType, selectProbType } from '@/types/problem';
+import { Label } from '../ui/label';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { Button } from '../ui/button';
 interface ProbCheckBoxProps {
   probList: problemType;
-  selectedProbs: string[];
-  setSelectedProbs: Dispatch<SetStateAction<string[]>>;
+  selectedProbs: selectProbType['problemList'];
+  setSelectedProbs: Dispatch<SetStateAction<selectProbType['problemList']>>;
+  handleSave: () => void;
 }
 
 const ProbCheckBox: React.FC<ProbCheckBoxProps> = ({
   probList,
   selectedProbs,
   setSelectedProbs,
+  handleSave,
 }) => {
   if (!probList) {
     return null;
   }
   return (
-    <div className="mt-5 flex-column">
-      {Object.entries(probList).map(([key, value]) => (
-        <>
-          <p className="text-sm font-semibold mb-2">{key}</p>
-          <div className="grid grid-cols-3 gap-3">
-            {value.map((prob) => (
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  key={prob.id}
-                  name={prob.id.toString()}
-                  onCheckedChange={(check) => {
-                    if (check) {
-                      setSelectedProbs([...selectedProbs, prob.id.toString()]);
-                    } else {
-                      setSelectedProbs(
-                        selectedProbs.filter(
-                          (item) => item !== prob.id.toString()
-                        )
-                      );
-                    }
-                  }}
-                />
-                <Label>{prob.name}</Label>
-              </div>
-            ))}
+    <>
+      <div className="mt-5 flex-column">
+        {Object.entries(probList).map(([key, value], index) => (
+          <div key={`probClass-${index}`}>
+            <p className="text-sm font-semibold mb-2">{key}</p>
+            <div className="grid grid-cols-3 gap-3">
+              {value.map((prob) => (
+                <div
+                  className="flex items-center gap-2"
+                  key={`prob-${prob.id}`}
+                >
+                  <Checkbox
+                    key={prob.id}
+                    name={prob.id.toString()}
+                    defaultChecked={selectedProbs.some(
+                      (item) => item.id === prob.id,
+                    )}
+                    onCheckedChange={(check) => {
+                      setSelectedProbs((prev) => {
+                        if (check) {
+                          return [
+                            ...prev,
+                            {
+                              id: prob.id,
+                              name: prob.name,
+                              maxPoint: prob.maxScore,
+                            },
+                          ];
+                        }
+                        return prev.filter((item) => item.id !== prob.id);
+                      });
+                    }}
+                  />
+                  <Label>{prob.name}</Label>
+                </div>
+              ))}
+            </div>
           </div>
-        </>
-      ))}
-    </div>
+        ))}
+      </div>
+      <div className="mt-5">
+        <Button onClick={handleSave}>提交</Button>
+      </div>
+    </>
   );
 };
 export default ProbCheckBox;

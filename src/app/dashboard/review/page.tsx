@@ -1,16 +1,17 @@
-import { PageTitle } from "@/components/route";
-import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
-import QRCodeScanner from "@/components/review/qrcodeScanner";
+import { PageTitle } from '@/components/route';
+import { Button } from '@/components/ui/button';
+import React, { useState } from 'react';
+import QRCodeScanner from '@/components/review/qrcodeScanner';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import SelectProblem from "@/components/review/selectProblem";
-import { useFlowTypeList } from "@/hooks/useFlowTypeList";
-import useFlowType from "@/hooks/useFlowType";
+} from '@/components/ui/sheet';
+import SelectProblem from '@/components/review/selectProblem';
+import { useFlowTypeList } from '@/hooks/useFlowTypeList';
+import useFlowType from '@/hooks/useFlowType';
 
 const Review: React.FC = async () => {
   const flow = await useFlowType();
@@ -26,9 +27,9 @@ const Review: React.FC = async () => {
           </SheetTrigger>
           <SheetContent>
             <SheetHeader className="text-2xl font-semibold">
-              设置阅卷范围
+              <SheetTitle>设置阅卷范围</SheetTitle>
             </SheetHeader>
-            <SelectProblem flow={flow} />
+            <SelectProblem flowTypes={flow} />
           </SheetContent>
         </Sheet>
       </div>

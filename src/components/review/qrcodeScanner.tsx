@@ -1,26 +1,27 @@
-"use client";
-import checkUser from "./checkUser";
-import React, { useEffect, useState } from "react";
-import { useZxing } from "react-zxing";
-import { Button } from "@/components/ui/button";
+'use client';
+import checkUser from './checkUser';
+import React, { useEffect, useState } from 'react';
+import { useZxing } from 'react-zxing';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import ReviewDialog from "./reviewContent";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+} from '../ui/dialog';
+import ReviewDialog from './reviewContent';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 
 interface ReviewProps {
   task: string;
 }
 
 const QRCodeScanner: React.FC = () => {
-  const [data, setData] = useState("");
+  const [data, setData] = useState('');
   const { ref } = useZxing({
     onDecodeResult(result) {
       setData(result.getText());
@@ -44,7 +45,7 @@ const QRCodeScanner: React.FC = () => {
           placeholder="请输入考生学号或扫描考生个人识别二维码"
         />
         {checkUserResult ? (
-          <Link href={"/dashboard/review/marking?user=" + data}>
+          <Link href={'/dashboard/review/marking?user=' + data}>
             <div className="flex-none">
               <Button
                 size="sm"
@@ -69,16 +70,19 @@ const QRCodeScanner: React.FC = () => {
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <text>错误的考生学号，请重新输入或扫描</text>
+              <DialogHeader>
+                <DialogTitle>错误</DialogTitle>
+              </DialogHeader>
+              <p>错误的考生学号，请重新输入或扫描</p>
             </DialogContent>
           </Dialog>
         )}
       </div>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "row",
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'row',
         }}
       >
         <video ref={ref} />
