@@ -20,27 +20,25 @@ export const MarkProblemTable = ({
 }) => {
   const studentId = useSearchParams().get('user');
 
-  const [problemPoints, setProblemPoints] = useState<Array<insertExamMapType>>([]);
+  const [problemPoints, setProblemPoints] = useState<Array<insertExamMapType>>(points);
   const problems = useLocalProblemList();
   useEffect(() => {
-    const problemPoints: Array<insertExamMapType> = [];
-    console.log('points', points);
-    console.log('problems', problems);
+    if (problems.length === problemPoints.length) {
+      return;
+    }
+    const newProblemPoints: Array<insertExamMapType> = [];
     problems.forEach(e => {
       const index = points.findIndex(p => p.problemId === e.id);
-      console.log('index', index);
-      if (index <= 0) {
-        // problemPoints.push({
-        //   flowStepId,
-        //   problemId: e.id,
-        //   score: 0,
-        //   judgerId: 0,
-        //   judgeTime: new Date(),
-        // });
-      }
+      newProblemPoints.push({
+        flowStepId,
+        problemId: e.id,
+        score: index === -1 ? 0 : points[index].score,
+        judgerId: 0,
+        judgeTime: new Date(),
+      })
     });
-    if (problemPoints.length > 0) {
-      setProblemPoints(problemPoints);
+    if (newProblemPoints.length > 0) {
+      setProblemPoints(newProblemPoints);
     };
   });
 
@@ -74,15 +72,15 @@ export const MarkProblemTable = ({
             {problemPoints.map((problemPoint, index) => (
               <fieldset key={index} className="border p-4 rounded-lg">
                 <legend className="px-2 text-sm font-medium text-muted-foreground">
-                  {problems[index].name}
+                  {problems[index]?.name}
                 </legend>
                 <div className="flex flex-col gap-2">
                   <div>
-                    <Label htmlFor={`problem-maxScore-${problems[index].id}`}>
+                    <Label htmlFor={`problem-maxScore-${problems[index]?.id}`}>
                       得分
                     </Label>
                     <Input
-                      id={`problem-maxScore-${problems[index].id}`}
+                      id={`problem-maxScore-${problems[index]?.id}`}
                       type="number"
                       value={problemPoint.score}
                       onChange={(e) => {

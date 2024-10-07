@@ -2,7 +2,7 @@
 import { db } from '@/db/drizzle';
 import { flow, flowStep, user } from '@/db/schema';
 import { verifyRole } from '@/lib/dal';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 export const useOngoingFlowStep = async (studentId: string) => {
   verifyRole(1);
@@ -16,18 +16,10 @@ export const useOngoingFlowStep = async (studentId: string) => {
     .from(flow)
     .innerJoin(user, eq(user.studentId, studentId))
     .innerJoin(flowStep, eq(flow.currentStepId, flowStep.stepId))
-    .where(eq(user.id, flow.uid))
+    .where(and(eq(user.id, flow.uid), eq(flow.id, flowStep.flowId)))
     .then(res => {
-      console.log(res);
       return res[0]?.flowStepId;
     });
-    // .where(eq(user.studentId, studentId))
-    // .innerJoin(flow, eq(user.id, flow.uid))
-    // .innerJoin(flowStep, eq(flow.currentStepId, flowStep.stepId), )
-    // .then(res => {
-    //   console.log(res);
-    //   return res[0]?.flowStepId;
-    // });
 
   if (!flowStepId) {
     throw new Error('您还没有报名流程');
