@@ -10,6 +10,7 @@ import { Label } from '../ui/label';
 import { RefreshCw, Save } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useLocalProblemList } from '@/hooks/useLocalProblemList';
+import { toast } from 'sonner';
 
 export const MarkProblemTable = ({
   points,
@@ -77,7 +78,7 @@ export const MarkProblemTable = ({
                 <div className="flex flex-col gap-2">
                   <div>
                     <Label htmlFor={`problem-maxScore-${problems[index]?.id}`}>
-                      得分
+                    得分 (满分{problems[index]?.maxPoint}分)
                     </Label>
                     <Input
                       id={`problem-maxScore-${problems[index]?.id}`}
@@ -95,7 +96,12 @@ export const MarkProblemTable = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleUpdate(index, problemPoints[index].score)}
+                      onClick={
+                        () => {
+                          handleUpdate(index, problemPoints[index].score)
+                          toast.success(`已更新 ${problems[index]?.name} 的得分`);
+                        }
+                      }
                     >
                       更新 <RefreshCw className="w-4 h-4 ml-2" />
                     </Button>
