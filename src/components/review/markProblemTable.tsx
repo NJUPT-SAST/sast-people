@@ -61,6 +61,12 @@ export const MarkProblemTable = ({
             <Button
               size="sm"
               onClick={() => {
+                for( let i = 0; i < problemPoints.length; i++) {
+                  if (problemPoints[i].score < 0 || problemPoints[i].score > problems[i]?.maxPoint) {
+                    toast.error(`更新失败，${problems[i]?.name}的得分必须在0到${problems[i]?.maxPoint}之间！`);
+                    return;
+                  }
+                }
                 handleSave();
               }}
             >
@@ -98,8 +104,12 @@ export const MarkProblemTable = ({
                       variant="outline"
                       onClick={
                         () => {
-                          handleUpdate(index, problemPoints[index].score)
-                          toast.success(`已更新 ${problems[index]?.name} 的得分`);
+                          if (problemPoints[index].score < 0 || problemPoints[index].score > problems[index]?.maxPoint) 
+                            toast.error(`更新失败，${problems[index]?.name}的得分必须在0到${problems[index]?.maxPoint}之间！`);
+                          else {
+                            handleUpdate(index, problemPoints[index].score)
+                            toast.success(`已更新 ${problems[index]?.name} 的得分`);
+                          }
                         }
                       }
                     >
