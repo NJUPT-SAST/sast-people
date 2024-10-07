@@ -24,14 +24,11 @@ const QRCodeScanner: React.FC = () => {
   const { ref } = useZxing({
     onDecodeResult(result) {
       setData(result.getText());
-      console.log(result.getText());
     },
   });
   const [checkUserResult, setCheckUserResult] = useState(false);
   const handleCheckUser = async (data: string) => {
     setCheckUserResult(await checkUser(data));
-
-    console.log("114515", checkUserResult);
   };
   useEffect(() => {
     handleCheckUser(data);
