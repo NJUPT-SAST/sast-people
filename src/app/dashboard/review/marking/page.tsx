@@ -1,28 +1,46 @@
-import ReviewContent from "@/components/review/reviewContent";
-import React from "react";
-import { PageTitle } from "@/components/route";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+'use server';
+import React from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { useExamMapList } from '@/hooks/useExamMapList';
+import { MarkProblemTable } from '@/components/review/markProblemTable';
+import { ArrowLeftIcon } from 'lucide-react';
+import { useOngoingFlowStep } from '@/hooks/useOngoingFlowStep';
 
 interface MarkingProps {
   user: string;
 }
-export default function marking({
-  searchParams,
-}: {
-  searchParams: { user: string };
-}) {
+
+const Marking = async ({searchParams}: {
+  searchParams: {
+    user: string;
+  }
+}) => {
+  const flowStepId = await useOngoingFlowStep(searchParams.user);
+  console.log('flowStepId', flowStepId);
+  const points = await useExamMapList(flowStepId);
+  console.log('points', points);
+
   return (
-    <div>
-      <PageTitle />
+    <>
       <div className="flex items-center justify-between">
-        <div className=" text-2xl">{"正在批改：" + searchParams.user}</div>
         <Link href="/dashboard/review">
-          <Button>返回</Button>
+          <Button variant="ghost">
+            <h1 className="text-lg font-semibold md:text-2xl inline-flex items-center gap-2">
+              <ArrowLeftIcon className="w-5 h-5" /> 准备阅卷
+            </h1>
+          </Button>
         </Link>
       </div>
-      <ReviewContent />
-    </div>
+      {/* map problems to a list of points */}
+      <div>
+        <MarkProblemTable
+          points={points}
+          flowStepId={flowStepId}
+        />
+      </div>
+    </>
   );
-}
+};
+
+export default Marking;

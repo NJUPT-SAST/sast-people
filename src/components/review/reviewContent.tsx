@@ -13,7 +13,6 @@ interface ReviewDialogProps {
 const ReviewContent: React.FC = () => {
   const task = localStorage.getItem('task');
   const [probList, setProbList] = useState<ReviewDialogProps[]>([]);
-  console.log('11451411', task, parseInt(task ?? '0'));
   if (task && parseInt(task) === 0) {
     return (
       <div>

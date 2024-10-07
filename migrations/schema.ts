@@ -102,6 +102,7 @@ export const examMap = pgTable("exam_map", {
 			foreignColumns: [problem.id],
 			name: "exam_map_problem_id_problem_id_fk"
 		}),
+		uniqueFlowStepProblem: unique("unique_flow_step_problem_index").on(table.flowStepId, table.problemId),
 	}
 });
 
