@@ -80,6 +80,7 @@ const QRCodeScanner: React.FC = () => {
       </div>
       <div
         style={{
+          marginTop: '20px',
           display: 'flex',
           justifyContent: 'center',
           flexDirection: 'row',
