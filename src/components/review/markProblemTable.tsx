@@ -44,8 +44,8 @@ export const MarkProblemTable = ({
   });
 
 
-  const handleSave = () => {
-    batchUpsert(points);
+  const handleSave = async () => {
+    await batchUpsert(points);
   };
 
   const handleUpdate = (index: number, score: number) => {
@@ -60,14 +60,20 @@ export const MarkProblemTable = ({
             <p>正在批改：{studentId}</p>
             <Button
               size="sm"
-              onClick={() => {
+              onClick={async () => {
                 for( let i = 0; i < problemPoints.length; i++) {
                   if (problemPoints[i].score < 0 || problemPoints[i].score > problems[i]?.maxPoint) {
                     toast.error(`更新失败，${problems[i]?.name}的得分必须在0到${problems[i]?.maxPoint}之间！`);
                     return;
                   }
                 }
-                handleSave();
+                try {
+                  await handleSave();
+                  toast.success('已保存所有得分');
+                }
+                catch (e) {
+                  toast.error('保存失败，请重试！');
+                }
               }}
             >
               保存 <Save className="w-4 h-4 ml-2" />
