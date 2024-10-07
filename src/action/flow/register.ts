@@ -1,9 +1,9 @@
-"use server";
-import { verifySession } from "@/lib/dal";
-import { db } from "@/db/drizzle";
-import { flow, flowStep, steps, status } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+'use server';
+import { verifySession } from '@/lib/dal';
+import { db } from '@/db/drizzle';
+import { flow, flowStep, steps, status } from '@/db/schema';
+import { and, eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 
 export const register = async (flowTypeId: number, uid: number) => {
   // 检查用户是否已经报名了这个流程
@@ -14,7 +14,7 @@ export const register = async (flowTypeId: number, uid: number) => {
     .limit(1);
 
   if (existingFlow.length > 0) {
-    throw new Error("您已经报名了这个流程");
+    throw new Error('您已经报名了这个流程');
   }
 
   // 获取流程的所有步骤
@@ -25,7 +25,7 @@ export const register = async (flowTypeId: number, uid: number) => {
     .orderBy(steps.order);
 
   if (flowSteps.length === 0) {
-    throw new Error("该流程没有定义步骤");
+    throw new Error('该流程没有定义步骤');
   }
 
   // 开启事务
@@ -37,7 +37,7 @@ export const register = async (flowTypeId: number, uid: number) => {
         uid: uid,
         flowTypeId: flowTypeId,
         currentStepId: flowSteps[0].id, // 设置为第一个步骤
-        isAccepted: false,
+        isAccepted: null,
       })
       .returning();
 
@@ -48,8 +48,8 @@ export const register = async (flowTypeId: number, uid: number) => {
         stepId: step.id,
         status: step.order === 1 ? status.enumValues[3] : status.enumValues[0], // 使用枚举值
         startedAt: step.order === 1 ? new Date() : null, // 第一个步骤的开始时间为当前时间
-      }))
+      })),
     );
-    revalidatePath("/flow");
+    revalidatePath('/flow');
   });
 };
