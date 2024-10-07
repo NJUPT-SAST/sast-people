@@ -17,7 +17,7 @@ export default function marking({
     <div>
       <PageTitle />
       <div className="flex items-center justify-between">
-        <text className=" text-2xl">{"正在批改：" + searchParams.user}</text>
+        <div className=" text-2xl">{"正在批改：" + searchParams.user}</div>
         <Link href="/dashboard/review">
           <Button>返回</Button>
         </Link>
