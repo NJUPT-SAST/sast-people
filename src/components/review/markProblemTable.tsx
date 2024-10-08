@@ -10,6 +10,7 @@ import { Label } from '../ui/label';
 import { RefreshCw, Save } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useLocalProblemList } from '@/hooks/useLocalProblemList';
+import { toast } from 'sonner';
 
 export const MarkProblemTable = ({
   points,
@@ -20,37 +21,45 @@ export const MarkProblemTable = ({
 }) => {
   const studentId = useSearchParams().get('user');
 
-  const [problemPoints, setProblemPoints] = useState<Array<insertExamMapType>>(points);
+  const [problemPoints, setProblemPoints] =
+    useState<Array<insertExamMapType>>(points);
   const problems = useLocalProblemList();
   useEffect(() => {
     if (problems.length === problemPoints.length) {
       return;
     }
     const newProblemPoints: Array<insertExamMapType> = [];
-    problems.forEach(e => {
-      const index = points.findIndex(p => p.problemId === e.id);
+    problems.forEach((e) => {
+      const index = points.findIndex((p) => p.problemId === e.id);
       newProblemPoints.push({
         flowStepId,
         problemId: e.id,
         score: index === -1 ? 0 : points[index].score,
         judgerId: 0,
         judgeTime: new Date(),
-      })
+      });
     });
     if (newProblemPoints.length > 0) {
       setProblemPoints(newProblemPoints);
-    };
+    }
   });
 
-
-  const handleSave = () => {
-    batchUpsert(points);
+  const handleSave = (problemPoints: Array<insertExamMapType>) => {
+    toast.promise(batchUpsert(problemPoints), {
+      loading: '保存中...',
+      success: '保存成功',
+      error: '保存失败',
+    });
   };
 
   const handleUpdate = (index: number, score: number) => {
-    console.log('update', index, score);
-    upsert(flowStepId, problems[index].id, score, new Date());
+    toast.promise(upsert(flowStepId, problems[index].id, score, new Date()), {
+      loading: '更新中...',
+      success: '更新成功',
+      error: '更新失败',
+    });
   };
+
   return (
     <div className="space-x-2">
       <Card key={flowStepId}>
@@ -60,7 +69,7 @@ export const MarkProblemTable = ({
             <Button
               size="sm"
               onClick={() => {
-                handleSave();
+                handleSave(problemPoints);
               }}
             >
               保存 <Save className="w-4 h-4 ml-2" />
@@ -76,15 +85,16 @@ export const MarkProblemTable = ({
                 </legend>
                 <div className="flex flex-col gap-2">
                   <div>
-                    <Label htmlFor={`problem-maxScore-${problems[index]?.id}`}>
+                    <Label htmlFor={`problem-score-${problems[index]?.id}`}>
                       得分
                     </Label>
                     <Input
-                      id={`problem-maxScore-${problems[index]?.id}`}
+                      id={`problem-score-${problems[index]?.id}`}
                       type="number"
+                      max={problems[index]?.maxPoint}
+                      // min={0}
                       value={problemPoint.score}
                       onChange={(e) => {
-                        console.log(e.target.value);
                         const newProblemPoints = [...problemPoints];
                         newProblemPoints[index].score = Number(e.target.value);
                         setProblemPoints(newProblemPoints);
@@ -95,7 +105,9 @@ export const MarkProblemTable = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleUpdate(index, problemPoints[index].score)}
+                      onClick={() =>
+                        handleUpdate(index, problemPoints[index].score)
+                      }
                     >
                       更新 <RefreshCw className="w-4 h-4 ml-2" />
                     </Button>
