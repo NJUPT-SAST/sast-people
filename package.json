@@ -43,6 +43,7 @@
     "react-day-picker": "9.0.9",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
+    "react-media-devices": "^1.1.5",
     "react-qr-code": "^2.0.15",
     "react-zxing": "^2.0.2",
     "sonner": "^1.5.0",
