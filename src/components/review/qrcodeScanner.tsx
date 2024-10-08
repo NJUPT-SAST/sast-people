@@ -1,5 +1,5 @@
 'use client';
-import checkUser from './checkUser';
+import { checkUserByStuID, findUserByUid } from './checkUser';
 import React, { useEffect, useState } from 'react';
 import { useZxing } from 'react-zxing';
 import { Button } from '@/components/ui/button';
@@ -10,11 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
-import ReviewDialog from './reviewContent';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { toast } from 'sonner';
 
 interface ReviewProps {
   task: string;
@@ -29,8 +28,25 @@ const QRCodeScanner: React.FC = () => {
   });
   const [checkUserResult, setCheckUserResult] = useState(false);
   const handleCheckUser = async (data: string) => {
-    setCheckUserResult(await checkUser(data));
-  };
+    if (checkUserResult) return;
+    if (data.length < 9) return;
+    else if (data.length === 9) {
+      setCheckUserResult(await checkUserByStuID(data));
+    } else {
+      const info = JSON.parse(atob(data));
+      await findUserByUid(info.uid).then((res) => {
+        if (res.studentId === null) {
+          toast.error('错误的考生学号，请重新输入或扫描');
+          setCheckUserResult(false);
+          return;
+        }
+        setCheckUserResult(true);
+        setData(res.studentId);
+    }).catch((err) => {
+      setCheckUserResult(false);
+      toast.error(err.message);
+    });
+  }};
   useEffect(() => {
     handleCheckUser(data);
   }, [data]);
@@ -65,6 +81,7 @@ const QRCodeScanner: React.FC = () => {
                 onClick={() => {
                   handleCheckUser;
                 }}
+                disabled={data.length != 9}
               >
                 开始阅卷
               </Button>
