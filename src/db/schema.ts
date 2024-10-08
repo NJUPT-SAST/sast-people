@@ -109,14 +109,25 @@ export const flowStep = pgTable('flow_step', {
   completedAt: timestamp('completed_at'),
 });
 
-export const examMap = pgTable("exam_map", {
-  id: serial("id").primaryKey(),
-  flowStepId: integer("flow_step_id").references(() => flowStep.id), // 外键关联 FlowSteps 表
-  problemId: integer("problem_id").references(() => problem.id), // 问题 ID
-  score: integer("score").notNull(), // 评分
-  judgerId: integer("judger_id").notNull(), // 评审者 ID
-  judgeTime: timestamp("judge_time").notNull(), // 评审时间
-});
+export const examMap = pgTable(
+  "exam_map",
+  {
+    id: serial("id").primaryKey(),
+    flowStepId: integer("flow_step_id").references(() => flowStep.id), // 外键关联 FlowSteps 表
+    problemId: integer("problem_id").references(() => problem.id), // 问题 ID
+    score: integer("score").notNull(), // 评分
+    judgerId: integer("judger_id").notNull(), // 评审者 ID
+    judgeTime: timestamp("judge_time").notNull(), // 评审时间
+  },
+  (examMap) => {
+    return {
+      uniqueFlowStepProblem: uniqueIndex("unique_flow_step_problem_index").on(
+        examMap.flowStepId,
+        examMap.problemId
+      ),
+    };
+  }
+);
 
 // CollegeList 表
 export const college = pgTable("college", {
