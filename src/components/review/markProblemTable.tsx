@@ -68,7 +68,13 @@ export const MarkProblemTable = ({
             <p>正在批改：{studentId}</p>
             <Button
               size="sm"
-              onClick={() => {
+              onClick={async () => {
+                for( let i = 0; i < problemPoints.length; i++) {
+                  if (problemPoints[i].score < 0 || problemPoints[i].score > problems[i]?.maxPoint) {
+                    toast.error(`更新失败，${problems[i]?.name}的得分必须在0到${problems[i]?.maxPoint}之间！`);
+                    return;
+                  }
+                }
                 handleSave(problemPoints);
               }}
             >
@@ -85,8 +91,8 @@ export const MarkProblemTable = ({
                 </legend>
                 <div className="flex flex-col gap-2">
                   <div>
-                    <Label htmlFor={`problem-score-${problems[index]?.id}`}>
-                      得分
+                    <Label htmlFor={`problem-maxScore-${problems[index]?.id}`}>
+                    得分 (满分{problems[index]?.maxPoint}分)
                     </Label>
                     <Input
                       id={`problem-score-${problems[index]?.id}`}
@@ -105,8 +111,14 @@ export const MarkProblemTable = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() =>
-                        handleUpdate(index, problemPoints[index].score)
+                      onClick={
+                        () => {
+                          if (problemPoints[index].score < 0 || problemPoints[index].score > problems[index]?.maxPoint) 
+                            toast.error(`更新失败，${problems[index]?.name}的得分必须在0到${problems[index]?.maxPoint}之间！`);
+                          else {
+                            handleUpdate(index, problemPoints[index].score)
+                          }
+                        }
                       }
                     >
                       更新 <RefreshCw className="w-4 h-4 ml-2" />

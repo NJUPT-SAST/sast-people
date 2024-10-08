@@ -4,7 +4,6 @@ import { db } from "@/db/drizzle";
 import { eq } from "drizzle-orm";
 const checkUser =async(data: string) => {
     try {
-        console.log('114514',data);
         const userInfo = await db
             .select()
             .from(user)
