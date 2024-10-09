@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "concurrently 'next dev -p 3001' 'quirrel'",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -39,6 +39,7 @@
     "next": "14.2.11",
     "next-themes": "^0.3.0",
     "pg": "^8.12.0",
+    "quirrel": "^1.14.1",
     "react": "^18",
     "react-day-picker": "9.0.9",
     "react-dom": "^18",
@@ -58,6 +59,7 @@
     "@types/pg": "^8.11.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "concurrently": "^9.0.1",
     "drizzle-kit": "^0.24.2",
     "eslint": "^9",
     "eslint-config-next": "14.2.11",

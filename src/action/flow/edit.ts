@@ -1,6 +1,7 @@
 'use server';
 import { db } from '@/db/drizzle';
 import { flow, flowStep, steps, status } from '@/db/schema';
+import eventManager from '@/event';
 import { verifyRole } from '@/lib/dal';
 import { and, asc, desc, eq, gt, lt } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -23,6 +24,10 @@ export const forward = async (
 
   if (nextStep.length === 0) {
     throw new Error('This is the last step');
+  }
+
+  if (eventManager[nextStep[0].label]) {
+    eventManager[nextStep[0].label](flowId.toString());
   }
 
   await db.transaction(async (tx) => {
@@ -143,8 +148,6 @@ export const backward = async (
   if (previousStep.length === 0) {
     throw new Error('This is the first step');
   }
-
-  console.log(previousStep);
 
   await db.transaction(async (tx) => {
     await tx

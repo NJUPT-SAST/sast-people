@@ -1,9 +1,10 @@
 'use server';
 import { verifySession } from '@/lib/dal';
 import { db } from '@/db/drizzle';
-import { flow, flowStep, steps, status } from '@/db/schema';
+import { flow, flowStep, steps, status, user } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import eventManager from '@/event';
 
 export const register = async (flowTypeId: number, uid: number) => {
   // 检查用户是否已经报名了这个流程
@@ -26,6 +27,18 @@ export const register = async (flowTypeId: number, uid: number) => {
 
   if (flowSteps.length === 0) {
     throw new Error('该流程没有定义步骤');
+  }
+
+  const userPhoneNumber = (
+    await db
+      .select({ phoneNumber: user.phoneNumber })
+      .from(user)
+      .where(eq(user.id, uid))
+      .limit(1)
+  )[0].phoneNumber;
+
+  if (!userPhoneNumber) {
+    throw new Error('填写先个人信息');
   }
 
   // 开启事务
@@ -51,5 +64,13 @@ export const register = async (flowTypeId: number, uid: number) => {
       })),
     );
     revalidatePath('/flow');
+    eventManager.register(
+      uid,
+      flowSteps[0].label,
+      flowSteps[0].id,
+      flowTypeId,
+      newFlow.id,
+      flowSteps[0].order,
+    );
   });
 };
