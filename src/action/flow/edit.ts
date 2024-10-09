@@ -26,6 +26,7 @@ export const forward = async (
     throw new Error('This is the last step');
   }
 
+  // 自动触发 label 关联的事件
   if (eventManager[nextStep[0].label]) {
     eventManager[nextStep[0].label](flowId.toString());
   }
