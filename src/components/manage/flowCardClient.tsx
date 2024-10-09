@@ -259,6 +259,12 @@ export const FlowCard = ({ flow }: FlowCardProps) => {
 							</Button>
 						) : (
 							<>
+								
+								<Button
+								disabled={loading}
+								>
+									发送邮件
+								</Button>
 								{
 									// 如果当前步骤不是第一个步骤，显示后退按钮
 									currentStepIndex > 0 && (
