@@ -20,16 +20,17 @@ import {
 } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Plus, Copy, Trash2 } from 'lucide-react';
+import { Plus, Copy, Trash2, Navigation } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { stepType } from '@/types/step';
+import { fullStepType, stepType } from '@/types/step';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { z } from 'zod';
 import { addFlowTypeSchema } from '../add';
 import { flowTypeType } from '@/types/flowType';
+import { batchUpdate } from '@/action/flow/edit';
 
 export const EditSteps = ({ data }: { data: flowTypeType }) => {
   const editFlowForm = useForm<z.infer<typeof addFlowTypeSchema>>({
@@ -182,6 +183,26 @@ export const EditSteps = ({ data }: { data: flowTypeType }) => {
                 </div>
 
                 <div className="flex justify-end">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="m-0"
+                    onClick={() => {
+                      const stepData = stepList[index] as fullStepType;
+                      const prevStep = index > 0 ? stepList[index - 1] as fullStepType : null;
+                      toast.promise(
+                        batchUpdate(stepData.flowTypeId, stepData.id, prevStep?.id),
+                        {
+                          loading: '正在将所有人设置到该步骤',
+                          success: '设置成功',
+                          error: '设置失败',
+                        },
+                      );
+
+                    }}
+                  >
+                    <Navigation size={18} />
+                  </Button>
                   <Button
                     size="sm"
                     variant="ghost"
