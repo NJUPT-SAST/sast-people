@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { MannualInput } from '@/components/review/mannualInput';
 
 const Review: React.FC = async () => {
   const flow = await useFlowType();
@@ -48,14 +49,7 @@ const Review: React.FC = async () => {
             <div>
               <QRCodeScanner />
             </div>
-            <div className="flex items-center gap-3">
-              <Input placeholder="请输入考生学号" />
-              <Link href={'/dashboard/review/marking?user='}>
-                <div className="flex-none">
-                  <Button size="sm">开始阅卷</Button>
-                </div>
-              </Link>
-            </div>
+            <MannualInput />
           </CardContent>
         </Card>
       </div>
