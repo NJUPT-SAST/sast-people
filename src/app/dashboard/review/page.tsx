@@ -1,6 +1,6 @@
 import { PageTitle } from '@/components/route';
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
+import React, { Suspense } from 'react';
 import QRCodeScanner from '@/components/review/qrcodeScanner';
 import {
   Sheet,
@@ -9,16 +9,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import SelectProblem from '@/components/review/selectProblem';
-import { useFlowTypeList } from '@/hooks/useFlowTypeList';
-import useFlowType from '@/hooks/useFlowType';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { SelectProblemServer } from './selectProblem';
+import { Loading } from '@/components/loading';
 
 const Review: React.FC = async () => {
-  const flow = await useFlowType();
   return (
     <>
       <div className="flex items-center justify-between">
@@ -33,7 +30,9 @@ const Review: React.FC = async () => {
             <SheetHeader className="text-2xl font-semibold">
               <SheetTitle>设置阅卷范围</SheetTitle>
             </SheetHeader>
-            <SelectProblem flowTypes={flow} />
+            <Suspense fallback={<Loading />}>
+              <SelectProblemServer />
+            </Suspense>
           </SheetContent>
         </Sheet>
       </div>

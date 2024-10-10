@@ -6,10 +6,11 @@ import {
 import { PageTitle } from '@/components/route';
 import { Button } from '@/components/ui/button';
 import { useFlowTypeList } from '@/hooks/useFlowTypeList';
-import React from 'react';
+import React, { Suspense } from 'react';
+import { FlowTypeTableServer } from './flowTypeTable';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const FlowTypes = async () => {
-  const data = await useFlowTypeList();
   return (
     <>
       <div className="flex items-center justify-between w-full">
@@ -17,7 +18,15 @@ const FlowTypes = async () => {
         <AddFlowType />
       </div>
       <div>
-        <FlowTypeTable columns={FlowTypeTableColumns} data={data} />
+        <Suspense
+          fallback={
+            <>
+              <Skeleton className="w-full h-[200px]" />
+            </>
+          }
+        >
+          <FlowTypeTableServer />
+        </Suspense>
       </div>
     </>
   );

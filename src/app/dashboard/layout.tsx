@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Header } from '@/components/route';
 import { UserCard } from '../../components/userCard';
 import { verifySession } from '@/lib/dal';
+import { Suspense } from 'react';
+import { Loading } from '@/components/loading';
 
 export const metadata: Metadata = {
   title: 'SAST 招新',
@@ -60,7 +62,7 @@ export default async function RootLayout({
           </Sheet>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 w-full">
-          {children}
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
       </div>
     </div>

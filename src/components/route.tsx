@@ -49,7 +49,6 @@ export const Header = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
-  console.log(pathname);
   const authRoutes = useMemo(() => {
     if (!role) {
       return menuItems.slice(0, 2);
