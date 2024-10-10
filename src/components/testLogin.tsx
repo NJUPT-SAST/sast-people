@@ -8,7 +8,7 @@ import { loginFromTest } from '@/action/user/auth';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
-export const TestLogin = async () => {
+export const TestLogin = () => {
   const formStatus = useFormStatus();
   const router = useRouter();
   return (
@@ -44,7 +44,7 @@ export const TestLogin = async () => {
   );
 };
 
-const FormContentWithStatus = async () => {
+const FormContentWithStatus = () => {
   const formStatus = useFormStatus();
   return (
     <>
