@@ -6,9 +6,9 @@ import { Button } from './ui/button';
 import { useFormStatus } from 'react-dom';
 import { loginFromTest } from '@/action/user/auth';
 import { toast } from 'sonner';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export const TestLogin = async () => {
+export const TestLogin = () => {
   const formStatus = useFormStatus();
   const router = useRouter();
   return (
@@ -19,12 +19,9 @@ export const TestLogin = async () => {
         action={async (formdata) => {
           toast.promise(
             async () => {
-              const uid = await loginFromTest(formdata);
-              if (uid) {
-                router.push('/dashboard');
-                return;
-              }
-              Promise.reject();
+              await loginFromTest(formdata);
+              router.push('/dashboard');
+              return;
             },
             {
               loading: '登录中',
@@ -47,7 +44,7 @@ export const TestLogin = async () => {
   );
 };
 
-const FormContentWithStatus = async () => {
+const FormContentWithStatus = () => {
   const formStatus = useFormStatus();
   return (
     <>

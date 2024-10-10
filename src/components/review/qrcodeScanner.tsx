@@ -124,7 +124,7 @@ const QRCodeScanner = () => {
             <Button variant="outline" onClick={() => setShowDialog(false)}>
               取消
             </Button>
-            <Link href={`/dashboard/review/marking?user=${userInfo?.id}`}>
+            <Link href={`/dashboard/review/marking?user=${userInfo?.studentId}`}>
               <Button>确认</Button>
             </Link>
           </DialogFooter>
