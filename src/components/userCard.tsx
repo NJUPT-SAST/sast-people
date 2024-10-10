@@ -28,7 +28,7 @@ export const UserCard: React.FC = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Link href="/api/auth/logout">
+          <Link href="/api/auth/logout" prefetch={false}>
             <Button
               size="sm"
               className="w-full"
