@@ -6,21 +6,15 @@ import { eq } from 'drizzle-orm';
 import { mqClient } from '@/queue/client';
 
 export default async function offer(flowId: number) {
-  const uid = (
+  const studentID = (
     await db
       .select({
-        uid: flow.uid,
+        studentID: user.studentId,
       })
-      .from(flow)
+      .from(user)
+      .innerJoin(flow, eq(flow.uid, user.id))
       .where(eq(flow.id, flowId))
       .limit(1)
-  )[0].uid;
-  const studentId = (
-    await db
-      .select({ studentId: user.studentId })
-      .from(user)
-      .where(eq(user.id, uid))
-      .limit(1)
-  )[0].studentId;
-  await mqClient.send({ name: sendEmail.name, data: { studentId } });
+  )[0]?.studentID?.toLocaleLowerCase();
+  await mqClient.send({ name: sendEmail.name, data: { studentID } });
 }

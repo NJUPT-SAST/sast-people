@@ -3,7 +3,7 @@ import { db } from '@/db/drizzle';
 import { flow, flowStep, steps, status } from '@/db/schema';
 import eventManager from '@/event';
 import { verifyRole } from '@/lib/dal';
-import { and, asc, desc, eq, gt, lt } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, lt, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export const forward = async (
@@ -31,26 +31,33 @@ export const forward = async (
     eventManager[nextStep[0].label](flowId.toString());
   }
 
-  await db.transaction(async (tx) => {
-    await tx
-      .update(flow)
-      .set({ currentStepId: nextStep[0].id })
-      .where(eq(flow.id, flowId));
+  const nextStepRecord = nextStep[0];
+  const nextStepId = nextStepRecord.id;
 
-    await tx
-      .update(flowStep)
-      .set({ status: status.enumValues[1] })
-      .where(
-        and(eq(flowStep.flowId, flowId), eq(flowStep.stepId, currentStepId)),
-      );
+  const updateSql = sql`
+    WITH
+    updated_flow AS (
+      UPDATE "flow"
+      SET "current_step_id" = ${nextStepId}
+      WHERE "id" = ${flowId}
+      RETURNING *
+    ),
+    updated_current_flowStep AS (
+      UPDATE "flow_step"
+      SET "status" = ${status.enumValues[1]}, "completed_at" = now()
+      WHERE "flow_id" = ${flowId} AND "step_id" = ${currentStepId}
+      RETURNING *
+    ),
+    updated_next_flowStep AS (
+      UPDATE "flow_step"
+      SET "status" = ${status.enumValues[3]}, "started_at" = now()
+      WHERE "flow_id" = ${flowId} AND "step_id" = ${nextStepId}
+      RETURNING *
+    )
+    SELECT 1;
+  `;
 
-    await tx
-      .update(flowStep)
-      .set({ status: status.enumValues[3], startedAt: new Date() })
-      .where(
-        and(eq(flowStep.flowId, flowId), eq(flowStep.stepId, nextStep[0].id)),
-      );
-  });
+  await db.execute<Record<string, unknown>>(updateSql);
 };
 
 // finish the last step
