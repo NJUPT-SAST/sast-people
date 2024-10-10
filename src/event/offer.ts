@@ -1,8 +1,9 @@
 import 'server-only';
 import { db } from '@/db/drizzle';
 import { flow, user } from '@/db/schema';
-import sendEmail, { sendEmailTest } from '@/queue/sendEmail';
+import { sendEmail } from '@/queue/sendEmail';
 import { eq } from 'drizzle-orm';
+import { mqClient } from '@/queue/client';
 
 export default async function offer(flowId: number) {
   const uid = (
@@ -21,8 +22,5 @@ export default async function offer(flowId: number) {
       .where(eq(user.id, uid))
       .limit(1)
   )[0].studentId;
-  // await sendEmailTest(`${studentId}@njupt.edu.cn`);
-  await sendEmail.enqueue(`${studentId}@njupt.edu.cn`, {
-    id: `offer-${flowId}`,
-  });
+  await mqClient.send({ name: sendEmail.name, data: { studentId } });
 }

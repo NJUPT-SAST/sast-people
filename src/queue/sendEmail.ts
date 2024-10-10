@@ -1,6 +1,6 @@
 import 'server-only';
-import { Queue } from 'quirrel/next';
 import { createTransport } from 'nodemailer';
+import { mqClient } from './client';
 
 const transporter = createTransport({
   host: 'smtp.feishu.cn',
@@ -12,20 +12,16 @@ const transporter = createTransport({
   },
 });
 
-export default Queue('api/sendOfferEmail', async (emailAddress: string) => {
-  await transporter
-    .sendMail({
-      from: '"SAST R&D Center" <recruitment@sast.fun>',
-      to: emailAddress,
-      subject: `SAST 2024 招新结果`,
-      text: 'test',
-    })
-    .then((res) => {
-      console.log(res);
-    });
-});
+export const sendEmail = mqClient.createFunction(
+  { id: 'step/send.email' },
+  { event: 'step/send.email' },
+  async ({ event, step }) => {
+    await email(`${event.data.studentId}@njupt.edu.cn`);
+    return { success: true };
+  },
+);
 
-export const sendEmailTest = async (emailAddress: string) => {
+export const email = async (emailAddress: string) => {
   console.log(`Sending offer email to ${emailAddress}`);
   let mailOptions = {
     from: '"SAST R&D Center" <recruitment@sast.fun>',

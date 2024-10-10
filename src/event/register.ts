@@ -1,7 +1,6 @@
 import 'server-only';
 import { db } from '@/db/drizzle';
 import { flow, steps, user } from '@/db/schema';
-import sendEmail from '@/queue/sendEmail';
 import { eq } from 'drizzle-orm';
 import { forward } from '@/action/flow/edit';
 
