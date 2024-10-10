@@ -1,9 +1,10 @@
 'use server';
 import { db } from '@/db/drizzle';
 import { user } from '@/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { eq, or, sql } from 'drizzle-orm';
 import { createSession, deleteSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
+import { userType } from '@/types/user';
 
 export async function loginFromX(
   openid: string,
@@ -11,16 +12,10 @@ export async function loginFromX(
   type: 'feishu' | 'link',
 ) {
   console.log('loginFrom', type, openid, userIdentifier);
-  let uidList: { uid: number, isDeleted: boolean|null }[] | null = null;
+  let uidList: Partial<userType>[] | null = null;
   // check if openid exists
   if (type === 'feishu') {
-    uidList = await db
-      .select({
-        uid: user.id,
-        isDeleted: user.isDeleted
-      })
-      .from(user)
-      .where(eq(user.feishuOpenId, openid));
+    uidList = await db.select().from(user).where(eq(user.feishuOpenId, openid));
     if (!uidList || uidList.length === 0) {
       uidList = await db
         .insert(user)
@@ -29,17 +24,22 @@ export async function loginFromX(
           name: userIdentifier,
           createdAt: new Date(),
           updatedAt: new Date(),
+          role: 1,
         })
-        .returning({ uid: user.id, isDeleted: user.isDeleted });
+        .returning({
+          uid: user.id,
+          isDeleted: user.isDeleted,
+          role: user.role,
+        });
     }
   } else if (type === 'link') {
     uidList = await db
-      .select({
-        uid: user.id,
-        isDeleted: user.isDeleted
-      })
+      .select()
       .from(user)
-      .where(eq(user.sastLinkOpenId, openid));
+      .where(
+        or(eq(user.sastLinkOpenId, openid), eq(user.studentId, userIdentifier)),
+      )
+      .limit(1);
     if (!uidList || uidList.length === 0) {
       uidList = await db
         .insert(user)
@@ -49,12 +49,31 @@ export async function loginFromX(
           studentId: userIdentifier,
           createdAt: new Date(),
           updatedAt: new Date(),
+          role: 0,
         })
-        .returning({ uid: user.id, isDeleted: user.isDeleted });
+        .returning({
+          uid: user.id,
+          isDeleted: user.isDeleted,
+          role: user.role,
+        });
+    } else {
+      if (uidList[0].sastLinkOpenId !== openid) {
+        await db
+          .update(user)
+          .set({
+            sastLinkOpenId: openid,
+            updatedAt: new Date(),
+          })
+          .where(eq(user.id, uidList[0].id as number));
+      }
     }
   }
-  if (uidList && uidList.length > 0&&!uidList[0].isDeleted) {
-    await createSession(uidList[0].uid, userIdentifier, type);
+  if (uidList && uidList.length > 0 && !uidList[0].isDeleted) {
+    await createSession(
+      uidList[0].id as number,
+      userIdentifier,
+      uidList[0].role || 0,
+    );
   } else {
     throw new Error('login failed');
   }
@@ -70,7 +89,7 @@ export async function loginFromTest(formData: FormData) {
     .from(user)
     .where(eq(user.studentId, studentId));
   if (uidList && uidList.length > 0) {
-    await createSession(uidList[0].uid, studentId, 'test');
+    await createSession(uidList[0].uid, studentId, 1);
     return uidList[0].uid;
   } else {
     throw new Error('login failed');
