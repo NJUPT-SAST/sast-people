@@ -7,6 +7,18 @@ import originalDayjs from '@/lib/dayjs';
 import { ShowQrCode } from '@/components/userInfo/showQrCode';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import { Loading } from '@/components/loading';
+import { BasicInfoServer } from './basicInfo';
+import { ExperienceInfoServer } from './experienceInfo';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default async function Home({
   searchParams,
@@ -16,7 +28,6 @@ export default async function Home({
   };
 }) {
   const userInfo = await useUserInfo();
-  const collegeList = await useCollegeList();
   return (
     <>
       <div className="flex justify-between">
@@ -53,8 +64,42 @@ export default async function Home({
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          <BasicInfo initialInfo={userInfo} collegeList={collegeList} />
-          <ExperienceInfo initialInfo={userInfo} />
+          <Suspense
+            fallback={
+              <Card>
+                <CardHeader>
+                  <CardTitle>基本信息</CardTitle>
+                  <CardDescription>个人基本信息</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3">
+                  <Skeleton className="w-[100px] h-[20px]" />
+                  <Skeleton className="w-full h-[20px]" />
+                  <Skeleton className="w-full h-[20px]" />
+                </CardContent>
+              </Card>
+            }
+          >
+            <BasicInfoServer />
+          </Suspense>
+          <Suspense
+            fallback={
+              <Card>
+                <CardHeader>
+                  <CardTitle>我的能力</CardTitle>
+                  <CardDescription>
+                    请与我们分享你目前的兴趣与能力，以便找到最合适的部门
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3">
+                  <Skeleton className="w-[100px] h-[20px]" />
+                  <Skeleton className="w-full h-[20px]" />
+                  <Skeleton className="w-full h-[20px]" />
+                </CardContent>
+              </Card>
+            }
+          >
+            <ExperienceInfoServer />
+          </Suspense>
         </div>
       )}
     </>
