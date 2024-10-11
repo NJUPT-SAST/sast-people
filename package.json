@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev -p 3001\" \"inngest-cli dev --no-discovery -u http://localhost:3001/api/inngest\"",
+    "dev": "concurrently \"next dev -p 3001\" \"inngest-cli dev --no-discovery -u http://localhost:3001/api/inngest\" \"email dev --dir=src/emails --port=3002\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
