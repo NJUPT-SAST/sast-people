@@ -170,3 +170,23 @@ export const backward = async (
       );
   });
 };
+
+export const batchUpdate = async (flowTypeID: number, stepID: number, preStepID?: number) => {
+  await verifyRole(1);
+  await db.transaction(async (tx) => {
+    if (preStepID !== undefined) {
+      await tx
+        .update(flowStep)
+        .set({ status: status.enumValues[1], completedAt: new Date() })
+        .where(eq(flowStep.stepId, preStepID));
+    }
+    await tx
+      .update(flow)
+      .set({ currentStepId: stepID })
+      .where(eq(flow.flowTypeId, flowTypeID));
+    await tx
+      .update(flowStep)
+      .set({ status: status.enumValues[3], startedAt: new Date() })
+      .where(eq(flowStep.stepId, stepID));
+  });
+}
