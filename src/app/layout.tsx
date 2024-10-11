@@ -21,7 +21,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         {children}
         <Toaster />
-        <VConsole />
+        {/* <VConsole /> */}
       </body>
     </html>
   );

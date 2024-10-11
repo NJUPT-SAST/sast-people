@@ -1,4 +1,4 @@
-import { FeishuSDKInject } from '@/components/feishuInject';
+import { FeishuRedirect, FeishuSDKInject } from '@/components/feishuInject';
 import BlurIn from '@/components/magicui/blur-in';
 import FlickeringGrid from '@/components/magicui/flickering-grid';
 import { TestLogin } from '@/components/testLogin';
@@ -52,7 +52,7 @@ const Login = async () => {
           {process.env.NODE_ENV === 'development' && <TestLogin />}
         </div>
       </div>
-      <FeishuSDKInject />
+      <FeishuRedirect />
     </>
   );
 };

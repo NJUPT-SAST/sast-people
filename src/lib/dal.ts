@@ -28,4 +28,5 @@ export const verifyRole = cache(async (role: number) => {
   if (session.role < role) {
     throw new Error('Unauthorized operation');
   }
+  return session;
 });
