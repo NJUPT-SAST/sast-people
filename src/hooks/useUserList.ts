@@ -1,7 +1,7 @@
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
 import { verifyRole } from "@/lib/dal";
-import { and, asc, desc, eq, ilike, or, SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, or, SQL } from "drizzle-orm";
 
 export type UserListParams = {
   page: number;
@@ -36,7 +36,7 @@ export const useUserList = async ({
   }
 
   const totalCountResult = await db
-    .select({ count: user.id })
+    .select({ count: count() })
     .from(user)
     .where(whereConditions)
     .execute();
