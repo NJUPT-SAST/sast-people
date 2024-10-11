@@ -36,7 +36,7 @@ import { toast } from 'sonner';
 import originalDayjs from '@/lib/dayjs';
 
 export const fullUserSchema = createInsertSchema(user, {
-  email: z.string().email('请输入正确的邮箱地址').trim(),
+  email: z.string().email('请输入正确的邮箱地址').trim().toLowerCase(),
   phoneNumber: z
     .string()
     .regex(
