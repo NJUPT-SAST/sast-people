@@ -38,10 +38,11 @@ import { toast } from "sonner";
 
 export const EditUserInfoDialog = ({
 	userInfo,
+	colleges
 }: {
 	userInfo: Partial<userType>;
+	colleges: { id: number; name: string }[];
 }) => {
-	const colleges = useCollegeListClient();
 	const basicInfoForm = useForm<z.infer<typeof basicInfoSchema>>({
 		resolver: zodResolver(basicInfoSchema),
 		defaultValues: {
