@@ -29,9 +29,9 @@ const Marking = async ({
       </div>
       {/* map problems to a list of points */}
       <div>
-        <Suspense fallback={<Loading />}>
-          <MarkProblemTableServer user={searchParams.user} />
-        </Suspense>
+          <Suspense fallback={<Loading />}>
+            <MarkProblemTableServer user={searchParams.user} />
+          </Suspense>
       </div>
     </>
   );
