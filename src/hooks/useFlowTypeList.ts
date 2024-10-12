@@ -8,6 +8,7 @@ export const useFlowTypeList = async (): Promise<flowTypeType[]> => {
   const flowTypeList = await db
     .select()
     .from(flowType)
+    .where(eq(flowType.isDeleted, false))
     .orderBy(desc(flowType.createdAt));
   const res = await Promise.all(
     flowTypeList.map(async (flowType) => {
