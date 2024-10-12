@@ -43,8 +43,8 @@ export const EditUserFlowSheet = ({
 				>
 					<SelectTrigger>
 						{selectedFlow !== undefined
-							? `流程 ${
-									flowList ? flowList[selectedFlow].id : ""
+							? `${
+									flowList ? flowList[selectedFlow]?.flowTypeInfo.name : ""
 							  }`
 							: "选择流程"}
 					</SelectTrigger>
@@ -55,7 +55,7 @@ export const EditUserFlowSheet = ({
 									key={flow.id}
 									value={index.toString()}
 								>
-									流程 {flow.id}
+									{flow.flowTypeInfo.name}
 								</SelectItem>
 							))}
 					</SelectContent>
