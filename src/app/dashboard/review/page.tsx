@@ -27,7 +27,7 @@ const Review: React.FC = async () => {
               设置阅卷范围
             </Button>
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className='w-full md:w-3/4'>
             <SheetHeader className="text-2xl font-semibold">
               <SheetTitle>设置阅卷范围</SheetTitle>
             </SheetHeader>
@@ -45,10 +45,10 @@ const Review: React.FC = async () => {
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
+            <MannualInput />
             <div>
               <QRCodeScanner />
             </div>
-            <MannualInput />
           </CardContent>
         </Card>
       </div>

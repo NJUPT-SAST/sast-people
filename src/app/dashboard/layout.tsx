@@ -42,7 +42,7 @@ export default async function RootLayout({
         </div>
       </div>
       <div className="flex flex-col md:overflow-y-auto md:h-screen w-screen md:w-full">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/80 backdrop-blur-lg px-4 lg:hidden md:hidden sticky top-0">
+        <header className="flex h-14 items-center gap-4 border-b bg-muted/80 backdrop-blur-lg px-4 lg:hidden md:hidden sticky top-0 z-50">
           <Sheet>
             <SheetTrigger asChild>
               <Button

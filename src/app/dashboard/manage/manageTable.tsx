@@ -23,6 +23,7 @@ export const ManageTableServer = async (props: {
         totalCount={totalCount}
         totalPages={totalPages}
         search={search}
+        currentPage={page}
       />
     </>
   );

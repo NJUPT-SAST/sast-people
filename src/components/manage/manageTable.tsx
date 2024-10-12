@@ -50,17 +50,22 @@ export const ManageTable = ({
   totalCount,
   totalPages,
   search,
+  currentPage,
 }: {
   users: UserType[];
   totalCount: number;
   totalPages: number;
   search: string;
+  currentPage: number;
 }) => {
   const colleges = useCollegeListClient();
   const columns: ColumnDef<UserType>[] = [
     {
       accessorKey: 'name',
       header: '姓名',
+      cell(props) {
+        return <div className="w-[80px]">{props.row.original.name}</div>;
+      },
     },
     {
       accessorKey: 'studentId',
@@ -79,17 +84,21 @@ export const ManageTable = ({
       header: '创建时间',
       cell: ({ row }) => {
         const date = row.getValue('createdAt') as Date;
-        return originalDayjs(date).format('YYYY-MM-DD HH:mm:ss');
+        return (
+          <div className="w-[80px]">
+            {originalDayjs(date).format('YYYY-MM-DD')}
+          </div>
+        );
       },
     },
     {
       id: 'actions',
       cell: ({ row }) => (
-        <>
+        <div className="w-[80px] flex gap-3 mr-4">
           <EditUserInfoDialog userInfo={row.original} colleges={colleges} />
           <EditUserFlowSheet userInfo={row.original} />
           <RemoveUserInfoDialog uid={row.original.id} />
-        </>
+        </div>
       ),
     },
   ];
@@ -163,12 +172,15 @@ export const ManageTable = ({
       </div>
 
       <div className="flex justify-between items-center">
-        <div>显示 1-10 共 {users.length} 结果</div>
+        <div>
+          显示 {currentPage === 1 ? currentPage : currentPage * 10} - {currentPage === 1 ? currentPage + 9 : currentPage * 10 + 9} 共{' '}
+          {users.length} 结果
+        </div>
         <div>
           <PaginationComponent
             totalItems={totalCount}
             pageSize={10}
-            currentPage={1}
+            currentPage={currentPage}
           />
         </div>
       </div>
