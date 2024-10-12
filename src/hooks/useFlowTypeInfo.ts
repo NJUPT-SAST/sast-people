@@ -1,11 +1,11 @@
 import { db } from '@/db/drizzle';
 import { flowType } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 export const useFlowTypeInfo = async (id: number) => {
   const flowTypeInfo = await db
     .select()
     .from(flowType)
-    .where(eq(flowType.id, id));
+    .where(and(eq(flowType.id, id), eq(flowType.isDeleted, false)));
   return flowTypeInfo[0];
 };
