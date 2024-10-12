@@ -9,7 +9,8 @@ export default async function offer(flowId: number) {
   const userInfo = (
     await db
       .select({
-        studentID: user.studentId,
+        // NOTE: highly dependent on the sastLinkOpenId field
+        studentID: user.sastLinkOpenId,
         name: user.name,
       })
       .from(user)
