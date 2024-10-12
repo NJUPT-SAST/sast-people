@@ -28,11 +28,11 @@ const SelectProblem = ({
   const [stepId, setStepId] = useState<number>();
   const initialProbs = useLocalProblemList();
 
-  useEffect(() => {
-    if (initialProbs) {
-      setSelectedProbs(initialProbs);
-    }
-  }, [initialProbs]);
+  // useEffect(() => {
+  //   if (initialProbs) {
+  //     setSelectedProbs(initialProbs);
+  //   }
+  // }, [initialProbs]);
 
   const handleSelectChange = async (value: string) => {
     setSelectedFlow(value);
