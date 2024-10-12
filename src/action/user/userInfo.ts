@@ -1,7 +1,7 @@
 "use server";
 import { basicInfoSchema } from "@/components/userInfo/basic";
 import { experienceSchema } from "@/components/userInfo/experience";
-import { verifySession } from "@/lib/dal";
+import { verifyRole, verifySession } from "@/lib/dal";
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -25,6 +25,12 @@ export async function editBasicInfoByUid(
 	uid: number,
 	values: z.infer<typeof basicInfoSchema>
 ) {
+	const session = await verifySession();
+
+	if (session.role !== 1 && session.uid !== uid) {
+		throw new Error("Permission denied");
+	}
+
 	await db
 		.update(user)
 		.set({
