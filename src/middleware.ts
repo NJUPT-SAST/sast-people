@@ -16,6 +16,13 @@ export default async function middleware(req: NextRequest) {
   const cookie = cookies().get('session')?.value;
   const session = await decrypt(cookie);
 
+  // 4. Get more information about the request
+  const ip = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for');
+  const userAgent = req.headers.get('user-agent');
+  const method = req.method;
+
+  console.log(`Request from ${session?.uid} (${session?.name})`, { path, isProtectedRoute, isPublicRoute, ip, userAgent, method });
+
   // 5. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !session?.uid) {
     return NextResponse.redirect(new URL('/login', req.nextUrl));
