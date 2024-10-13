@@ -2,7 +2,7 @@
 import { db } from '@/db/drizzle';
 import { flow, flowStep, steps, status } from '@/db/schema';
 import { verifyRole } from '@/lib/dal';
-import { and, asc, desc, eq, gt, inArray, lt } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, lt, lte } from 'drizzle-orm';
 
 export const forward = async (
   flowId: number,
@@ -170,7 +170,11 @@ export const backward = async (
   });
 };
 
-export const batchUpdate = async (flowTypeID: number, stepID: number, preStepID?: number) => {
+export const batchUpdate = async (
+  flowTypeID: number,
+  stepID: number,
+  preStepID?: number,
+) => {
   await verifyRole(1);
   await db.transaction(async (tx) => {
     if (preStepID !== undefined) {
@@ -188,17 +192,36 @@ export const batchUpdate = async (flowTypeID: number, stepID: number, preStepID?
       .set({ status: status.enumValues[3], startedAt: new Date() })
       .where(eq(flowStep.stepId, stepID));
   });
-}
+};
 
-export const batchUpdateByUid = async (flowTypeID: number, stepID: number, statusStr: "ongoing" | "pending" | "rejected" | "accepted", uids: number[], preStepID?: number) => {
+export const batchUpdateByUid = async (
+  flowTypeID: number,
+  stepID: number,
+  statusStr: 'ongoing' | 'pending' | 'rejected' | 'accepted',
+  uids: number[],
+  preStepID?: number,
+) => {
   await verifyRole(1);
+  const currentStepOrder = (
+    await db
+      .select({ currentStepOrder: steps.order })
+      .from(steps)
+      .where(eq(steps.id, stepID))
+  )[0].currentStepOrder;
+  const previousSteps = (
+    await db
+      .select()
+      .from(steps)
+      .where(lte(steps.order, currentStepOrder))
+      .orderBy(desc(steps.order))
+  ).map((step) => step.id);
+  console.log(previousSteps);
   await db.transaction(async (tx) => {
-    if (preStepID !== undefined) {
-      await tx
-        .update(flowStep)
-        .set({ status: status.enumValues[1], completedAt: new Date() })
-        .where(and(eq(flowStep.stepId, preStepID), inArray(flowStep.flowId, uids)));
-    }
+    await tx
+      .update(flowStep)
+      .set({ status: status.enumValues[1], completedAt: new Date() })
+      .where(and(inArray(flowStep.stepId, previousSteps)));
+
     await tx
       .update(flow)
       .set({ currentStepId: stepID })
@@ -207,11 +230,11 @@ export const batchUpdateByUid = async (flowTypeID: number, stepID: number, statu
       .update(flowStep)
       .set({ status: statusStr, startedAt: new Date() })
       .where(and(eq(flowStep.stepId, stepID), inArray(flowStep.flowId, uids)));
-    if (statusStr === "rejected") {
+    if (statusStr === 'rejected') {
       await tx
         .update(flow)
         .set({ isAccepted: false })
         .where(and(eq(flow.flowTypeId, flowTypeID), inArray(flow.uid, uids)));
     }
   });
-}
+};

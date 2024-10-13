@@ -5,14 +5,32 @@ import { and, eq, sum } from 'drizzle-orm';
 
 export const calScore = async (flowTypeID: number) => {
   const examResult = await db
-    .select({ flowStepId: examMap.flowStepId, stepId: flowStep.stepId, totalScore: sum(examMap.score), uid: flow.uid, name:  user.name, studentId: user.studentId })
+    .select({
+      flowStepId: examMap.flowStepId,
+      stepId: flowStep.stepId,
+      totalScore: sum(examMap.score),
+      uid: flow.uid,
+      name: user.name,
+      studentId: user.studentId,
+    })
     .from(examMap)
     .innerJoin(flowStep, eq(examMap.flowStepId, flowStep.id))
-    .innerJoin(flow, and(eq(flow.id, flowStep.flowId), eq(flow.flowTypeId, flowTypeID)))
+    .innerJoin(
+      flow,
+      and(eq(flow.id, flowStep.flowId), eq(flow.flowTypeId, flowTypeID)),
+    )
     .innerJoin(user, eq(flow.uid, user.id))
-    .groupBy(examMap.flowStepId, flow.uid, user.studentId, user.name, user.studentId, flowStep.id)
+    .groupBy(
+      examMap.flowStepId,
+      flow.uid,
+      user.studentId,
+      user.name,
+      user.studentId,
+      flowStep.id,
+    );
 
-  console.log(examResult.splice(0, 10));
-
-  return examResult;
+  return examResult.sort(
+    (a, b) =>
+      (b.totalScore as unknown as number) - (a.totalScore as unknown as number),
+  );
 };
