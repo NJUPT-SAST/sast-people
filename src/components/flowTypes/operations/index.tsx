@@ -1,6 +1,7 @@
 import { Button } from '../../ui/button';
 import { flowTypeType } from '@/types/flowType';
 import { EditSteps } from './editSteps';
+import { CalScore } from './calScore';
 import { Delete } from './delete';
 import Link from 'next/link';
 import {
@@ -33,6 +34,7 @@ export const Operations = ({ data }: { data: flowTypeType }) => {
           </Tooltip>
         </TooltipProvider>
       )}
+      <CalScore data={data} />
       <Delete data={data} />
     </>
   );
