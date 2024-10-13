@@ -1,6 +1,6 @@
 'use server';
 import { db } from '@/db/drizzle';
-import { examMap, flowStep, flow, user } from '@/db/schema';
+import { examMap, flowStep, flow, user, problem } from '@/db/schema';
 import { and, eq, sum } from 'drizzle-orm';
 
 export const calScore = async (flowTypeID: number) => {
@@ -19,6 +19,7 @@ export const calScore = async (flowTypeID: number) => {
       flow,
       and(eq(flow.id, flowStep.flowId), eq(flow.flowTypeId, flowTypeID)),
     )
+    .innerJoin(problem, eq(examMap.problemId, problem.id))
     .innerJoin(user, eq(flow.uid, user.id))
     .groupBy(
       examMap.flowStepId,
@@ -27,7 +28,8 @@ export const calScore = async (flowTypeID: number) => {
       user.name,
       user.studentId,
       flowStep.id,
-    );
+    )
+    .where(eq(problem.stepId, flowStep.stepId));
 
   return examResult.sort(
     (a, b) =>
