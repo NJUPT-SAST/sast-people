@@ -68,9 +68,11 @@ export function DataTable<TData, TValue>({
             toast.promise(
               batchUpdateByUid(
                 flowTypeId,
-                table.getRowModel().rowsById['0'].original.stepId,
+                (table.getRowModel().rowsById['0'].original as any).stepId,
                 'accepted',
-                table.getSelectedRowModel().rows.map((row) => row.original.uid),
+                table
+                  .getSelectedRowModel()
+                  .rows.map((row) => (row.original as any).uid),
               ),
               {
                 loading: '正在确认',
