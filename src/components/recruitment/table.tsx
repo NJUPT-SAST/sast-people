@@ -23,6 +23,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { batchUpdateByUid } from '@/action/flow/edit';
+import { batchSendEmail } from '@/action/user/sendEmail';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -73,7 +74,14 @@ export function DataTable<TData, TValue>({
                 table
                   .getSelectedRowModel()
                   .rows.map((row) => (row.original as any).uid),
-              ),
+              ).then(async () => {
+                await batchSendEmail(
+                  table
+                    .getSelectedRowModel()
+                    .rows.map((row) => (row.original as any).uid),
+                  flowTypeId,
+                );
+              }),
               {
                 loading: '正在确认',
                 success: '确认成功',
