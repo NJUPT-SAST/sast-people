@@ -18,18 +18,20 @@ export const sendEmail = mqClient.createFunction(
   { id: 'step/send.email' },
   { event: 'step/send.email' },
   async ({ event, step }) => {
-    const { studentID, name } = event.data;
+    const { studentID, name, flowName } = event.data;
     // return { studentId: event.data.studentId, name: event.data.name };
-    await email(`${studentID}@njupt.edu.cn`, name);
+    await email(`${studentID}@njupt.edu.cn`, name, flowName);
     return { success: true };
   },
 );
 
-export const email = async (emailAddress: string, name: string) => {
+export const email = async (
+  emailAddress: string,
+  name: string,
+  flowName: string,
+) => {
   console.log(`Sending offer email to ${emailAddress}`);
-  const email = await render(
-    <OfferEmail name={name} offerLink="https://people.sast.fun" />,
-  );
+  const email = await render(<OfferEmail name={name} flowName={flowName} />);
   let mailOptions = {
     from: '"SAST R&D Center" <recruitment@sast.fun>',
     to: emailAddress,

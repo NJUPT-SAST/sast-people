@@ -14,10 +14,10 @@ import * as React from 'react';
 
 interface OfferEmailProps {
   name?: string;
-  offerLink?: string;
+  flowName?: string;
 }
 
-export const OfferEmail = ({ name, offerLink }: OfferEmailProps) => {
+export const OfferEmail = ({ name, flowName }: OfferEmailProps) => {
   return (
     <Html>
       <Head />
@@ -32,13 +32,9 @@ export const OfferEmail = ({ name, offerLink }: OfferEmailProps) => {
           <Section>
             <Text style={{ ...text, marginTop: '50px' }}>Hi {name},</Text>
             <Text style={text}>
-              恭喜你通过了 SAST
-              的招新考核，成功加入南京邮电大学大学生科学技术协会。我们看到了你对技术的热情，认可你的态度。希望在接下来的日子里，你能和志同道合的人在科协的丰富活动中做想做的事。
+              恭喜你通过了 {flowName}&nbsp;的招新考核，成功加入南京邮电大学大学生科学技术协会。我们看到了你对技术的热情，认可你的态度。希望在接下来的日子里，你能和志同道合的人在科协的丰富活动中做想做的事。
               今后，在这条路上，让我们一起学习共同进步，在自己所热爱的世界里闪闪发光。
             </Text>
-            <Button style={button} href={offerLink}>
-              加入 SAST
-            </Button>
             <Text style={text}>
               如果你有更多疑问，请联系 recruitment@sast.fun
             </Text>
@@ -64,8 +60,8 @@ export const OfferEmail = ({ name, offerLink }: OfferEmailProps) => {
 };
 
 OfferEmail.PreviewProps = {
-  name: '李正楠',
-  offerLink: 'https://people.sast.fun',
+  name: 'Maxtune',
+  flowName: 'SAST 2024',
 } as OfferEmailProps;
 
 export default OfferEmail;
