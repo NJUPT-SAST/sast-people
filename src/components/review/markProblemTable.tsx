@@ -25,9 +25,6 @@ export const MarkProblemTable = ({
     useState<Array<insertExamMapType>>(points);
   const problems = useLocalProblemList();
   useEffect(() => {
-    if (problems.length === problemPoints.length) {
-      return;
-    }
     const newProblemPoints: Array<insertExamMapType> = [];
     problems.forEach((e) => {
       const index = points.findIndex((p) => p.problemId === e.id);
@@ -42,7 +39,7 @@ export const MarkProblemTable = ({
     if (newProblemPoints.length > 0) {
       setProblemPoints(newProblemPoints);
     }
-  });
+  }, [problems]);
 
   const handleSave = (problemPoints: Array<insertExamMapType>) => {
     toast.promise(batchUpsert(problemPoints), {
