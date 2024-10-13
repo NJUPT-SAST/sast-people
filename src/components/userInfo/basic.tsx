@@ -36,7 +36,7 @@ import { toast } from 'sonner';
 import originalDayjs from '@/lib/dayjs';
 
 export const fullUserSchema = createInsertSchema(user, {
-  email: z.string().email('请输入正确的邮箱地址').trim(),
+  email: z.string().email('请输入正确的邮箱地址').trim().toLowerCase(),
   phoneNumber: z
     .string()
     .regex(
@@ -74,7 +74,7 @@ export const fullUserSchema = createInsertSchema(user, {
       /^([BPQF](1[89]|2[0-5])(0[0-9]|1[0-7])([0-2]\d|3[01])\d{2}|\d{11})$/i,
       '请输入正确的学号',
     )
-    .trim(),
+    .trim().toUpperCase(),
   college: z
     .number({
       invalid_type_error: '请选择你所在的学院',

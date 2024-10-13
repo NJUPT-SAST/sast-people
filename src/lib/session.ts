@@ -30,17 +30,13 @@ export async function decrypt(session: string | undefined = '') {
   }
 }
 
-export async function createSession(
-  uid: number,
-  name: string,
-  source: 'feishu' | 'link' | 'test',
-) {
+export async function createSession(uid: number, name: string, role: number) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({
     uid,
     expiresAt,
     name,
-    role: source === 'feishu' || source === 'test' ? 1 : 0,
+    role,
   });
 
   cookies().set('session', session, {

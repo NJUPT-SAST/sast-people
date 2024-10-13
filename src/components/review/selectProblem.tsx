@@ -28,11 +28,11 @@ const SelectProblem = ({
   const [stepId, setStepId] = useState<number>();
   const initialProbs = useLocalProblemList();
 
-  useEffect(() => {
-    if (initialProbs) {
-      setSelectedProbs(initialProbs);
-    }
-  }, [initialProbs]);
+  // useEffect(() => {
+  //   if (initialProbs) {
+  //     setSelectedProbs(initialProbs);
+  //   }
+  // }, [initialProbs]);
 
   const handleSelectChange = async (value: string) => {
     setSelectedFlow(value);
@@ -63,7 +63,7 @@ const SelectProblem = ({
   return (
     <div className="mt-3 flex-row">
       <Select onValueChange={handleSelectChange}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="请选择试卷" />
         </SelectTrigger>
         <SelectContent>

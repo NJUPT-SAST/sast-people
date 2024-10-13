@@ -83,9 +83,9 @@ export const MarkProblemTable = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="flex items-center gap-2">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 w-full">
             {problemPoints.map((problemPoint, index) => (
-              <fieldset key={index} className="border p-4 rounded-lg">
+              <fieldset key={index} className="border p-4 rounded-lg w-full">
                 <legend className="px-2 text-sm font-medium text-muted-foreground">
                   {problems[index]?.name}
                 </legend>

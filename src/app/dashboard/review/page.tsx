@@ -1,6 +1,6 @@
 import { PageTitle } from '@/components/route';
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
+import React, { Suspense } from 'react';
 import QRCodeScanner from '@/components/review/qrcodeScanner';
 import {
   Sheet,
@@ -9,16 +9,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import SelectProblem from '@/components/review/selectProblem';
-import { useFlowTypeList } from '@/hooks/useFlowTypeList';
-import useFlowType from '@/hooks/useFlowType';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { MannualInput } from '@/components/review/mannualInput';
+import { SelectProblemServer } from './selectProblem';
+import { Loading } from '@/components/loading';
 
 const Review: React.FC = async () => {
-  const flow = await useFlowType();
   return (
     <>
       <div className="flex items-center justify-between">
@@ -29,11 +27,13 @@ const Review: React.FC = async () => {
               设置阅卷范围
             </Button>
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className='w-full md:w-3/4'>
             <SheetHeader className="text-2xl font-semibold">
               <SheetTitle>设置阅卷范围</SheetTitle>
             </SheetHeader>
-            <SelectProblem flowTypes={flow} />
+            <Suspense fallback={<Loading />}>
+              <SelectProblemServer />
+            </Suspense>
           </SheetContent>
         </Sheet>
       </div>
@@ -45,16 +45,9 @@ const Review: React.FC = async () => {
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
+            <MannualInput />
             <div>
               <QRCodeScanner />
-            </div>
-            <div className="flex items-center gap-3">
-              <Input placeholder="请输入考生学号" />
-              <Link href={'/dashboard/review/marking?user='}>
-                <div className="flex-none">
-                  <Button size="sm">开始阅卷</Button>
-                </div>
-              </Link>
             </div>
           </CardContent>
         </Card>

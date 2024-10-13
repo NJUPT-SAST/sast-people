@@ -1,23 +1,20 @@
 import { EditProblems } from '@/components/flowTypes/operations/editProblems';
+import { Loading } from '@/components/loading';
 import { PageTitle } from '@/components/route';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useFlowTypeInfo } from '@/hooks/useFlowTypeInfo';
 import { useProblemList } from '@/hooks/useProblemList';
 import { useStepWithProblem } from '@/hooks/useStepWithProblem';
 import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import { EditProblemsServer } from './editProblems';
 
 export default async function EditExamPage({
   searchParams,
 }: { searchParams: { id: string } }) {
-  const { id } = searchParams;
-  const [flowTypeInfo, { stepList, stepWithProblemId }] = await Promise.all([
-    useFlowTypeInfo(Number(id)),
-    useStepWithProblem(Number(id)),
-  ]);
-  const problems = stepWithProblemId
-    ? await useProblemList(stepWithProblemId)
-    : {};
+  const flowTypeInfo = await useFlowTypeInfo(Number(searchParams.id));
   return (
     <>
       <div className="flex items-center justify-between">
@@ -31,12 +28,9 @@ export default async function EditExamPage({
         <p className="text-sm text-muted-foreground">{flowTypeInfo.name}</p>
       </div>
       <div>
-        <EditProblems
-          problems={problems}
-          stepList={stepList}
-          currentStepId={stepWithProblemId ?? 0}
-          flowTypeId={Number(id)}
-        />
+        <Suspense fallback={<Loading />}>
+          <EditProblemsServer id={searchParams.id} />
+        </Suspense>
       </div>
     </>
   );

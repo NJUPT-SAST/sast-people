@@ -1,26 +1,21 @@
 'use server';
-import React from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useExamMapList } from '@/hooks/useExamMapList';
 import { MarkProblemTable } from '@/components/review/markProblemTable';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useOngoingFlowStep } from '@/hooks/useOngoingFlowStep';
+import { MarkProblemTableServer } from './markProblemTable';
+import { Loading } from '@/components/loading';
 
-interface MarkingProps {
-  user: string;
-}
-
-const Marking = async ({searchParams}: {
+const Marking = async ({
+  searchParams,
+}: {
   searchParams: {
     user: string;
-  }
+  };
 }) => {
-  const flowStepId = await useOngoingFlowStep(searchParams.user);
-  console.log('flowStepId', flowStepId);
-  const points = await useExamMapList(flowStepId);
-  console.log('points', points);
-
   return (
     <>
       <div className="flex items-center justify-between">
@@ -34,10 +29,9 @@ const Marking = async ({searchParams}: {
       </div>
       {/* map problems to a list of points */}
       <div>
-        <MarkProblemTable
-          points={points}
-          flowStepId={flowStepId}
-        />
+          <Suspense fallback={<Loading />}>
+            <MarkProblemTableServer user={searchParams.user} />
+          </Suspense>
       </div>
     </>
   );

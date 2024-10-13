@@ -7,6 +7,7 @@ import {
   Users,
   SquareChartGantt,
   TicketsPlane,
+  ArrowDownWideNarrow,
 } from 'lucide-react';
 import Link from 'next/link';
 import { createElement, useMemo } from 'react';
@@ -29,9 +30,14 @@ const menuItems = [
     path: '/review',
   },
   {
-    title: '招新管理',
+    title: '用户管理',
     icon: Users,
     path: '/manage',
+  },
+  {
+    title: '招新成绩管理',
+    icon: ArrowDownWideNarrow,
+    path: '/recruitment',
   },
   {
     title: '流程类别管理',
@@ -49,7 +55,6 @@ export const Header = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
-  console.log(pathname);
   const authRoutes = useMemo(() => {
     if (!role) {
       return menuItems.slice(0, 2);

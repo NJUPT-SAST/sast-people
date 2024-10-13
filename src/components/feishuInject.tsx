@@ -11,7 +11,6 @@ export const FeishuSDKInject: React.FC = () => {
     try {
       if ((window as any).h5sdk) {
         console.log('[环境]: 飞书浏览器');
-        toast.loading('飞书自动授权登录中……');
         const url = window.location.href;
         axios.get(`/api/auth?url=${url}`).then((res) => {
           console.log(res);
@@ -56,6 +55,25 @@ export const FeishuSDKInject: React.FC = () => {
       ></Script>
       <Script
         src="https://sf1-scmcdn-cn.feishucdn.com/obj/feishu-static/op/fe/devtools_frontend/remote-debug-0.0.1-alpha.6.js"
+        strategy="beforeInteractive"
+      ></Script>
+    </>
+  );
+};
+
+export const FeishuRedirect = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    if ((window as any).h5sdk) {
+      console.log('[环境]: 飞书浏览器');
+      router.replace('/login/feishu');
+    }
+  }, []);
+  return (
+    <>
+      <Script
+        src="https://lf1-cdn-tos.bytegoofy.com/goofy/lark/op/h5-js-sdk-1.5.29.js"
         strategy="beforeInteractive"
       ></Script>
     </>

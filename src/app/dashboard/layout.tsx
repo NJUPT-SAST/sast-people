@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Header } from '@/components/route';
 import { UserCard } from '../../components/userCard';
 import { verifySession } from '@/lib/dal';
+import { Suspense } from 'react';
+import { Loading } from '@/components/loading';
 
 export const metadata: Metadata = {
   title: 'SAST 招新',
@@ -40,7 +42,7 @@ export default async function RootLayout({
         </div>
       </div>
       <div className="flex flex-col md:overflow-y-auto md:h-screen w-screen md:w-full">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/80 backdrop-blur-lg px-4 lg:hidden md:hidden sticky top-0">
+        <header className="flex h-14 items-center gap-4 border-b bg-muted/80 backdrop-blur-lg px-4 lg:hidden md:hidden sticky top-0 z-50">
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -60,7 +62,7 @@ export default async function RootLayout({
           </Sheet>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 w-full">
-          {children}
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
       </div>
     </div>

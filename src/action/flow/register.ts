@@ -1,7 +1,7 @@
 'use server';
 import { verifySession } from '@/lib/dal';
 import { db } from '@/db/drizzle';
-import { flow, flowStep, steps, status, user } from '@/db/schema';
+import { flow, flowStep, steps, status, flowType, user } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import eventManager from '@/event';
@@ -11,6 +11,7 @@ export const register = async (flowTypeId: number, uid: number) => {
   const existingFlow = await db
     .select()
     .from(flow)
+    .innerJoin(flowType, eq(flow.flowTypeId, flowType.id))
     .where(and(eq(flow.uid, uid), eq(flow.flowTypeId, flowTypeId)))
     .limit(1);
 
