@@ -38,6 +38,10 @@ export const columns: ColumnDef<
     header: '姓名',
   },
   {
+    accessorKey: 'phoneNumber',
+    header: '手机号',
+  },
+  {
     accessorKey: 'totalScore',
     header: '总分',
     filterFn: (row, id, filterValue) => {
