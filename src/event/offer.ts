@@ -5,7 +5,7 @@ import { sendEmail } from '@/queue/sendEmail';
 import { eq } from 'drizzle-orm';
 import { mqClient } from '@/queue/client';
 
-export default async function offer(flowId: number) {
+export default async function offer(flowId: number, accept: boolean) {
   const userInfo = (
     await db
       .select({
@@ -26,6 +26,7 @@ export default async function offer(flowId: number) {
       studentID: userInfo.studentID,
       name: userInfo.name,
       flowName: userInfo.flowName,
+      accept,
     },
   });
 }

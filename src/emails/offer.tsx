@@ -15,9 +15,10 @@ import * as React from 'react';
 interface OfferEmailProps {
   name?: string;
   flowName?: string;
+  accept?: boolean;
 }
 
-export const OfferEmail = ({ name, flowName }: OfferEmailProps) => {
+export const OfferEmail = ({ name, flowName, accept }: OfferEmailProps) => {
   return (
     <Html>
       <Head />
@@ -31,10 +32,40 @@ export const OfferEmail = ({ name, flowName }: OfferEmailProps) => {
           />
           <Section>
             <Text style={{ ...text, marginTop: '50px' }}>Hi {name},</Text>
-            <Text style={text}>
-              恭喜你通过了 {flowName}&nbsp;的招新考核，成功加入南京邮电大学大学生科学技术协会。我们看到了你对技术的热情，认可你的态度。希望在接下来的日子里，你能和志同道合的人在科协的丰富活动中做想做的事。
-              今后，在这条路上，让我们一起学习共同进步，在自己所热爱的世界里闪闪发光。
-            </Text>
+            {accept ? (
+              <>
+                <Text style={text}>
+                  恭喜你通过了 {flowName}
+                  &nbsp;，成功加入南京邮电大学大学生科学技术协会。我们看到了你对技术的热情，认可你的态度。希望在接下来的日子里，你能和志同道合的人在科协的丰富活动中做想做的事。
+                  今后，在这条路上，让我们一起学习共同进步，在自己所热爱的世界里闪闪发光。
+                </Text>
+                <Text style={text}>
+                  请加入 SASTer 2024 新伙伴群：894545066 ，一起踏入新的旅途吧！
+                </Text>
+                <Text style={text}>
+                  欢迎使用 SAST Evento 查看我们的日常授课与最新活动 &nbsp;
+                  <Link href="https://evento.sast.fun" style={anchor}>
+                    evento.sast.fun
+                  </Link>
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text style={text}>
+                  感谢你参加 {flowName}，你的卓越表现给我们留下了深刻的印象。
+                  经过慎重评估和综合考虑后，我们很遗憾地通知你，你未能通过我们的考核。这不代表我们否定你的技术能力，你的才华依然闪耀，
+                  我们同样在你身上看到了你对于技术的渴望和学习的热情。接下来的授课活动以及寒假的
+                  Winter of Code / Design
+                  活动依然向你开放。希望在接下来的日子里，你能保持对技术的热爱，再接再厉！
+                </Text>
+                <Text style={text}>
+                  欢迎使用 SAST Evento 查看我们的日常授课与最新活动 &nbsp;
+                  <Link href="https://evento.sast.fun" style={anchor}>
+                    evento.sast.fun
+                  </Link>
+                </Text>
+              </>
+            )}
             <Text style={text}>
               如果你有更多疑问，请联系 recruitment@sast.fun
             </Text>
@@ -62,6 +93,7 @@ export const OfferEmail = ({ name, flowName }: OfferEmailProps) => {
 OfferEmail.PreviewProps = {
   name: 'Maxtune',
   flowName: 'SAST 2024',
+  // accept: true,
 } as OfferEmailProps;
 
 export default OfferEmail;

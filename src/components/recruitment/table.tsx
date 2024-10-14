@@ -22,7 +22,7 @@ import { useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
-import { batchUpdateByUid } from '@/action/flow/edit';
+import { batchEndByUid } from '@/action/flow/edit';
 import { batchSendEmail } from '@/action/user/sendEmail';
 
 interface DataTableProps<TData, TValue> {
@@ -65,23 +65,40 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <Button
+          disabled={table.getSelectedRowModel().rows.length === 0}
           onClick={async () => {
+            // get not selected rows
+            const selectedRows = table.getSelectedRowModel().flatRows;
+            const notSelectedRows = table
+              .getRowModel()
+              .flatRows.filter((row) => !selectedRows.includes(row));
             toast.promise(
-              batchUpdateByUid(
-                flowTypeId,
-                (table.getRowModel().rowsById['0'].original as any).stepId,
-                'accepted',
-                table
-                  .getSelectedRowModel()
-                  .rows.map((row) => (row.original as any).uid),
-              ).then(async () => {
-                await batchSendEmail(
-                  table
-                    .getSelectedRowModel()
-                    .rows.map((row) => (row.original as any).uid),
+              Promise.all([
+                batchSendEmail(
+                  selectedRows.map((row) => (row.original as any).uid),
                   flowTypeId,
-                );
-              }),
+                  true,
+                ).then(async () => {
+                  await batchEndByUid(
+                    flowTypeId,
+                    (selectedRows[0].original as any).stepId,
+                    'accepted',
+                    selectedRows.map((row) => (row.original as any).uid),
+                  );
+                }),
+                batchSendEmail(
+                  notSelectedRows.map((row) => (row.original as any).uid),
+                  flowTypeId,
+                  false,
+                ).then(async () => {
+                  batchEndByUid(
+                    flowTypeId,
+                    (notSelectedRows[0].original as any).stepId,
+                    'rejected',
+                    notSelectedRows.map((row) => (row.original as any).uid),
+                  );
+                }),
+              ]),
               {
                 loading: '正在确认',
                 success: '确认成功',
@@ -92,6 +109,7 @@ export function DataTable<TData, TValue>({
         >
           确认选中同学通过
         </Button>
+        <span className='text-muted-foreground text-sm'>同时修改流程与发送邮件，请谨慎操作</span>
       </div>
       <div className="rounded-md border">
         <div className="flex-1 text-sm text-muted-foreground p-3">
