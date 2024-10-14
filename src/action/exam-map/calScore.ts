@@ -1,38 +1,35 @@
 'use server';
 import { db } from '@/db/drizzle';
-import { examMap, flowStep, flow, user, problem } from '@/db/schema';
-import { and, eq, sum } from 'drizzle-orm';
+import { examMap, flowStep, flow, user, problem, steps } from '@/db/schema';
+import { and, desc, eq, sum } from 'drizzle-orm';
 
 export const calScore = async (flowTypeID: number) => {
   const examResult = await db
     .select({
-      flowStepId: examMap.flowStepId,
-      stepId: flowStep.stepId,
-      totalScore: sum(examMap.score),
-      uid: flow.uid,
+      uid: user.id,
       name: user.name,
       studentId: user.studentId,
+      phoneNumber: user.phoneNumber,
+      totalScore: sum(examMap.score),
     })
     .from(examMap)
     .innerJoin(flowStep, eq(examMap.flowStepId, flowStep.id))
-    .innerJoin(
-      flow,
-      and(eq(flow.id, flowStep.flowId), eq(flow.flowTypeId, flowTypeID)),
-    )
+    .innerJoin(flow, eq(flow.id, flowStep.flowId))
     .innerJoin(problem, eq(examMap.problemId, problem.id))
     .innerJoin(user, eq(flow.uid, user.id))
+    .innerJoin(
+      steps,
+      and(eq(problem.stepId, steps.id), eq(steps.flowTypeId, flowTypeID)),
+    )
     .groupBy(
-      examMap.flowStepId,
-      flow.uid,
+      problem.stepId,
+      user.phoneNumber,
       user.studentId,
       user.name,
-      user.studentId,
+      user.id,
       flowStep.id,
     )
-    .where(eq(problem.stepId, flowStep.stepId));
+    .orderBy(desc(sum(examMap.score)));
 
-  return examResult.sort(
-    (a, b) =>
-      (b.totalScore as unknown as number) - (a.totalScore as unknown as number),
-  );
+  return examResult;
 };
