@@ -1,8 +1,9 @@
 'use server';
 import { db } from '@/db/drizzle';
 import { flow, flowStep, steps, status } from '@/db/schema';
+import eventManager from '@/event';
 import { verifyRole } from '@/lib/dal';
-import { and, asc, desc, eq, gt, inArray, lt, lte } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, inArray, lt, lte, sql } from 'drizzle-orm';
 
 export const forward = async (
   flowId: number,
@@ -24,26 +25,38 @@ export const forward = async (
     throw new Error('This is the last step');
   }
 
-  await db.transaction(async (tx) => {
-    await tx
-      .update(flow)
-      .set({ currentStepId: nextStep[0].id })
-      .where(eq(flow.id, flowId));
+  // 自动触发 label 关联的事件
+  if (eventManager[nextStep[0].label]) {
+    eventManager[nextStep[0].label](flowId.toString());
+  }
 
-    await tx
-      .update(flowStep)
-      .set({ status: status.enumValues[1] })
-      .where(
-        and(eq(flowStep.flowId, flowId), eq(flowStep.stepId, currentStepId)),
-      );
+  const nextStepRecord = nextStep[0];
+  const nextStepId = nextStepRecord.id;
 
-    await tx
-      .update(flowStep)
-      .set({ status: status.enumValues[3], startedAt: new Date() })
-      .where(
-        and(eq(flowStep.flowId, flowId), eq(flowStep.stepId, nextStep[0].id)),
-      );
-  });
+  const updateSql = sql`
+    WITH
+    updated_flow AS (
+      UPDATE "flow"
+      SET "current_step_id" = ${nextStepId}
+      WHERE "id" = ${flowId}
+      RETURNING *
+    ),
+    updated_current_flowStep AS (
+      UPDATE "flow_step"
+      SET "status" = ${status.enumValues[1]}, "completed_at" = now()
+      WHERE "flow_id" = ${flowId} AND "step_id" = ${currentStepId}
+      RETURNING *
+    ),
+    updated_next_flowStep AS (
+      UPDATE "flow_step"
+      SET "status" = ${status.enumValues[3]}, "started_at" = now()
+      WHERE "flow_id" = ${flowId} AND "step_id" = ${nextStepId}
+      RETURNING *
+    )
+    SELECT 1;
+  `;
+
+  await db.execute<Record<string, unknown>>(updateSql);
 };
 
 // finish the last step
@@ -143,8 +156,6 @@ export const backward = async (
     throw new Error('This is the first step');
   }
 
-  console.log(previousStep);
-
   await db.transaction(async (tx) => {
     await tx
       .update(flow)
@@ -194,46 +205,67 @@ export const batchUpdate = async (
   });
 };
 
-export const batchUpdateByUid = async (
+export const batchEndByUid = async (
   flowTypeID: number,
   stepID: number,
-  statusStr: 'ongoing' | 'pending' | 'rejected' | 'accepted',
+  statusStr: 'rejected' | 'accepted',
   uids: number[],
   preStepID?: number,
 ) => {
   await verifyRole(1);
-  const currentStepOrder = (
-    await db
-      .select({ currentStepOrder: steps.order })
-      .from(steps)
-      .where(eq(steps.id, stepID))
-  )[0].currentStepOrder;
-  const previousSteps = (
+  const allSteps = (
     await db
       .select()
       .from(steps)
-      .where(lte(steps.order, currentStepOrder))
+      .where(eq(steps.flowTypeId, flowTypeID))
       .orderBy(desc(steps.order))
   ).map((step) => step.id);
-  console.log(previousSteps);
+  const flowIds = (
+    await db
+      .select()
+      .from(flow)
+      .where(and(eq(flow.flowTypeId, flowTypeID), inArray(flow.uid, uids)))
+  ).map((flow) => flow.id);
   await db.transaction(async (tx) => {
-    await tx
-      .update(flowStep)
-      .set({ status: status.enumValues[1], completedAt: new Date() })
-      .where(and(inArray(flowStep.stepId, previousSteps)));
-
-    await tx
-      .update(flow)
-      .set({ currentStepId: stepID })
-      .where(and(eq(flow.flowTypeId, flowTypeID), inArray(flow.uid, uids)));
-    await tx
-      .update(flowStep)
-      .set({ status: statusStr, startedAt: new Date() })
-      .where(and(eq(flowStep.stepId, stepID), inArray(flowStep.flowId, uids)));
-    if (statusStr === 'rejected') {
+    if (statusStr === 'accepted') {
+      await tx
+        .update(flowStep)
+        .set({ status: status.enumValues[1], completedAt: new Date() })
+        .where(
+          and(
+            inArray(flowStep.stepId, allSteps),
+            inArray(flowStep.flowId, flowIds),
+          ),
+        );
       await tx
         .update(flow)
-        .set({ isAccepted: false })
+        .set({ currentStepId: allSteps[0], isAccepted: true })
+        .where(and(eq(flow.flowTypeId, flowTypeID), inArray(flow.uid, uids)));
+    }
+    if (statusStr === 'rejected') {
+      const stepNeedUpdate = allSteps.findIndex((step) => step === stepID) - 1;
+      const stepNeedFinish = allSteps.slice(stepNeedUpdate + 1);
+      await tx
+        .update(flowStep)
+        .set({ status: status.enumValues[2] })
+        .where(
+          and(
+            eq(flowStep.stepId, allSteps[stepNeedUpdate]),
+            inArray(flowStep.flowId, flowIds),
+          ),
+        );
+      await tx
+        .update(flowStep)
+        .set({ status: status.enumValues[1], completedAt: new Date() })
+        .where(
+          and(
+            inArray(flowStep.stepId, stepNeedFinish),
+            inArray(flowStep.flowId, flowIds),
+          ),
+        );
+      await tx
+        .update(flow)
+        .set({ isAccepted: false, currentStepId: allSteps[stepNeedUpdate] })
         .where(and(eq(flow.flowTypeId, flowTypeID), inArray(flow.uid, uids)));
     }
   });

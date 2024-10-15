@@ -11,6 +11,7 @@ export const calScore = async (flowTypeID: number) => {
       studentId: user.studentId,
       phoneNumber: user.phoneNumber,
       totalScore: sum(examMap.score),
+      stepId: steps.id,
     })
     .from(examMap)
     .innerJoin(flowStep, eq(examMap.flowStepId, flowStep.id))
@@ -28,6 +29,7 @@ export const calScore = async (flowTypeID: number) => {
       user.name,
       user.id,
       flowStep.id,
+      steps.id,
     )
     .orderBy(desc(sum(examMap.score)));
 
