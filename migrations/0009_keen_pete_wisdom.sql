@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "unique_flow_step_problem_index" ON "exam_map" USING btree ("flow_step_id","problem_id");
