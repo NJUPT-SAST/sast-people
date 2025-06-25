@@ -1,14 +1,14 @@
 'use server';
 import { db } from '@/db/drizzle';
-import { problem, steps } from '@/db/schema';
+import { problem, step } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 const getProbList = async (selectedFlow: number) => {
   try {
     const stepId = await db
       .select()
-      .from(steps)
-      .where(eq(steps.flowTypeId, selectedFlow));
+      .from(step)
+      .where(eq(step.flowTypeId, selectedFlow));
     if (stepId.length === 0) {
       return [];
     }

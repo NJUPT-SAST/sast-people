@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { flow, flowType, steps } from "@/db/schema";
+import { flow, flowType, step } from "@/db/schema";
 import { verifySession } from "@/lib/dal";
 import { displayFlowType } from "@/types/flow";
 import { eq } from "drizzle-orm";
@@ -18,8 +18,8 @@ export const useMyFlowList = async (): Promise<displayFlowType[]> => {
         .where(eq(flowType.id, flow.flowTypeId ?? 0));
       const stepsList = await db
         .select()
-        .from(steps)
-        .where(eq(steps.flowTypeId, flow.flowTypeId ?? 0));
+        .from(step)
+        .where(eq(step.flowTypeId, flow.flowTypeId ?? 0));
       return {
         ...flow,
         flowTypeInfo: { ...flowTypeInfo[0], steps: stepsList },

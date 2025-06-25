@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { flowType, steps, user } from "@/db/schema";
+import { flowType, step, user } from "@/db/schema";
 import { displayFlowType } from "@/types/flow";
 import { flowTypeType } from "@/types/flowType";
 import { desc, eq } from "drizzle-orm";
@@ -21,8 +21,8 @@ export const useFlowTypeList = async (): Promise<flowTypeType[]> => {
         .limit(1);
       const stepsList = await db
         .select()
-        .from(steps)
-        .where(eq(steps.flowTypeId, flowType.id));
+        .from(step)
+        .where(eq(step.flowTypeId, flowType.id));
       return {
         ...flowType,
         createBy: userInfo[0].name,

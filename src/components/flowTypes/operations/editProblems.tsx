@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { steps } from '@/db/schema';
+import type { step } from '@/db/schema';
 import type { InferSelectModel } from 'drizzle-orm';
 import { updateProblems } from '@/action/flow-type/problem/edit';
 import { toast } from 'sonner';
@@ -33,7 +33,7 @@ const EditProblems = ({
   flowTypeId,
 }: {
   problems: problemType;
-  stepList: InferSelectModel<typeof steps>[];
+  stepList: InferSelectModel<typeof step>[];
   currentStepId: number;
   flowTypeId: number;
 }) => {

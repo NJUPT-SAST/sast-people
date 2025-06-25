@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '@/db/drizzle';
-import { flow, steps, user } from '@/db/schema';
+import { flow, step, user } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { forward } from '@/action/flow/edit';
 

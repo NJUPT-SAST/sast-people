@@ -2,7 +2,7 @@
 
 import { addFlowTypeSchema } from '@/components/flowTypes/add';
 import { db } from '@/db/drizzle';
-import { flowType, steps } from '@/db/schema';
+import { flowType, step } from '@/db/schema';
 import { verifyRole, verifySession } from '@/lib/dal';
 import { stepType } from '@/types/step';
 import { and, eq, notInArray } from 'drizzle-orm';
@@ -28,22 +28,22 @@ export const updateFlowType = async (
   // 更新steps
   for (const step of stepList) {
     await db
-      .update(steps)
+      .update(step)
       .set({
         label: step.label,
         name: step.name,
         description: step.description,
         order: step.order,
       })
-      .where(and(eq(steps.flowTypeId, id), eq(steps.order, step.order)));
+      .where(and(eq(step.flowTypeId, id), eq(step.order, step.order)));
   }
 
   // 删除不再存在的steps
-  await db.delete(steps).where(
+  await db.delete(step).where(
     and(
-      eq(steps.flowTypeId, id),
+      eq(step.flowTypeId, id),
       notInArray(
-        steps.order,
+        step.order,
         stepList.map((step) => step.order),
       ),
     ),
@@ -52,14 +52,14 @@ export const updateFlowType = async (
   // 添加新的steps
   const existingSteps = await db
     .select()
-    .from(steps)
-    .where(eq(steps.flowTypeId, id));
+    .from(step)
+    .where(eq(step.flowTypeId, id));
   const newSteps = stepList.filter(
     (step) =>
       !existingSteps.some((existingStep) => existingStep.order === step.order),
   );
   if (newSteps.length > 0) {
-    await db.insert(steps).values(
+    await db.insert(step).values(
       newSteps.map((step) => ({
         ...step,
         flowTypeId: id,

@@ -1,6 +1,6 @@
 'use server';
 import { db } from '@/db/drizzle';
-import { flow, flowStep, steps, status } from '@/db/schema';
+import { flow, flowStep, step, status } from '@/db/schema';
 import eventManager from '@/event';
 import { verifyRole } from '@/lib/dal';
 import { and, asc, desc, eq, gt, inArray, lt, lte, sql } from 'drizzle-orm';
@@ -14,11 +14,11 @@ export const forward = async (
   await verifyRole(1);
   const nextStep = await db
     .select()
-    .from(steps)
+    .from(step)
     .where(
-      and(gt(steps.order, currentStepOrder), eq(steps.flowTypeId, flowTypeId)),
+      and(gt(step.order, currentStepOrder), eq(step.flowTypeId, flowTypeId)),
     )
-    .orderBy(asc(steps.order))
+    .orderBy(asc(step.order))
     .limit(1);
 
   if (nextStep.length === 0) {
@@ -68,8 +68,8 @@ export const finish = async (
   await verifyRole(1);
   const currentStep = await db
     .select()
-    .from(steps)
-    .where(eq(steps.id, currentStepId))
+    .from(step)
+    .where(eq(step.id, currentStepId))
     .limit(1);
 
   if (currentStep.length === 0) {
@@ -97,8 +97,8 @@ export const reject = async (
   await verifyRole(1);
   const currentStep = await db
     .select()
-    .from(steps)
-    .where(eq(steps.id, currentStepId))
+    .from(step)
+    .where(eq(step.id, currentStepId))
     .limit(1);
 
   if (currentStep.length === 0) {
@@ -145,11 +145,11 @@ export const backward = async (
   await verifyRole(1);
   const previousStep = await db
     .select()
-    .from(steps)
+    .from(step)
     .where(
-      and(lt(steps.order, currentStepOrder), eq(steps.flowTypeId, flowTypeId)),
+      and(lt(step.order, currentStepOrder), eq(step.flowTypeId, flowTypeId)),
     )
-    .orderBy(desc(steps.order))
+    .orderBy(desc(step.order))
     .limit(1);
 
   if (previousStep.length === 0) {
@@ -216,9 +216,9 @@ export const batchEndByUid = async (
   const allSteps = (
     await db
       .select()
-      .from(steps)
-      .where(eq(steps.flowTypeId, flowTypeID))
-      .orderBy(desc(steps.order))
+      .from(step)
+      .where(eq(step.flowTypeId, flowTypeID))
+      .orderBy(desc(step.order))
   ).map((step) => step.id);
   const flowIds = (
     await db

@@ -1,7 +1,7 @@
 'use server';
 import { verifySession } from '@/lib/dal';
 import { db } from '@/db/drizzle';
-import { flow, flowStep, steps, status, flowType, user } from '@/db/schema';
+import { flow, flowStep, step, status, flowType, user } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import eventManager from '@/event';
@@ -22,9 +22,9 @@ export const register = async (flowTypeId: number, uid: number) => {
   // 获取流程的所有步骤
   const flowSteps = await db
     .select()
-    .from(steps)
-    .where(eq(steps.flowTypeId, flowTypeId))
-    .orderBy(steps.order);
+    .from(step)
+    .where(eq(step.flowTypeId, flowTypeId))
+    .orderBy(step.order);
 
   if (flowSteps.length === 0) {
     throw new Error('该流程没有定义步骤');

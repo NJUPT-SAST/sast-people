@@ -22,21 +22,21 @@ export const status = pgEnum("status", [
 // user 表
 export const user = pgTable("user", {
   id: serial("uid").primaryKey(),
-  name: text("name").notNull(),
+  name: varchar("name", { length: 20}).notNull(),
   studentId: varchar("student_id", { length: 20 }),
   college: integer("college").references(() => college.id),
-  major: text("major"),
+  major: varchar("major", { length: 20 }),
   phoneNumber: varchar("phone_number", { length: 20 }).unique(),
-  email: varchar("email", { length: 255 }).unique(),
-  github: varchar("github", { length: 255 }),
-  blog: varchar("blog", { length: 255 }),
-  personalStatement: text("personal_statement"),
+  email: varchar("email", { length: 254 }).unique(),
+  github: varchar("github", { length: 100 }),
+  blog: varchar("blog", { length: 100 }),
+  personalStatement: varchar("personal_statement", { length: 100}),
   birthday: date("birthday"),
   isDeleted: boolean("is_deleted").default(false),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-  department: varchar("department", { length: 255 }),
-  group: varchar("group", { length: 255 }),
+  department: varchar("department", { length: 50 }),
+  group: varchar("group", { length: 50 }),
   role: integer("role").default(0),
   feishuOpenId: varchar("feishu_open_id", { length: 255 }).unique(),
   sastLinkOpenId: varchar("sast_link_open_id", { length: 255 }).unique(),
@@ -47,24 +47,22 @@ export const user = pgTable("user", {
 // FlowType 表
 export const flowType = pgTable("flow_type", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  description: text("description"),
-  createdAt: timestamp("created_at").notNull(), // 使用 timestamp 类型和 SQL 默认值
+  name: varchar("name", { length: 100}).notNull(),
+  description: varchar("description", { length: 100 }),
+  createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   isDeleted: boolean("is_deleted").default(false),
   createBy: integer("create_by")
     .references(() => user.id)
-    .notNull(), // 外键关联到 user 表的 id
+    .notNull(),
 });
 
-// Steps 表
-export const steps = pgTable(
-  "steps",
-  {
+// Step 表
+export const step = pgTable("step", {
     id: serial("id").primaryKey(),
     flowTypeId: integer("flow_type_id")
       .references(() => flowType.id)
-      .notNull(), // 外键关联 FlowType 表
+      .notNull(),
     order: integer("order").notNull(),
     label: text("label").notNull(),
     name: text("name").notNull(),
@@ -83,7 +81,7 @@ export const steps = pgTable(
 // Problem 表
 export const problem = pgTable("problem", {
   id: serial("id").primaryKey(),
-  stepId: integer("step_id").references(() => steps.id), // 外键关联 Steps 表
+  stepId: integer("step_id").references(() => step.id), // 外键关联 Steps 表
   class: text("class").notNull(), // 问题类别
   name: text("name").notNull(), // 问题名称
   maxScore: integer("max_score").notNull(), // 最大得分
@@ -93,7 +91,7 @@ export const flow = pgTable('flow', {
   id: serial('id').primaryKey(),
   uid: integer('uid').references(() => user.id).notNull(), // 外键关联到 user 表
   flowTypeId: integer('flow_type_id').references(() => flowType.id).notNull(), // 外键关联 FlowType 表
-  currentStepId: integer('current_step_id').references(() => steps.id), // 当前步骤
+  currentStepId: integer('current_step_id').references(() => step.id), // 当前步骤
   isAccepted: boolean('is_accepted'), // 是否被接受
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
@@ -103,7 +101,7 @@ export const flow = pgTable('flow', {
 export const flowStep = pgTable('flow_step', {
   id: serial('id').primaryKey(),
   flowId: integer('flow_id').references(() => flow.id).notNull(), // 外键关联 Flow 表
-  stepId: integer('step_id').references(() => steps.id).notNull(), // 外键关联 Steps 表
+  stepId: integer('step_id').references(() => step.id).notNull(), // 外键关联 Steps 表
   status: status('status').notNull().default('pending'), // 步骤状态
   startedAt: timestamp('started_at'),
   completedAt: timestamp('completed_at'),
