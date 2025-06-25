@@ -32,7 +32,7 @@ copy `.env.example` to `.env` and fill in the required environment variables.
 
 > [!NOTE]
 > 
-> DATABASE_URL example: postgres://user:password@127.0.0.1:5432/sast_people
+> DATABASE_URL example: postgres://postgres:postgres@127.0.0.1:5432/sast-people
 >
 > it's convenient to use openssl to generate a secrets
 > ```bash
