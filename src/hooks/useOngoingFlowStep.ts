@@ -11,12 +11,12 @@ export const useOngoingFlowStep = async (studentId: string) => {
   const flowStepId = await db
     .select({
       flowStepId: flowStep.id,
-      uid: flow.uid,
+      // TODO: v2 db uid: flow.userId,
     })
     .from(flow)
     .innerJoin(user, eq(user.studentId, studentId))
-    .innerJoin(flowStep, eq(flow.currentStepId, flowStep.stepId))
-    .where(and(eq(user.id, flow.uid), eq(flow.id, flowStep.flowId)))
+    // TODO: v2 db .innerJoin(flowStep, eq(flow.currentStepId, flowStep.stepId))
+    // TODO: v2 db .where(and(eq(user.id, flow.userId), eq(flow.id, flowStep.flowId)))
     .then(res => {
       return res[0]?.flowStepId;
     });

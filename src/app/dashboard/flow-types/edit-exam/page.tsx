@@ -14,7 +14,7 @@ import { EditProblemsServer } from './editProblems';
 export default async function EditExamPage({
   searchParams,
 }: { searchParams: { id: string } }) {
-  const flowTypeInfo = await useFlowTypeInfo(Number(searchParams.id));
+  // const flowTypeInfo = await useFlowTypeInfo(Number(searchParams.id));
   return (
     <>
       <div className="flex items-center justify-between">
@@ -25,7 +25,7 @@ export default async function EditExamPage({
             </h1>
           </Button>
         </Link>
-        <p className="text-sm text-muted-foreground">{flowTypeInfo.name}</p>
+        {/* <p className="text-sm text-muted-foreground">{flowTypeInfo.name}</p> */}
       </div>
       <div>
         <Suspense fallback={<Loading />}>

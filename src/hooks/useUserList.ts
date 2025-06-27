@@ -29,7 +29,7 @@ export const useUserList = async ({
       or(
         ilike(user.name, `%${search}%`),
         ilike(user.studentId, `%${search}%`),
-        ilike(user.phoneNumber, `%${search}%`),
+        ilike(user.phone, `%${search}%`),
         ilike(user.email, `%${search}%`)
       )
     );

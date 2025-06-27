@@ -9,13 +9,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { FlowList } from './flowList';
 
 const Flows = async () => {
-  const allFlowList = await useFlowTypeList();
+  // const allFlowList = await useFlowTypeList();
   const { uid } = await verifySession();
   return (
     <>
       <div className="flex items-center justify-between">
         <PageTitle />
-        <SubmitRegister flowList={allFlowList} uid={uid} />
+        {/* <SubmitRegister flowList={allFlowList} uid={uid} /> */}
       </div>
       <div className="space-y-4 mt-4">
         <Suspense

@@ -10,13 +10,15 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export const Operations = ({ data }: { data: flowTypeType }) => {
-  const stepsCount = data.steps.length;
+// export const Operations = ({ data }: { data: flowTypeType }) => {
+export const Operations = () => {
+  const stepsCount = 0;
   return (
     <>
-      <EditSteps data={data} />
+      {/* <EditSteps data={data} /> */}
       {stepsCount > 0 ? (
-        <Link href={`/dashboard/flow-types/edit-exam?id=${data.id}`}>
+        // <Link href={`/dashboard/flow-types/edit-exam?id=${data.id}`}>
+        <Link href={`/dashboard/flow-types/edit-exam`}>
           <Button variant={'ghost'}>编辑笔试</Button>
         </Link>
       ) : (
@@ -33,7 +35,7 @@ export const Operations = ({ data }: { data: flowTypeType }) => {
           </Tooltip>
         </TooltipProvider>
       )}
-      <Delete data={data} />
+      {/* <Delete data={data} /> */}
     </>
   );
 };

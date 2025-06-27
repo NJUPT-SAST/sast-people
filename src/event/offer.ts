@@ -10,22 +10,22 @@ export default async function offer(flowId: number, accept: boolean) {
     await db
       .select({
         // NOTE: highly dependent on the sastLinkOpenId field
-        studentID: user.sastLinkOpenId,
+        // TODO: v2 db studentID: user.sastLinkOpenId,
         name: user.name,
-        flowName: flowType.name,
+        // TODO: v2 db flowName: flowType.name,
       })
       .from(user)
-      .innerJoin(flow, eq(flow.uid, user.id))
-      .innerJoin(flowType, eq(flow.flowTypeId, flowType.id))
+      // TODO: v2 db .innerJoin(flow, eq(flow.userId, user.id))
+      // TODO: v2 db .innerJoin(flowType, eq(flow.flowTypeId, flowType.id))
       .where(eq(flow.id, flowId))
       .limit(1)
   )[0];
   await mqClient.send({
     name: sendEmail.name,
     data: {
-      studentID: userInfo.studentID,
+      // TODO: v2 db studentID: userInfo.studentID,
       name: userInfo.name,
-      flowName: userInfo.flowName,
+      // TODO: v2 db flowName: userInfo.flowName,
       accept,
     },
   });

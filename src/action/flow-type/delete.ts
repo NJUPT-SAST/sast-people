@@ -7,13 +7,14 @@ import { verifyRole, verifySession } from '@/lib/dal';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
-export async function deleteFlowType(id: number) {
-  await verifyRole(1);
+// TODO: v2 db 
+// export async function deleteFlowType(id: number) {
+//   await verifyRole(1);
 
-  await db
-    .update(flowType)
-    .set({ isDeleted: true })
-    .where(eq(flowType.id, id));
+//   await db
+//     .update(flowType)
+//     .set({ isDeleted: true })
+//     .where(eq(flowType.id, id));
 
-  revalidatePath('/dashboard/flow-types');
-}
+//   revalidatePath('/dashboard/flow-types');
+// }

@@ -1,5 +1,4 @@
 'use client';
-import { deleteFlowType } from '@/action/flow-type/delete';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -15,7 +14,8 @@ import { flowTypeType } from '@/types/flowType';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-const Delete = ({ data }: { data: flowTypeType }) => {
+// const Delete = ({ data }: { data: flowTypeType }) => {
+const Delete = () => {
   const [openDelete, setOpenDelete] = useState(false);
 
   return (
@@ -39,11 +39,12 @@ const Delete = ({ data }: { data: flowTypeType }) => {
               variant="destructive"
               onClick={async () => {
                 setOpenDelete(false);
-                toast.promise(deleteFlowType(data.id), {
-                  loading: '删除中...',
-                  success: '删除成功',
-                  error: '删除失败',
-                });
+                // TODO: v2 db 
+                // toast.promise(deleteFlowType(data.id), {
+                //   loading: '删除中...',
+                //   success: '删除成功',
+                //   error: '删除失败',
+                // });
               }}
             >
               删除

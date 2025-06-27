@@ -32,7 +32,7 @@ const Review: React.FC = async () => {
               <SheetTitle>设置阅卷范围</SheetTitle>
             </SheetHeader>
             <Suspense fallback={<Loading />}>
-              <SelectProblemServer />
+              {/* <SelectProblemServer /> */}
             </Suspense>
           </SheetContent>
         </Sheet>

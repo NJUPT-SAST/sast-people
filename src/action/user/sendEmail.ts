@@ -11,9 +11,9 @@ export const batchSendEmail = async (uid: number[], flowTypeId: number, accept: 
       .from(flow)
       .where(
         and(
-          eq(flow.flowTypeId, flowTypeId),
-          inArray(flow.uid, uid),
-          isNull(flow.isAccepted),
+          // TODO: v2 db eq(flow.flowTypeId, flowTypeId),
+          // TODO: v2 db inArray(flow.userId, uid),
+          // TODO: v2 db isNull(flow.isAccepted),
         ),
       )
   ).map((flow) => flow.id);

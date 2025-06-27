@@ -12,7 +12,7 @@ import { useFlowTypeList } from '@/hooks/useFlowTypeList';
 import { redirect } from 'next/navigation';
 
 const Recruitment = async () => {
-  const flowTypes = await useFlowTypeList();
+  // const flowTypes = await useFlowTypeList();
 
   return (
     <>
@@ -20,7 +20,7 @@ const Recruitment = async () => {
         <PageTitle />
       </div>
       <div className="space-y-4 mt-4">
-        <SelectFlow flowTypes={flowTypes} />
+        {/* <SelectFlow flowTypes={flowTypes} /> */}
       </div>
     </>
   );
