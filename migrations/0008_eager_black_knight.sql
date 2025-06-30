@@ -1,1 +1,0 @@
-ALTER TABLE "flow" ALTER COLUMN "is_accepted" DROP DEFAULT;

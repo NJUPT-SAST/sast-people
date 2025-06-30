@@ -1,11 +1,11 @@
 {
-  "id": "fbecdb5f-f10c-4b1b-b655-975168d64e58",
+  "id": "6cc0bace-781d-40a2-85dc-8249ac17ea82",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.college": {
-      "name": "college",
+    "public.email": {
+      "name": "email",
       "schema": "",
       "columns": {
         "id": {
@@ -14,102 +14,33 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "subject": {
+          "name": "subject",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.department": {
-      "name": "department",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.exam_map": {
-      "name": "exam_map",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "flow_step_id": {
-          "name": "flow_step_id",
+        "fk_flow_step_id": {
+          "name": "fk_flow_step_id",
           "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "problem_id": {
-          "name": "problem_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "score": {
-          "name": "score",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "judger_id": {
-          "name": "judger_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "judge_time": {
-          "name": "judge_time",
-          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "exam_map_flow_step_id_flow_step_id_fk": {
-          "name": "exam_map_flow_step_id_flow_step_id_fk",
-          "tableFrom": "exam_map",
+        "email_fk_flow_step_id_flow_step_id_fk": {
+          "name": "email_fk_flow_step_id_flow_step_id_fk",
+          "tableFrom": "email",
           "tableTo": "flow_step",
           "columnsFrom": [
-            "flow_step_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "exam_map_problem_id_problem_id_fk": {
-          "name": "exam_map_problem_id_problem_id_fk",
-          "tableFrom": "exam_map",
-          "tableTo": "problem",
-          "columnsFrom": [
-            "problem_id"
+            "fk_flow_step_id"
           ],
           "columnsTo": [
             "id"
@@ -131,20 +62,47 @@
           "primaryKey": true,
           "notNull": true
         },
-        "uid": {
-          "name": "uid",
-          "type": "integer",
+        "title": {
+          "name": "title",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
-        "flow_type_id": {
-          "name": "flow_type_id",
-          "type": "integer",
+        "description": {
+          "name": "description",
+          "type": "varchar(1000)",
           "primaryKey": false,
           "notNull": false
         },
-        "is_accepted": {
-          "name": "is_accepted",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "ended_at": {
+          "name": "ended_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_deleted": {
+          "name": "is_deleted",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
@@ -152,21 +110,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "flow_flow_type_id_flow_type_id_fk": {
-          "name": "flow_flow_type_id_flow_type_id_fk",
-          "tableFrom": "flow",
-          "tableTo": "flow_type",
-          "columnsFrom": [
-            "flow_type_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -180,99 +124,49 @@
           "primaryKey": true,
           "notNull": true
         },
-        "flow_id": {
-          "name": "flow_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "step_id": {
-          "name": "step_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "label": {
-          "name": "label",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "flow_step_flow_id_flow_id_fk": {
-          "name": "flow_step_flow_id_flow_id_fk",
-          "tableFrom": "flow_step",
-          "tableTo": "flow",
-          "columnsFrom": [
-            "flow_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "flow_step_step_id_steps_id_fk": {
-          "name": "flow_step_step_id_steps_id_fk",
-          "tableFrom": "flow_step",
-          "tableTo": "steps",
-          "columnsFrom": [
-            "step_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.flow_type": {
-      "name": "flow_type",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
+        "title": {
+          "name": "title",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
         "description": {
           "name": "description",
-          "type": "text",
+          "type": "varchar(1000)",
           "primaryKey": false,
           "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "flow_step_type_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fk_flow_id": {
+          "name": "fk_flow_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": true
         },
         "is_deleted": {
           "name": "is_deleted",
@@ -280,74 +174,24 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
-        },
-        "create_by": {
-          "name": "create_by",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "flow_type_create_by_user_uid_fk": {
-          "name": "flow_type_create_by_user_uid_fk",
-          "tableFrom": "flow_type",
-          "tableTo": "user",
+        "flow_step_fk_flow_id_flow_id_fk": {
+          "name": "flow_step_fk_flow_id_flow_id_fk",
+          "tableFrom": "flow_step",
+          "tableTo": "flow",
           "columnsFrom": [
-            "create_by"
+            "fk_flow_id"
           ],
           "columnsTo": [
-            "uid"
+            "id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.group": {
-      "name": "group",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.major": {
-      "name": "major",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -361,20 +205,20 @@
           "primaryKey": true,
           "notNull": true
         },
-        "step_id": {
-          "name": "step_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
+        "title": {
+          "name": "title",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
-        "max_score": {
-          "name": "max_score",
+        "score": {
+          "name": "score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fk_flow_step_id": {
+          "name": "fk_flow_step_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -382,94 +226,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "problem_step_id_steps_id_fk": {
-          "name": "problem_step_id_steps_id_fk",
+        "problem_fk_flow_step_id_flow_step_id_fk": {
+          "name": "problem_fk_flow_step_id_flow_step_id_fk",
           "tableFrom": "problem",
-          "tableTo": "steps",
+          "tableTo": "flow_step",
           "columnsFrom": [
-            "step_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.steps": {
-      "name": "steps",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "flow_type_id": {
-          "name": "flow_type_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "order": {
-          "name": "order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "label": {
-          "name": "label",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "unique_flow_type_order_index": {
-          "name": "unique_flow_type_order_index",
-          "columns": [
-            {
-              "expression": "flow_type_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "steps_flow_type_id_flow_type_id_fk": {
-          "name": "steps_flow_type_id_flow_type_id_fk",
-          "tableFrom": "steps",
-          "tableTo": "flow_type",
-          "columnsFrom": [
-            "flow_type_id"
+            "fk_flow_step_id"
           ],
           "columnsTo": [
             "id"
@@ -485,71 +247,79 @@
       "name": "user",
       "schema": "",
       "columns": {
-        "uid": {
-          "name": "uid",
+        "id": {
+          "name": "id",
           "type": "serial",
           "primaryKey": true,
           "notNull": true
         },
         "name": {
           "name": "name",
-          "type": "text",
+          "type": "varchar(30)",
           "primaryKey": false,
           "notNull": true
         },
         "student_id": {
           "name": "student_id",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "college": {
-          "name": "college",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "major": {
-          "name": "major",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "phone_number": {
-          "name": "phone_number",
-          "type": "varchar(20)",
+          "type": "varchar(16)",
           "primaryKey": false,
           "notNull": false
         },
         "email": {
           "name": "email",
+          "type": "varchar(254)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "college": {
+          "name": "college",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "major": {
+          "name": "major",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "department": {
+          "name": "department",
+          "type": "varchar(50)[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
+        },
+        "link_openid": {
+          "name": "link_openid",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
-        "github": {
-          "name": "github",
+        "feishu_openid": {
+          "name": "feishu_openid",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
-        "blog": {
-          "name": "blog",
-          "type": "varchar(255)",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         },
-        "personal_statement": {
-          "name": "personal_statement",
-          "type": "text",
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
-        },
-        "birthday": {
-          "name": "birthday",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "is_deleted": {
           "name": "is_deleted",
@@ -557,61 +327,93 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_student_id_unique": {
+          "name": "user_student_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "student_id"
+          ]
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
+        "user_link_openid_unique": {
+          "name": "user_link_openid_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "link_openid"
+          ]
+        },
+        "user_feishu_openid_unique": {
+          "name": "user_feishu_openid_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "feishu_openid"
+          ]
+        }
+      }
+    },
+    "public.user_flow": {
+      "name": "user_flow",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "user_flow_status_enum",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": true,
+          "default": "'pending'"
         },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "department": {
-          "name": "department",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "group": {
-          "name": "group",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "role": {
-          "name": "role",
+        "current_step_order": {
+          "name": "current_step_order",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "default": 0
+          "notNull": true
         },
-        "feishu_open_id": {
-          "name": "feishu_open_id",
-          "type": "varchar(255)",
+        "fk_flow_id": {
+          "name": "fk_flow_id",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "sast_link_open_id": {
-          "name": "sast_link_open_id",
-          "type": "varchar(255)",
+        "fk_user_id": {
+          "name": "fk_user_id",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "user_college_college_id_fk": {
-          "name": "user_college_college_id_fk",
-          "tableFrom": "user",
-          "tableTo": "college",
+        "user_flow_fk_flow_id_flow_id_fk": {
+          "name": "user_flow_fk_flow_id_flow_id_fk",
+          "tableFrom": "user_flow",
+          "tableTo": "flow",
           "columnsFrom": [
-            "college"
+            "fk_flow_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_flow_fk_user_id_user_id_fk": {
+          "name": "user_flow_fk_user_id_user_id_fk",
+          "tableFrom": "user_flow",
+          "tableTo": "user",
+          "columnsFrom": [
+            "fk_user_id"
           ],
           "columnsTo": [
             "id"
@@ -621,41 +423,84 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "user_phone_number_unique": {
-          "name": "user_phone_number_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "phone_number"
-          ]
+      "uniqueConstraints": {}
+    },
+    "public.user_point": {
+      "name": "user_point",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
-        "user_email_unique": {
-          "name": "user_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+        "fk_user_flow_id": {
+          "name": "fk_user_flow_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
-        "user_feishu_open_id_unique": {
-          "name": "user_feishu_open_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "feishu_open_id"
-          ]
+        "fk_problem_id": {
+          "name": "fk_problem_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
-        "user_sast_link_open_id_unique": {
-          "name": "user_sast_link_open_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "sast_link_open_id"
-          ]
+        "point": {
+          "name": "point",
+          "type": "point",
+          "primaryKey": false,
+          "notNull": true
         }
-      }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_point_fk_user_flow_id_user_flow_id_fk": {
+          "name": "user_point_fk_user_flow_id_user_flow_id_fk",
+          "tableFrom": "user_point",
+          "tableTo": "user_flow",
+          "columnsFrom": [
+            "fk_user_flow_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_point_fk_problem_id_problem_id_fk": {
+          "name": "user_point_fk_problem_id_problem_id_fk",
+          "tableFrom": "user_point",
+          "tableTo": "problem",
+          "columnsFrom": [
+            "fk_problem_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     }
   },
   "enums": {
-    "public.status": {
-      "name": "status",
+    "public.flow_step_type_enum": {
+      "name": "flow_step_type_enum",
+      "schema": "public",
+      "values": [
+        "registering",
+        "checking",
+        "judging",
+        "email",
+        "finished"
+      ]
+    },
+    "public.user_flow_status_enum": {
+      "name": "user_flow_status_enum",
       "schema": "public",
       "values": [
         "pending",

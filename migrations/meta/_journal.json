@@ -5,64 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1725092470462,
-      "tag": "0000_organic_boomerang",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1725198551340,
-      "tag": "0001_furry_stature",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1725198616373,
-      "tag": "0002_green_titania",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1725198691058,
-      "tag": "0003_square_victor_mancha",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1725460496829,
-      "tag": "0004_overjoyed_vivisector",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1726072382039,
-      "tag": "0005_cultured_mimic",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1726072469271,
-      "tag": "0006_brief_iron_lad",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1726906010862,
-      "tag": "0007_sweet_adam_destine",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1728145817117,
-      "tag": "0008_eager_black_knight",
+      "when": 1751031744364,
+      "tag": "0000_windy_lester",
       "breakpoints": true
     }
   ]

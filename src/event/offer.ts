@@ -1,9 +1,9 @@
-import 'server-only';
-import { db } from '@/db/drizzle';
-import { flow, flowType, user } from '@/db/schema';
-import { sendEmail } from '@/queue/sendEmail';
-import { eq } from 'drizzle-orm';
-import { mqClient } from '@/queue/client';
+import { db } from "@/db/drizzle";
+import { flow, user } from "@/db/schema";
+import { mqClient } from "@/queue/client";
+import { sendEmail } from "@/queue/sendEmail";
+import { eq } from "drizzle-orm";
+import "server-only";
 
 export default async function offer(flowId: number, accept: boolean) {
   const userInfo = (
