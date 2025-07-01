@@ -1,18 +1,15 @@
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
-  integer,
-  text,
   boolean,
-  pgTable,
-  date,
-  timestamp,
-  varchar,
-  uniqueIndex,
-  serial,
+  integer,
   pgEnum,
+  pgTable,
   point,
+  serial,
+  text,
+  timestamp,
+  varchar
 } from "drizzle-orm/pg-core";
-import { title } from "process";
 
 export const flowStepTypeEnum = pgEnum("flow_step_type_enum", [
   "registering",
@@ -21,7 +18,6 @@ export const flowStepTypeEnum = pgEnum("flow_step_type_enum", [
   "email",
   "finished",
 ]);
-
 
 export const userFlowStatusEnum = pgEnum("user_flow_status_enum", [
   "pending",
@@ -32,33 +28,41 @@ export const userFlowStatusEnum = pgEnum("user_flow_status_enum", [
 
 export const user = pgTable("user", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 30}).notNull(),
+  name: varchar("name", { length: 30 }).notNull(),
   studentId: varchar("student_id", { length: 16 }).unique(),
   email: varchar("email", { length: 254 }),
   phone: varchar("phone", { length: 16 }),
   college: varchar("college", { length: 50 }),
   major: varchar("major", { length: 50 }),
-  departments: varchar("department", { length: 50 }).array().notNull().default(sql`ARRAY[]::text[]`),
+  departments: varchar("department", { length: 50 })
+    .array()
+    .notNull()
+    .default(sql`ARRAY[]::text[]`),
   linkOpenid: varchar("link_openid", { length: 255 }).unique(),
   feishuOpenid: varchar("feishu_openid", { length: 255 }).unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().$onUpdate(() => sql`now()`),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => sql`now()`),
   isDeleted: boolean("is_deleted").default(false),
-  
+
   // TODO: v2 db role: integer("role").default(0),
   // TODO: v2 db feishuOpenId: varchar("feishu_open_id", { length: 255 }).unique(),
   // TODO: v2 db sastLinkOpenId: varchar("sast_link_open_id", { length: 255 }).unique(),
-
 });
 
-export const flow = pgTable('flow', {
-  id: serial('id').primaryKey(),
-  title: varchar('title', { length: 100 }).notNull(),
-  description: varchar('description', { length: 1000 }),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  startedAt: timestamp('started_at').notNull().defaultNow(),
-  endedAt: timestamp('ended_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().$onUpdate(() => sql`now()`),
+export const flow = pgTable("flow", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 100 }).notNull(),
+  description: varchar("description", { length: 1000 }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  startedAt: timestamp("started_at").notNull().defaultNow(),
+  endedAt: timestamp("ended_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => sql`now()`),
   isDeleted: boolean("is_deleted").default(false),
 
   // TODO: v2 db userId: integer('user_id').references(() => user.id).notNull(), // 外键关联 User 表
@@ -101,15 +105,20 @@ export const flow = pgTable('flow', {
 //   }
 // );
 
-export const flowStep = pgTable('flow_step', {
-  id: serial('id').primaryKey(),
-  title: varchar('title', { length: 100 }).notNull(),
-  description: varchar('description', { length: 1000 }),
-  type: flowStepTypeEnum('type').notNull(),
-  order: integer('order').notNull(),
-  fkFlowId: integer('fk_flow_id').references(() => flow.id).notNull(),
+export const flowStep = pgTable("flow_step", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 100 }).notNull(),
+  description: varchar("description", { length: 1000 }),
+  type: flowStepTypeEnum("type").notNull(),
+  order: integer("order").notNull(),
+  fkFlowId: integer("fk_flow_id")
+    .references(() => flow.id)
+    .notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().$onUpdate(() => sql`now()`),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => sql`now()`),
   isDeleted: boolean("is_deleted").default(false),
 
   // TODO: v2 db stepId: integer('step_id').references(() => step.id).notNull(), // 外键关联 Steps 表
@@ -118,19 +127,25 @@ export const flowStep = pgTable('flow_step', {
   // completedAt: timestamp('completed_at'),
 });
 
-export const userFlow = pgTable('user_flow', {
-  id: serial('id').primaryKey(),
-  status: userFlowStatusEnum('status').notNull().default('pending'),
-  currentStepOrder: integer('current_step_order').notNull(),
-  fkFlowId: integer('fk_flow_id').references(() => flow.id).notNull(),
-  fkUserId: integer('fk_user_id').references(() => user.id).notNull(),
+export const userFlow = pgTable("user_flow", {
+  id: serial("id").primaryKey(),
+  status: userFlowStatusEnum("status").notNull().default("pending"),
+  currentStepOrder: integer("current_step_order").notNull(),
+  fkFlowId: integer("fk_flow_id")
+    .references(() => flow.id)
+    .notNull(),
+  fkUserId: integer("fk_user_id")
+    .references(() => user.id)
+    .notNull(),
 });
 
 export const problem = pgTable("problem", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 100 }).notNull(),
   score: integer("score").notNull(),
-  fkFlowStepId: integer("fk_flow_step_id").references(() => flowStep.id).notNull(),
+  fkFlowStepId: integer("fk_flow_step_id")
+    .references(() => flowStep.id)
+    .notNull(),
 
   // TODO: v2 db
   // stepId: integer("step_id").references(() => step.id), // 外键关联 Steps 表
@@ -143,13 +158,19 @@ export const email = pgTable("email", {
   id: serial("id").primaryKey(),
   subject: varchar("subject", { length: 255 }).notNull(),
   content: text("content").notNull(),
-  fkFlowStepId: integer("fk_flow_step_id").references(() => flowStep.id).notNull(),
+  fkFlowStepId: integer("fk_flow_step_id")
+    .references(() => flowStep.id)
+    .notNull(),
 });
 
 export const userPoint = pgTable("user_point", {
   id: serial("id").primaryKey(),
-  fkUserFlowId: integer("fk_user_flow_id").references(() => userFlow.id).notNull(),
-  fkProblemId: integer("fk_problem_id").references(() => problem.id).notNull(),
+  fkUserFlowId: integer("fk_user_flow_id")
+    .references(() => userFlow.id)
+    .notNull(),
+  fkProblemId: integer("fk_problem_id")
+    .references(() => problem.id)
+    .notNull(),
   point: point("point").notNull(),
 });
 

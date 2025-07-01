@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS "flow" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"started_at" timestamp DEFAULT now() NOT NULL,
 	"ended_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"is_deleted" boolean DEFAULT false
 );
 --> statement-breakpoint
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS "flow_step" (
 	"order" integer NOT NULL,
 	"fk_flow_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"is_deleted" boolean DEFAULT false
 );
 --> statement-breakpoint
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"link_openid" varchar(255),
 	"feishu_openid" varchar(255),
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"is_deleted" boolean DEFAULT false,
 	CONSTRAINT "user_student_id_unique" UNIQUE("student_id"),
 	CONSTRAINT "user_link_openid_unique" UNIQUE("link_openid"),

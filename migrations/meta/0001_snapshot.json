@@ -1,5 +1,5 @@
 {
-  "id": "6cc0bace-781d-40a2-85dc-8249ac17ea82",
+  "id": "f3c7901c-3e03-4bb2-a525-6100bdb30a9d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -99,7 +99,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "is_deleted": {
           "name": "is_deleted",
@@ -166,7 +167,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "is_deleted": {
           "name": "is_deleted",
@@ -319,7 +321,8 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "is_deleted": {
           "name": "is_deleted",
