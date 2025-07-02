@@ -42,19 +42,19 @@ export const MarkProblemTable = ({
   }, [problems]);
 
   const handleSave = (problemPoints: Array<insertExamMapType>) => {
-    toast.promise(batchUpsert(problemPoints), {
-      loading: '保存中...',
-      success: '保存成功',
-      error: '保存失败',
-    });
+    // toast.promise(batchUpsert(problemPoints), {
+    //   loading: '保存中...',
+    //   success: '保存成功',
+    //   error: '保存失败',
+    // });
   };
 
   const handleUpdate = (index: number, score: number) => {
-    toast.promise(upsert(flowStepId, problems[index].id, score, new Date()), {
-      loading: '更新中...',
-      success: '更新成功',
-      error: '更新失败',
-    });
+    // toast.promise(upsert(flowStepId, problems[index].id, score, new Date()), {
+    //   loading: '更新中...',
+    //   success: '更新成功',
+    //   error: '更新失败',
+    // });
   };
 
   return (

@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1751031744364,
-      "tag": "0000_windy_lester",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
       "when": 1751361085459,
-      "tag": "0001_tearful_crusher_hogan",
+      "tag": "0000_tearful_crusher_hogan",
       "breakpoints": true
     }
   ]
