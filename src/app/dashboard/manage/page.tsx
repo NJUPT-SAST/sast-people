@@ -1,13 +1,16 @@
-import { ManageTable } from '@/components/manage/manageTable';
-import { PageTitle } from '@/components/route';
-import React, { Suspense } from 'react';
-import { useUserList } from '@/hooks/useUserList';
-import { ManageTableServer } from './manageTable';
-import { Skeleton } from '@/components/ui/skeleton';
+import { ManageTable } from "@/components/manage/manageTable";
+import { PageTitle } from "@/components/route";
+import React, { Suspense } from "react";
+import { useUserList } from "@/hooks/useUserList";
+import { ManageTableServer } from "./manageTable";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Manage = async ({
   searchParams,
-}: { searchParams: { page?: string; pageSize?: string; search?: string } }) => {
+}: {
+  searchParams: { page?: string; pageSize?: string; search?: string };
+}) => {
+  const awaitedSearchParams = await searchParams;
   return (
     <>
       <div className="flex items-center justify-between">
@@ -22,7 +25,7 @@ const Manage = async ({
             </div>
           }
         >
-          <ManageTableServer {...searchParams} />
+          <ManageTableServer {...awaitedSearchParams} />
         </Suspense>
       </div>
     </>

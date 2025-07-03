@@ -1,12 +1,7 @@
 'use client';
-import React from 'react';
 import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+  PaginationComponent
+} from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -15,22 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import originalDayjs from '@/lib/dayjs';
 import {
-  Pagination,
-  PaginationComponent,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
-import { SearchInput } from './searchInput';
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { EditUserFlowSheet } from './editUserFlowSheet';
 import { EditUserInfoDialog } from './editUserInfoDialog';
 import { RemoveUserInfoDialog } from './removeUserInfoDialog';
-import { Workflow } from 'lucide-react';
-import { EditUserFlowSheet } from './editUserFlowSheet';
-import { useCollegeListClient } from '@/hooks/useCollegeListClient';
+import { SearchInput } from './searchInput';
 // 定义用户类型
 type UserType = {
   id: number;
@@ -58,7 +49,6 @@ export const ManageTable = ({
   search: string;
   currentPage: number;
 }) => {
-  const colleges = useCollegeListClient();
   const columns: ColumnDef<UserType>[] = [
     {
       accessorKey: 'name',
@@ -72,7 +62,7 @@ export const ManageTable = ({
       header: '学号',
     },
     {
-      accessorKey: 'phoneNumber',
+      accessorKey: 'phone',
       header: '手机号码',
     },
     {
@@ -95,7 +85,7 @@ export const ManageTable = ({
       id: 'actions',
       cell: ({ row }) => (
         <div className="w-[80px] flex gap-3 mr-4">
-          <EditUserInfoDialog userInfo={row.original} colleges={colleges} />
+          <EditUserInfoDialog userInfo={row.original}/>
           <EditUserFlowSheet userInfo={row.original} />
           <RemoveUserInfoDialog uid={row.original.id} />
         </div>

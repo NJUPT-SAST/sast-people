@@ -1,16 +1,17 @@
-import 'server-only';
+import "server-only";
 
-import { cookies } from 'next/headers';
-import { decrypt } from '@/lib/session';
-import { cache } from 'react';
-import { redirect } from 'next/navigation';
+import { cookies } from "next/headers";
+import { decrypt } from "@/lib/session";
+import { cache } from "react";
+import { redirect } from "next/navigation";
 
 export const verifySession = cache(async () => {
-  const cookie = cookies().get('session')?.value;
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get("session")?.value;
   const session = await decrypt(cookie);
 
   if (!session?.uid) {
-    redirect('/login');
+    redirect("/login");
   }
 
   return {
@@ -24,7 +25,7 @@ export const verifySession = cache(async () => {
 export const verifyRole = cache(async (role: number) => {
   const session = await verifySession();
   if (session.role < role) {
-    throw new Error('Unauthorized operation');
+    throw new Error("Unauthorized operation");
   }
   return session;
 });

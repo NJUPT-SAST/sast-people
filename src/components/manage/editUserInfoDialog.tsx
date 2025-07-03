@@ -1,4 +1,5 @@
 "use client";
+import { editBasicInfoByUid } from "@/action/user/userInfo";
 import {
 	Dialog,
 	DialogClose,
@@ -8,9 +9,13 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
-import { UserCog } from "lucide-react";
 import { userType } from "@/types/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserCog } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "../ui/button";
 import {
 	Form,
 	FormControl,
@@ -19,22 +24,16 @@ import {
 	FormLabel,
 	FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../ui/input";
 import {
 	Select,
-	SelectTrigger,
-	SelectValue,
 	SelectContent,
 	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from "../ui/select";
-import { z } from "zod";
-import { Input } from "../ui/input";
 import { basicInfoSchema } from "../userInfo/basic";
-import { useCollegeListClient } from "@/hooks/useCollegeListClient";
-import { Button } from "../ui/button";
-import { editBasicInfoByUid } from "@/action/user/userInfo";
-import { toast } from "sonner";
+import { Description } from "@radix-ui/react-dialog";
 
 export const EditUserInfoDialog = ({
 	userInfo,
@@ -102,7 +101,7 @@ export const EditUserInfoDialog = ({
 							/>
 							<FormField
 								control={basicInfoForm.control}
-								name="phoneNumber"
+								name="phone"
 								disabled={isSubmitting}
 								render={({ field }) => (
 									<FormItem>
@@ -136,7 +135,7 @@ export const EditUserInfoDialog = ({
 									</FormItem>
 								)}
 							/>
-							<FormField
+							{/* <FormField
 								control={basicInfoForm.control}
 								disabled={isSubmitting}
 								name="birthday"
@@ -153,7 +152,7 @@ export const EditUserInfoDialog = ({
 										<FormMessage />
 									</FormItem>
 								)}
-							/>
+							/> */}
 							<FormField
 								control={basicInfoForm.control}
 								disabled={isSubmitting}
@@ -161,30 +160,13 @@ export const EditUserInfoDialog = ({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>学院</FormLabel>
-										<Select
-											value={field.value?.toString()}
-											name={field.name}
-											onValueChange={(val) => {
-												field.onChange(parseInt(val));
-											}}
-										>
-											<FormControl>
-												<SelectTrigger>
-													<SelectValue placeholder="请选择你目前所在的学院" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												{colleges.length &&
-													colleges.map((college) => (
-														<SelectItem
-															key={`college${college.id}`}
-															value={college.id.toString()}
-														>
-															{college.name}
-														</SelectItem>
-													))}
-											</SelectContent>
-										</Select>
+										<FormControl>
+											<Input
+												placeholder="请填写你的学院"
+												{...field}
+												value={field.value || ""}
+											/>
+										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -216,6 +198,7 @@ export const EditUserInfoDialog = ({
 					</DialogClose>
 					<Button
 						onClick={basicInfoForm.handleSubmit(async (val) => {
+							console.log("Form data:", val);
 							await editBasicInfoByUid(
 								userInfo.id as number,
 								val

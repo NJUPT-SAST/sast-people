@@ -64,16 +64,16 @@ function sha256(buffer: Buffer | string) {
 
 export async function useCodeChallenge() {
   const code_verifier = base64URLEncode(crypto.randomBytes(32));
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const code_challenge = base64URLEncode(sha256(code_verifier));
   cookieStore.set("link_code_verifier", code_verifier);
   return code_challenge;
 }
 
-export const getCurrentRedirectUri = () => {
+export async function getCurrentRedirectUri() {
   return (
     (process.env.NODE_ENV === "development"
       ? "http://localhost:3001"
       : "https://people.sast.fun") + "/api/auth/link"
   );
-};
+}

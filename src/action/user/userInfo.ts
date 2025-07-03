@@ -15,7 +15,6 @@ export async function editBasicInfo(values: z.infer<typeof basicInfoSchema>) {
 		.update(user)
 		.set({
 			...values,
-			college: Number(values.college) ?? null,
 			updatedAt: new Date(),
 		})
 		.where(eq(user.id, session.uid));
@@ -35,7 +34,6 @@ export async function editBasicInfoByUid(
 		.update(user)
 		.set({
 			...values,
-			college: Number(values.college) ?? null,
 			updatedAt: new Date(),
 		})
 		.where(eq(user.id, uid));
@@ -43,14 +41,13 @@ export async function editBasicInfoByUid(
 	return true;
 }
 
-export async function editExperience(values: z.infer<typeof experienceSchema>) {
-	const session = await verifySession();
+// export async function editExperience(values: z.infer<typeof experienceSchema>) {
+// 	const session = await verifySession();
 
-	await db
-		.update(user)
-		.set({
-			...values,
-			updatedAt: new Date(),
-		})
-		.where(eq(user.id, session.uid));
-}
+// 	await db
+// 		.update(user)
+// 		.set({
+// 			...values,
+// 		})
+// 		.where(eq(user.id, session.uid));
+// }

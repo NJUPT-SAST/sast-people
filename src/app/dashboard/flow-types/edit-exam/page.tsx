@@ -1,14 +1,17 @@
-import { Loading } from '@/components/loading';
-import { Button } from '@/components/ui/button';
-import { ArrowLeftIcon } from 'lucide-react';
-import Link from 'next/link';
-import { Suspense } from 'react';
-import { EditProblemsServer } from './editProblems';
+import { Loading } from "@/components/loading";
+import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
+import { EditProblemsServer } from "./editProblems";
 
 export default async function EditExamPage({
   searchParams,
-}: { searchParams: { id: string } }) {
-  // const flowTypeInfo = await useFlowTypeInfo(Number(searchParams.id));
+}: {
+  searchParams: { id: string };
+}) {
+  const awaitedSearchParams = await searchParams;
+  // const flowTypeInfo = await useFlowTypeInfo(Number(awaitedSearchParams.id));
   return (
     <>
       <div className="flex items-center justify-between">
@@ -23,7 +26,7 @@ export default async function EditExamPage({
       </div>
       <div>
         <Suspense fallback={<Loading />}>
-          <EditProblemsServer id={searchParams.id} />
+          <EditProblemsServer id={awaitedSearchParams.id} />
         </Suspense>
       </div>
     </>

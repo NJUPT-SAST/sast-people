@@ -1,38 +1,30 @@
 "use client";
+import { editBasicInfo } from "@/action/user/userInfo";
+import { user } from "@/db/schema";
+import type { userType } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInsertSchema } from "drizzle-zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
-import { user } from "@/db/schema";
 import { Button } from "../ui/button";
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from "../ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { editBasicInfo } from "@/action/user/userInfo";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import type { userType } from "@/types/user";
-import { collegeType } from "@/types/college";
-import { toast } from "sonner";
 
 export const fullUserSchema = createInsertSchema(user, {
   email: z.string().email("请输入正确的邮箱地址").trim().toLowerCase(),
@@ -52,11 +44,7 @@ export const fullUserSchema = createInsertSchema(user, {
     )
     .trim()
     .toUpperCase(),
-  college: z
-    .number({
-      invalid_type_error: "请选择你所在的学院",
-    })
-    .transform((val) => val.toString()),
+  college: z.string().min(1, "学院不能为空").trim(),
 });
 export const basicInfoSchema = fullUserSchema.pick({
   name: true,
@@ -66,13 +54,7 @@ export const basicInfoSchema = fullUserSchema.pick({
   college: true,
   major: true,
 });
-export const BasicInfo = ({
-  initialInfo,
-  collegeList,
-}: {
-  initialInfo: userType;
-  collegeList: collegeType[];
-}) => {
+export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
   const basicInfoForm = useForm<z.infer<typeof basicInfoSchema>>({
     resolver: zodResolver(basicInfoSchema),
     defaultValues: {
@@ -166,29 +148,13 @@ export const BasicInfo = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>学院</FormLabel>
-                  <Select
-                    value={field.value?.toString()}
-                    name={field.name}
-                    onValueChange={(val) => {
-                      field.onChange(parseInt(val));
-                    }}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="请选择你目前所在的学院" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {collegeList.map((college) => (
-                        <SelectItem
-                          key={`college${college.id}`}
-                          value={college.id.toString()}
-                        >
-                          {college.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input
+                      placeholder="请填写你的学院"
+                      {...field}
+                      value={field.value || ""}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

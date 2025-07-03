@@ -1,24 +1,20 @@
-import { PageTitle } from '@/components/route';
-import { BasicInfo } from '@/components/userInfo/basic';
-import { ExperienceInfo } from '@/components/userInfo/experience';
-import { useUserInfo } from '../../hooks/useUserInfo';
-import { useCollegeList } from '../../hooks/useCollegeList';
-import originalDayjs from '@/lib/dayjs';
-import { ShowQrCode } from '@/components/userInfo/showQrCode';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { Suspense } from 'react';
-import { Loading } from '@/components/loading';
-import { BasicInfoServer } from './basicInfo';
-import { ExperienceInfoServer } from './experienceInfo';
+import { PageTitle } from "@/components/route";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ShowQrCode } from "@/components/userInfo/showQrCode";
+import originalDayjs from "@/lib/dayjs";
+import Link from "next/link";
+import { Suspense } from "react";
+import { useUserInfo } from "../../hooks/useUserInfo";
+import { BasicInfoServer } from "./basicInfo";
+import { ExperienceInfoServer } from "./experienceInfo";
 
 export default async function Home({
   searchParams,
@@ -28,6 +24,7 @@ export default async function Home({
   };
 }) {
   const userInfo = await useUserInfo();
+  const awaitedSearchParams = await searchParams;
   return (
     <>
       <div className="flex justify-between">
@@ -36,16 +33,16 @@ export default async function Home({
           <div className="text-sm text-muted-foreground">
             上次更新时间：
             {userInfo.updatedAt &&
-              originalDayjs(userInfo.updatedAt).format('YYYY-MM-DD HH:mm')}
+              originalDayjs(userInfo.updatedAt).format("YYYY-MM-DD HH:mm")}
           </div>
         </div>
-        {userInfo.phoneNumber && (
+        {userInfo.phone && (
           <div className="flex items-center">
             <ShowQrCode uid={userInfo.id.toString()} />
           </div>
         )}
       </div>
-      {userInfo.phoneNumber === null && !searchParams.start ? (
+      {userInfo.phone === null && !awaitedSearchParams.start ? (
         <div
           className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
           x-chunk="dashboard-02-chunk-1"

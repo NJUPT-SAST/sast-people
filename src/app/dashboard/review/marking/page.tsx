@@ -1,13 +1,13 @@
-'use server';
-import React, { Suspense } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { useExamMapList } from '@/hooks/useExamMapList';
-import { MarkProblemTable } from '@/components/review/markProblemTable';
-import { ArrowLeftIcon } from 'lucide-react';
-import { useOngoingFlowStep } from '@/hooks/useOngoingFlowStep';
-import { MarkProblemTableServer } from './markProblemTable';
-import { Loading } from '@/components/loading';
+"use server";
+import React, { Suspense } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useExamMapList } from "@/hooks/useExamMapList";
+import { MarkProblemTable } from "@/components/review/markProblemTable";
+import { ArrowLeftIcon } from "lucide-react";
+import { useOngoingFlowStep } from "@/hooks/useOngoingFlowStep";
+import { MarkProblemTableServer } from "./markProblemTable";
+import { Loading } from "@/components/loading";
 
 const Marking = async ({
   searchParams,
@@ -16,6 +16,7 @@ const Marking = async ({
     user: string;
   };
 }) => {
+  const awaitedSearchParams = await searchParams;
   return (
     <>
       <div className="flex items-center justify-between">
@@ -29,9 +30,9 @@ const Marking = async ({
       </div>
       {/* map problems to a list of points */}
       <div>
-          <Suspense fallback={<Loading />}>
-            <MarkProblemTableServer user={searchParams.user} />
-          </Suspense>
+        <Suspense fallback={<Loading />}>
+          <MarkProblemTableServer user={searchParams.user} />
+        </Suspense>
       </div>
     </>
   );
