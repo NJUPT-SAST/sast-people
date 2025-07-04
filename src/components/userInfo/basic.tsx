@@ -27,24 +27,15 @@ import {
 import { Input } from "../ui/input";
 
 export const fullUserSchema = createInsertSchema(user, {
-  email: z.string().email("请输入正确的邮箱地址").trim().toLowerCase(),
-  phone: z
-    .string()
-    .regex(
-      /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
-      "请输入正确的手机号码"
-    )
-    .trim(),
   name: z.string().min(2, "姓名至少两个字符").trim(),
-  studentId: z
-    .string()
-    .regex(
-      /^([BPQF](1[89]|2[0-5])(0[0-9]|1[0-7])([0-2]\d|3[01])\d{2}|\d{11})$/i,
-      "请输入正确的学号"
-    )
-    .trim()
-    .toUpperCase(),
+  studentId: z.string().min(1, "学号不能为空").trim().toUpperCase(),
+  email: z.string().email("请输入正确的邮箱地址").trim().toLowerCase(),
+  phone: z.string().regex(
+    /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+    "请输入正确的手机号码"
+  ),
   college: z.string().min(1, "学院不能为空").trim(),
+  major: z.string().min(1, "专业不能为空").trim(),
 });
 export const basicInfoSchema = fullUserSchema.pick({
   name: true,

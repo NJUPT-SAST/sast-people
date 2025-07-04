@@ -50,10 +50,10 @@
     "react-qr-code": "^2.0.16",
     "react-zxing": "^2.1.0",
     "sonner": "^1.7.4",
-    "swr": "^2.3.3",
+    "swr": "^2.3.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.25.67"
+    "zod": "^3.25.72"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
