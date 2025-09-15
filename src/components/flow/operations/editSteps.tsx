@@ -1,5 +1,5 @@
 'use client';
-import { batchUpdate } from '@/action/flow/edit';
+// import { batchUpdate } from '@/action/user-flow/edit';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,13 +13,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
-import { fullStepType, stepType } from '@/types/step';
+// import { fullStepType, stepType } from '@/types/step';
 import { Copy, Navigation, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 // export const EditSteps = ({ data }: { data: flowTypeType }) => {
-// TODO: v2 db 
+// TODO: v2 db
 // export const EditSteps = () => {
 //   // TODO: v2 db
 //   // const editFlowForm = useForm<z.infer<typeof addFlowTypeSchema>>({
@@ -236,7 +236,7 @@ import { toast } from 'sonner';
 //             onClick={editFlowForm.handleSubmit(async (val) => {
 //               toast.promise(
 //                 async () => {
-//                   // TODO: v2 db 
+//                   // TODO: v2 db
 //                   // await updateFlowType(data.id, val, stepList).then(() => {
 //                   //   setOpenEdit(false);
 //                   //   editFlowForm.reset();

@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { college } from '@/db/schema';
-import { useFlowTypeList } from '@/hooks/useFlowTypeList';
+import { useFlowTypeList } from '@/hooks/useFlowList';
 import { redirect } from 'next/navigation';
 
 const Recruitment = async () => {

@@ -1,5 +1,5 @@
 import { SelectFlow } from '@/components/recruitment/selectFlow';
-import { useFlowTypeList } from '@/hooks/useFlowTypeList';
+import { useFlowTypeList } from '@/hooks/useFlowList';
 import React from 'react';
 
 const RegisteredPersonTableLayout = async ({

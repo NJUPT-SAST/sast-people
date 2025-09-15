@@ -22,7 +22,7 @@ import { useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
-import { batchEndByUid } from '@/action/flow/edit';
+import { batchEndByUid } from '@/action/user-flow/edit';
 import { batchSendEmail } from '@/action/user/sendEmail';
 
 interface DataTableProps<TData, TValue> {

@@ -1,13 +1,15 @@
 import { PageTitle } from '@/components/route';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Suspense } from 'react';
+import { AddFlow } from '@/components/flow/add';
+import { FlowTableServer } from './flowTable';
 
-const FlowTypes = async () => {
+const FlowPage = async () => {
   return (
     <>
       <div className="flex items-center justify-between w-full">
         <PageTitle />
-        {/* <AddFlowType /> */}
+        <AddFlow />
       </div>
       <div>
         <Suspense
@@ -17,11 +19,11 @@ const FlowTypes = async () => {
             </>
           }
         >
-          {/* <FlowTypeTableServer /> */}
+          <FlowTableServer />
         </Suspense>
       </div>
     </>
   );
 };
 
-export default FlowTypes;
+export default FlowPage;

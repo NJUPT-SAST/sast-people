@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { register } from '@/action/flow/register';
+import { register } from '@/action/user-flow/register';
 import { toast } from 'sonner';
 import { flowTypeType } from '@/types/flowType';
 

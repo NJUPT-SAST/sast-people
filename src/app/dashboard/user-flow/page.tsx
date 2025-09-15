@@ -1,10 +1,10 @@
 import { PageTitle } from '@/components/route';
-import SubmitRegister from '@/components/flow/submitRegister';
+import SubmitRegister from '@/components/userFlow/submitRegister';
 import { useMyFlowList } from '@/hooks/useMyFlowList';
 import React, { Suspense } from 'react';
-import { useFlowTypeList } from '@/hooks/useFlowTypeList';
+import { useFlowTypeList } from '@/hooks/useFlowList';
 import { verifySession } from '@/lib/dal';
-import { FlowCard } from '@/components/flow/flowCard';
+import { FlowCard } from '@/components/userFlow/flowCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FlowList } from './flowList';
 

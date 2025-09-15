@@ -1,6 +1,6 @@
 import { Button } from '../../ui/button';
-import { flowTypeType } from '@/types/flowType';
-import { EditSteps } from './editSteps';
+import { displayFlowType } from '@/types/flow';
+// import { EditSteps } from './editSteps';
 import { Delete } from './delete';
 import Link from 'next/link';
 import {
@@ -17,8 +17,8 @@ export const Operations = () => {
     <>
       {/* <EditSteps data={data} /> */}
       {stepsCount > 0 ? (
-        // <Link href={`/dashboard/flow-types/edit-exam?id=${data.id}`}>
-        <Link href={`/dashboard/flow-types/edit-exam`}>
+        // <Link href={`/dashboard/flow/edit-exam?id=${data.id}`}>
+        <Link href={`/dashboard/flow/edit-exam`}>
           <Button variant={'ghost'}>编辑笔试</Button>
         </Link>
       ) : (

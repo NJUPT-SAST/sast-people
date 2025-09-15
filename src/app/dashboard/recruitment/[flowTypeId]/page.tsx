@@ -1,6 +1,6 @@
 import { SelectFlow } from '@/components/recruitment/selectFlow';
 import { Button } from '@/components/ui/button';
-import { useFlowTypeList } from '@/hooks/useFlowTypeList';
+import { useFlowTypeList } from '@/hooks/useFlowList';
 import { ArrowLeftIcon } from 'lucide-react';
 import React, { Suspense } from 'react';
 import Link from 'next/link';

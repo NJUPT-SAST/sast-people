@@ -9,8 +9,8 @@ export default async function offer(flowId: number, accept: boolean) {
   const userInfo = (
     await db
       .select({
-        // NOTE: highly dependent on the sastLinkOpenId field
-        // TODO: v2 db studentID: user.sastLinkOpenId,
+        // NOTE: highly dependent on the linkOpenid field
+        // TODO: v2 db studentID: user.linkOpenid,
         name: user.name,
         // TODO: v2 db flowName: flowType.name,
       })

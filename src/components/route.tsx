@@ -22,7 +22,7 @@ const menuItems = [
   {
     title: '我的流程',
     icon: Workflow,
-    path: '/flows',
+    path: '/user-flow',
   },
   {
     title: '试卷批改',
@@ -42,7 +42,7 @@ const menuItems = [
   {
     title: '流程类别管理',
     icon: SquareChartGantt,
-    path: '/flow-types',
+    path: '/flow',
   },
 ];
 

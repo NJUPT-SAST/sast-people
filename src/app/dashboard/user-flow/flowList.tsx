@@ -1,4 +1,4 @@
-import { FlowCard } from '@/components/flow/flowCard';
+import { FlowCard } from '@/components/userFlow/flowCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMyFlowList } from '@/hooks/useMyFlowList';

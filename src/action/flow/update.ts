@@ -1,6 +1,6 @@
 'use server';
 
-import { addFlowTypeSchema } from '@/components/flowTypes/add';
+import { addFlowSchema } from '@/components/flow/add';
 import { db } from '@/db/drizzle';
 // TODO: v2 db import { flowType, step } from '@/db/schema';
 import { verifyRole, verifySession } from '@/lib/dal';
@@ -68,5 +68,5 @@ import { z } from 'zod';
 //     );
 //   }
 
-//   revalidatePath('/dashboard/flow-types');
+//   revalidatePath('/dashboard/flow');
 // };

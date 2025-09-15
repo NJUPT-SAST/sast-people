@@ -1,4 +1,4 @@
-import { backward, forward } from '@/action/flow/edit';
+import { backward, forward } from '@/action/user-flow/edit';
 import { useFlowStepsInfo } from '@/hooks/useFlowStepsInfo';
 import { verifyRole } from '@/lib/dal';
 import { NextRequest, NextResponse } from 'next/server';

@@ -40,22 +40,22 @@ export const user = pgTable("user", {
     .default(sql`ARRAY[]::text[]`),
   linkOpenid: varchar("link_openid", { length: 255 }).unique(),
   feishuOpenid: varchar("feishu_openid", { length: 255 }).unique(),
+  role: integer("role").default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()
     .defaultNow()
     .$onUpdate(() => sql`now()`),
   isDeleted: boolean("is_deleted").default(false),
-
-  // TODO: v2 db role: integer("role").default(0),
-  // TODO: v2 db feishuOpenId: varchar("feishu_open_id", { length: 255 }).unique(),
-  // TODO: v2 db sastLinkOpenId: varchar("sast_link_open_id", { length: 255 }).unique(),
 });
 
 export const flow = pgTable("flow", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 100 }).notNull(),
   description: varchar("description", { length: 1000 }),
+  ownerId: integer("owner_id")
+    .references(() => user.id)
+    .notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   startedAt: timestamp("started_at").notNull().defaultNow(),
   endedAt: timestamp("ended_at").notNull().defaultNow(),

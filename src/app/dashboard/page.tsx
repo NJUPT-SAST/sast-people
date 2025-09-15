@@ -24,6 +24,7 @@ export default async function Home({
   };
 }) {
   const userInfo = await useUserInfo();
+  console.log(userInfo);
   const awaitedSearchParams = await searchParams;
   return (
     <>

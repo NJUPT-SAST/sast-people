@@ -91,5 +91,5 @@ export const updateProblems = async (
       ),
     );
 
-  revalidatePath(`/dashboard/flow-types/edit-exam?id=${flowTypeId}`);
+  revalidatePath(`/dashboard/flow/edit-exam?id=${flowTypeId}`);
 };
