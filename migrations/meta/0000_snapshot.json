@@ -1,5 +1,5 @@
 {
-  "id": "f3c7901c-3e03-4bb2-a525-6100bdb30a9d",
+  "id": "383fdae3-7108-4836-b497-c0028b0d2696",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -74,6 +74,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -111,7 +117,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "flow_owner_id_user_id_fk": {
+          "name": "flow_owner_id_user_id_fk",
+          "tableFrom": "flow",
+          "tableTo": "user",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -310,6 +330,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "role": {
+          "name": "role",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -450,9 +477,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "point": {
-          "name": "point",
-          "type": "point",
+        "points": {
+          "name": "points",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }

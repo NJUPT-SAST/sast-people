@@ -1,1 +1,0 @@
-ALTER TABLE "user_point" ALTER COLUMN "point" SET DATA TYPE integer;

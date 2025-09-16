@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS "flow" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(100) NOT NULL,
 	"description" varchar(1000),
+	"owner_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"started_at" timestamp DEFAULT now() NOT NULL,
 	"ended_at" timestamp DEFAULT now() NOT NULL,
@@ -58,6 +59,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"department" varchar(50)[] DEFAULT ARRAY[]::text[] NOT NULL,
 	"link_openid" varchar(255),
 	"feishu_openid" varchar(255),
+	"role" integer DEFAULT 0,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"is_deleted" boolean DEFAULT false,
@@ -78,11 +80,17 @@ CREATE TABLE IF NOT EXISTS "user_point" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"fk_user_flow_id" integer NOT NULL,
 	"fk_problem_id" integer NOT NULL,
-	"point" "point" NOT NULL
+	"points" integer NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "email" ADD CONSTRAINT "email_fk_flow_step_id_flow_step_id_fk" FOREIGN KEY ("fk_flow_step_id") REFERENCES "public"."flow_step"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "flow" ADD CONSTRAINT "flow_owner_id_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
