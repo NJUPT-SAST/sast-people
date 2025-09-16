@@ -13,7 +13,7 @@ type ProblemType = typeof problem.$inferInsert;
 export const updateProblems = async (
   stepId: number,
   problems: problemType,
-  flowTypeId: number,
+  flowId: number,
 ) => {
   await verifyRole(1);
 
@@ -21,17 +21,16 @@ export const updateProblems = async (
   const existingProblems = await db
     .select()
     .from(problem)
-    .where(eq(problem.stepId, stepId));
+    .where(eq(problem.fkFlowStepId, stepId));
 
   // 准备新的问题列表
   const newProblems = Object.entries(problems).flatMap(
     ([category, categoryProblems]) =>
       categoryProblems.map((p) => ({
         id: p.id,
-        stepId,
-        class: category,
-        name: p.name,
-        maxScore: p.maxScore,
+        fkFlowStepId: stepId,
+        title: p.title,
+        score: p.score,
       })),
   );
 
@@ -44,7 +43,7 @@ export const updateProblems = async (
   for (const p of problemsToUpdate) {
     await db
       .update(problem)
-      .set({ stepId, class: p.class, name: p.name, maxScore: p.maxScore })
+      .set({ fkFlowStepId: stepId, title: p.title, score: p.score })
       .where(eq(problem.id, p.id));
   }
 
@@ -69,11 +68,11 @@ export const updateProblems = async (
     .filter((id) => id > 0);
   await db
     .update(problem)
-    .set({ stepId })
+    .set({ fkFlowStepId: stepId })
     .where(
       and(
         inArray(problem.id, existingProblemIds),
-        notInArray(problem.stepId, [stepId]),
+        notInArray(problem.fkFlowStepId, [stepId]),
       ),
     );
 
@@ -86,10 +85,10 @@ export const updateProblems = async (
     .delete(problem)
     .where(
       and(
-        eq(problem.stepId, stepId),
+        eq(problem.fkFlowStepId, stepId),
         notInArray(problem.id, problemIdsToKeep as number[]),
       ),
     );
 
-  revalidatePath(`/dashboard/flow/edit-exam?id=${flowTypeId}`);
+  revalidatePath(`/dashboard/flow/edit-exam?id=${flowId}`);
 };

@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
 import { useFlowStepsInfo } from './useFlowStepsInfo';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/utils';

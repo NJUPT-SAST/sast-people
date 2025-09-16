@@ -6,7 +6,6 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { addFlowSchema } from '@/components/flow/add';
 
-// TODO: v2 db
 export async function addFlow(values: z.infer<typeof addFlowSchema>) {
   const session = await verifySession();
   await verifyRole(1);

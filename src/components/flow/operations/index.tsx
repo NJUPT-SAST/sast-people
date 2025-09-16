@@ -1,6 +1,6 @@
 import { Button } from '../../ui/button';
 import { displayFlowType } from '@/types/flow';
-// import { EditSteps } from './editSteps';
+import { EditSteps } from './editSteps';
 import { Delete } from './delete';
 import Link from 'next/link';
 import {
@@ -10,21 +10,20 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-// export const Operations = ({ data }: { data: flowTypeType }) => {
-export const Operations = () => {
+export const Operations = ({ data }: { data: displayFlowType }) => {
   const stepsCount = 0;
   return (
     <>
-      {/* <EditSteps data={data} /> */}
+      <EditSteps data={data} />
       {stepsCount > 0 ? (
-        // <Link href={`/dashboard/flow/edit-exam?id=${data.id}`}>
-        <Link href={`/dashboard/flow/edit-exam`}>
+        <Link href={`/dashboard/flow/edit-exam?id=${data.id}`}>
+        {/* <Link href={`/dashboard/flow/edit-exam`}> */}
           <Button variant={'ghost'}>编辑笔试</Button>
         </Link>
       ) : (
         <TooltipProvider delayDuration={100}>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button variant={'ghost'} disabled>
                 编辑笔试
               </Button>

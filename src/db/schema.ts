@@ -171,7 +171,7 @@ export const userPoint = pgTable("user_point", {
   fkProblemId: integer("fk_problem_id")
     .references(() => problem.id)
     .notNull(),
-  point: point("point").notNull(),
+  points: integer("points").notNull(),
 });
 
 // TODO: v2 db

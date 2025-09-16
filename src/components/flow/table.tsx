@@ -16,6 +16,7 @@ import {
   TableCell,
 } from '../ui/table';
 import originalDayjs from '@/lib/dayjs';
+import { Operations } from './operations';
 
 export const FlowTableColumns: ColumnDef<displayFlowType>[] = [
   {
@@ -41,8 +42,8 @@ export const FlowTableColumns: ColumnDef<displayFlowType>[] = [
     accessorKey: 'operations',
     header: '操作',
     cell({ row }) {
-      // const data = row.original;
-      // return <Operations data={data} />;
+      const data = row.original;
+      return <Operations data={data} />;
     },
   },
 ];

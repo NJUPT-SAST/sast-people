@@ -1,11 +1,9 @@
-// TODO: v2 db import { step } from "@/db/schema";
+import { flowStep, flowStepTypeEnum } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 
-// TODO: v2 db 
-// export type stepType = Exclude<
-//   { name: string; label: string; order: number; description: string | null },
-//   InferSelectModel<typeof step>
-// >;
+export type stepType = Exclude<
+  { title: string; type: typeof flowStepTypeEnum; order: number; description: string | null },
+  InferSelectModel<typeof flowStep>
+>;
 
-// TODO: v2 db 
-// export type fullStepType = InferSelectModel<typeof step>;
+export type fullStepType = InferSelectModel<typeof flowStep>;

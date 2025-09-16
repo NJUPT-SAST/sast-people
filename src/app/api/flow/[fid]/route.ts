@@ -1,14 +1,15 @@
-import { backward, forward } from '@/action/user-flow/edit';
+// import { backward, forward } from '@/action/user-flow/edit';
 import { useFlowStepsInfo } from '@/hooks/useFlowStepsInfo';
 import { verifyRole } from '@/lib/dal';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { fid: number } },
+  context: { params: { fid: number } },
 ) => {
+  const { fid } = await context.params;
   await verifyRole(1);
-  return NextResponse.json(await useFlowStepsInfo(params.fid));
+  return NextResponse.json(await useFlowStepsInfo(fid));
 };
 
 // export const POST = async (
