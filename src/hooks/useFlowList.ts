@@ -1,9 +1,9 @@
 import { db } from "@/db/drizzle";
-import { displayFlowType } from "@/types/flow";
+import { displayFlow } from "@/types/flow";
 import { flow, user, flowStep } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 
-export const useFlowList = async (): Promise<displayFlowType[]> => {
+export const useFlowList = async (): Promise<displayFlow[]> => {
   const flowList = await db
     .select()
     .from(flow)

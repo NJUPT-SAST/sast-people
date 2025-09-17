@@ -120,11 +120,6 @@ export const flowStep = pgTable("flow_step", {
     .defaultNow()
     .$onUpdate(() => sql`now()`),
   isDeleted: boolean("is_deleted").default(false),
-
-  // TODO: v2 db stepId: integer('step_id').references(() => step.id).notNull(), // 外键关联 Steps 表
-  // status: userFlowStatusEnum('status').notNull().default('pending'), // 步骤状态
-  // startedAt: timestamp('started_at'),
-  // completedAt: timestamp('completed_at'),
 });
 
 export const userFlow = pgTable("user_flow", {
@@ -146,12 +141,6 @@ export const problem = pgTable("problem", {
   fkFlowStepId: integer("fk_flow_step_id")
     .references(() => flowStep.id)
     .notNull(),
-
-  // TODO: v2 db
-  // stepId: integer("step_id").references(() => step.id), // 外键关联 Steps 表
-  // class: text("class").notNull(), // 问题类别
-  // name: text("name").notNull(), // 问题名称
-  // maxScore: integer("max_score").notNull(), // 最大得分
 });
 
 export const email = pgTable("email", {

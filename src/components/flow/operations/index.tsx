@@ -1,5 +1,5 @@
 import { Button } from '../../ui/button';
-import { displayFlowType } from '@/types/flow';
+import { displayFlow } from '@/types/flow';
 import { EditSteps } from './editSteps';
 import { Delete } from './delete';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export const Operations = ({ data }: { data: displayFlowType }) => {
+export const Operations = ({ data }: { data: displayFlow }) => {
   const stepsCount = 0;
   return (
     <>

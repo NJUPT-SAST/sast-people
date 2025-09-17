@@ -1,7 +1,6 @@
 "use server";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { displayFlowType } from "@/types/flow";
 import { Badge } from "../ui/badge";
 import {
 HoverCard,
@@ -15,7 +14,8 @@ XCircle,
 AlertCircle,
 CircleDashed,
 } from "lucide-react";
-// TODO: v2 db import { useFlowStepsInfo } from "@/hooks/useFlowStepsInfo";
+import { displayUserFlow } from "@/types/userflow";
+import useFlowInfo from "@/hooks/useFlowInfo";
 
 // TODO: v2 db 
 // 定义状态图标映射
@@ -34,24 +34,13 @@ const statusName = {
 };
 
 interface FlowCardProps {
-	flow: displayFlowType;
+	flow: displayUserFlow;
 }
 
 export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
-	const { flowTypeInfo } = flow;
-	// TODO: v2 db const rawFlowSteps = await useFlowStepsInfo(flow.id);
-	// TODO: v2 db const flowSteps = flowTypeInfo.steps.map((step) => {
-	// TODO: v2 db 	const rawFlowStep = rawFlowSteps.find(
-	// TODO: v2 db 		(rawFlowStep) => rawFlowStep.stepId === step.id
-	// TODO: v2 db 	);
-	// TODO: v2 db 	return {
-	// TODO: v2 db 		...step,
-	// TODO: v2 db 		status: rawFlowStep?.status,
-	// TODO: v2 db 	};
-	// TODO: v2 db });
-	// TODO: v2 db const currentStepIndex = flowSteps.findIndex(
-	// TODO: v2 db 	(step) => step.id === flow.currentStepId
-	// TODO: v2 db );
+	const { currentStepOrder } = flow;
+	// const flowInfo = await useFlowInfo(fkFlowId);
+	
 
 	// 根据状态确定颜色
 	const getStatusColor = (status: string) => {
@@ -71,20 +60,20 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 		<Card className="w-full">
 			<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 				<CardTitle className="text-sm font-medium">
-					{flowTypeInfo.name}
+					{flow.title}
 				</CardTitle>
 				<Badge
 					variant={
-						flow.isAccepted === null
+						flow.status === 'ongoing'
 							? "secondary"
-							: flow.isAccepted
+							: flow.status === 'accepted'
 							? "default"
 							: "destructive"
 					}
 				>
-					{flow.isAccepted === null
+					{flow.status === 'ongoing'
 						? "流程进行中"
-						: flow.isAccepted
+						: flow.status === 'accepted'
 						? "已通过考核"
 						: "未通过考核"}
 				</Badge>
@@ -93,14 +82,14 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 				<div className="flex items-center justify-between relative my-5">
 					{/* 背景横线 */}
 					<div className="absolute top-1/2 left-0 right-0 h-0.5 bg-muted z-10"></div>
-					{flowTypeInfo.steps.map((step, index) => {
-						const status = flowSteps[index].status;
+					{flow.steps.map((step, index) => {
+						const status = step?.order && step.order < currentStepOrder ? 'accepted' : step.order === currentStepOrder ? 'ongoing' : 'pending';
 						const Icon =
 							statusIcons[status as keyof typeof statusIcons] ||
 							AlertCircle;
 						const nextStatus =
-							index < flowTypeInfo.steps.length - 1
-								? flowSteps[index + 1].status
+							index < currentStepOrder-1
+								? flow.status
 								: null;
 
 						return (
@@ -110,7 +99,7 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 										<div
 											className={`w-14 h-14 rounded-full flex items-center justify-center text-sm
                         ${
-							index <= currentStepIndex
+							index <= currentStepOrder-1
 								? getStatusColor(status || "") + " text-white"
 								: "bg-muted text-muted-foreground"
 						}`}
@@ -121,7 +110,7 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 									<HoverCardContent>
 										<div className="space-y-2">
 											<h4 className="text-sm font-semibold">
-												{step.name}
+												{step.title}
 											</h4>
 											<p className="text-sm">
 												{step.description}
@@ -137,7 +126,7 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 										</div>
 									</HoverCardContent>
 								</HoverCard>
-								{index < flowTypeInfo.steps.length - 1 && (
+								{index < flow.steps.length - 1 && (
 									<div
 										className={`absolute top-1/2 h-0.5 z-20 ${getStatusColor(
 											nextStatus || ""
@@ -145,13 +134,13 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 										style={{
 											left: `calc(${
 												(index /
-													(flowTypeInfo.steps.length -
+													(flow.steps.length -
 														1)) *
 												100
 											}% + 7px)`,
 											width: `calc(${
 												100 /
-												(flowTypeInfo.steps.length - 1)
+												(flow.steps.length - 1)
 											}% - 14px)`,
 										}}
 									></div>
@@ -161,10 +150,10 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 					})}
 				</div>
 				<p className="mt-4 text-sm text-muted-foreground">
-					当前步骤: {flowTypeInfo.steps[currentStepIndex]?.name}
+					当前步骤: {flow.steps[currentStepOrder-1].title}
 				</p>
 				<p className="mt-2 text-xs text-muted-foreground">
-					{flowTypeInfo.steps[currentStepIndex]?.description ||
+					{flow.steps[currentStepOrder-1]?.description ||
 						"流程已结束"}
 				</p>
 			</CardContent>

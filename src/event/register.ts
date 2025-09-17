@@ -5,14 +5,14 @@ import { eq } from 'drizzle-orm';
 // TODO: v2 db import { forward } from '@/action/flow/edit';
 
 // TODO: v2 db 
-// export default async function register(
-//   uid: number,
-//   currrentStepLabel: string,
-//   currentStepId: number,
-//   flowTypeId: number,
-//   flowId: number,
-//   currentStepOrder: number,
-// ) {
+export default async function register(
+  uid: number,
+  currrentStepLabel: string,
+  currentStepId: number,
+  flowTypeId: number,
+  flowId: number,
+  currentStepOrder: number,
+) {
 //   const phoneNumber = (
 //     await db
 //       .select({ phoneNumber: user.phone })
@@ -25,4 +25,4 @@ import { eq } from 'drizzle-orm';
 //       forward(flowId, flowTypeId, currentStepOrder, currentStepId);
 //     }
 //   }
-// }
+}

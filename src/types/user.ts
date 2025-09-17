@@ -1,4 +1,6 @@
 import { user } from '@/db/schema';
-import { InferColumnsDataTypes, InferSelectModel } from 'drizzle-orm';
+import { InferSelectModel } from 'drizzle-orm';
 
-export type userType = Extract<InferSelectModel<typeof user>, { id: number }>;
+//用户管理相关的信息
+export type userType = InferSelectModel<typeof user>;
+

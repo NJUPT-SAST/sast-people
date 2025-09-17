@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { displayFlowType } from '@/types/flow';
+import { displayFlow } from '@/types/flow';
 import {
   Table,
   TableHeader,
@@ -18,7 +18,7 @@ import {
 import originalDayjs from '@/lib/dayjs';
 import { Operations } from './operations';
 
-export const FlowTableColumns: ColumnDef<displayFlowType>[] = [
+export const FlowTableColumns: ColumnDef<displayFlow>[] = [
   {
     accessorKey: 'title',
     header: '名称',

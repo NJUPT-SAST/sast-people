@@ -19,13 +19,12 @@ import {
 } from '../ui/select';
 import { register } from '@/action/user-flow/register';
 import { toast } from 'sonner';
-import { flowTypeType } from '@/types/flowType';
+import { displayFlow } from '@/types/flow';
 
 const SubmitRegister = ({
-  // flowList,
+  flowList,
   uid,
-// }: { flowList: flowTypeType[]; uid: number }) => {
-}: {uid: number }) => {
+}: { flowList: displayFlow[]; uid: number }) => {
   const [open, setOpen] = useState(false);
   const [selectedFlow, setSelectedFlow] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,13 +74,13 @@ const SubmitRegister = ({
           <SelectTrigger className="w-full">
             <SelectValue placeholder="选择流程" />
           </SelectTrigger>
-          {/* <SelectContent>
+          <SelectContent>
             {flowList.map((flow) => (
               <SelectItem key={flow.id} value={flow.id.toString()}>
-                {flow.name}
+                {flow.title}
               </SelectItem>
             ))}
-          </SelectContent> */}
+          </SelectContent>
         </Select>
         <DialogFooter>
           <Button 

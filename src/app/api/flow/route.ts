@@ -1,8 +1,8 @@
 import { db } from "@/db/drizzle";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import { flow, flowStep } from "@/db/schema";
-import { verifyRole, verifySession } from "@/lib/dal";
+import { flow, userFlow } from "@/db/schema";
+import { verifyRole } from "@/lib/dal";
 
 export const GET = async (req: NextRequest) => {
 	await verifyRole(1);
@@ -11,22 +11,23 @@ export const GET = async (req: NextRequest) => {
 	if (!uid) {
 		return NextResponse.json({ status: 400, body: "Invalid uid" });
 	}
-	const rawFlowList = await db.select().from(flow).where(eq(flow.userId, uid));
-	const flowList = await Promise.all(
-		rawFlowList.map(async (flow) => {
-			const flowTypeInfo = await db
-				.select()
-				.from(flowType)
-				.where(eq(flowType.id, flow.flowId ?? 0));
-			const stepsList = await db
-				.select()
-				.from(step)
-				.where(eq(step.flowId, flow.flowId ?? 0));
-			return {
-				...flow,
-				flowTypeInfo: { ...flowTypeInfo[0], steps: stepsList },
-			};
-		})
-	);
-	return NextResponse.json(flowList);
+	// const rawFlowList = await db.select().from(flow).where(eq(flow.userId, uid));
+	// const flowList = await Promise.all(
+	// 	rawFlowList.map(async (flow) => {
+	// 		const flowTypeInfo = await db
+	// 			.select()
+	// 			.from(flowType)
+	// 			.where(eq(flowType.id, flow.flowId ?? 0));
+	// 		const stepsList = await db
+	// 			.select()
+	// 			.from(step)
+	// 			.where(eq(step.flowId, flow.flowId ?? 0));
+	// 		return {
+	// 			...flow,
+	// 			flowTypeInfo: { ...flowTypeInfo[0], steps: stepsList },
+	// 		};
+	// 	})
+	// );
+	const rawFlowList = await db.select().from(userFlow).innerJoin(flow, eq(userFlow.fkFlowId, flow.id)).where(eq(userFlow.fkUserId, uid));
+	return NextResponse.json(rawFlowList);
 };

@@ -22,17 +22,8 @@ import { EditUserFlowSheet } from './editUserFlowSheet';
 import { EditUserInfoDialog } from './editUserInfoDialog';
 import { RemoveUserInfoDialog } from './removeUserInfoDialog';
 import { SearchInput } from './searchInput';
-// 定义用户类型
-type UserType = {
-  id: number;
-  name: string;
-  studentId: string | null;
-  phoneNumber: string | null;
-  email: string | null;
-  department: string | null;
-  group: string | null;
-  createdAt: Date;
-};
+import { userType } from '@/types/user';
+
 
 // 定义表格列
 
@@ -43,13 +34,13 @@ export const ManageTable = ({
   search,
   currentPage,
 }: {
-  users: UserType[];
+  users: userType[];
   totalCount: number;
   totalPages: number;
   search: string;
   currentPage: number;
 }) => {
-  const columns: ColumnDef<UserType>[] = [
+  const columns: ColumnDef<userType>[] = [
     {
       accessorKey: 'name',
       header: '姓名',
@@ -85,7 +76,7 @@ export const ManageTable = ({
       id: 'actions',
       cell: ({ row }) => (
         <div className="w-[80px] flex gap-3 mr-4">
-          <EditUserInfoDialog userInfo={row.original}/>
+          {/* <EditUserInfoDialog userInfo={row.original}/> */}
           <EditUserFlowSheet userInfo={row.original} />
           <RemoveUserInfoDialog uid={row.original.id} />
         </div>

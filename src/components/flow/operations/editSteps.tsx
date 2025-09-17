@@ -23,7 +23,7 @@ import { toast } from 'sonner';
 import z from 'zod';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { updateFlow } from '@/action/flow/update';
-import { displayFlowType } from '@/types/flow';
+import { displayFlow } from '@/types/flow';
 import { useFlowStepsInfoClient } from '@/hooks/useFlowStepsInfoClient';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -35,7 +35,7 @@ type CustomStepType = {
   description: string | null;
 };
 
-export const EditSteps = ({ data }: { data: displayFlowType }) => {
+export const EditSteps = ({ data }: { data: displayFlow }) => {
   const editFlowForm = useForm<z.infer<typeof fullFlowSchema>>({
     resolver: zodResolver(fullFlowSchema),
     defaultValues: {

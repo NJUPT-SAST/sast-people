@@ -12,7 +12,7 @@ import { userType } from '@/types/user';
 import { FlowCard } from './flowCardClient';
 import { useFlowListClient } from '@/hooks/useFlowListClient';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select';
-import { displayFlowType } from '@/types/flow';
+import { displayFlow } from '@/types/flow';
 import { Button } from '../ui/button';
 
 export const EditUserFlowSheet = ({
@@ -42,14 +42,14 @@ export const EditUserFlowSheet = ({
         >
           <SelectTrigger>
             {selectedFlow !== undefined
-              ? `${flowList ? flowList[selectedFlow]?.flowTypeInfo.name : ''}`
+              ? `${flowList ? flowList[selectedFlow]?.title : ''}`
               : '选择流程'}
           </SelectTrigger>
           <SelectContent>
             {flowList &&
               flowList.map((flow, index) => (
                 <SelectItem key={flow.id} value={index.toString()}>
-                  {flow.flowTypeInfo.name}
+                  {flow.title}
                 </SelectItem>
               ))}
           </SelectContent>
