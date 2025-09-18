@@ -1,8 +1,10 @@
 import { db } from "@/db/drizzle";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import { flow, userFlow } from "@/db/schema";
+import { flow, userFlow, flowStep } from "@/db/schema";
 import { verifyRole } from "@/lib/dal";
+import { displayUserFlow } from "@/types/userflow";
+import { fullStepType } from "@/types/step";
 
 export const GET = async (req: NextRequest) => {
 	await verifyRole(1);
@@ -11,23 +13,22 @@ export const GET = async (req: NextRequest) => {
 	if (!uid) {
 		return NextResponse.json({ status: 400, body: "Invalid uid" });
 	}
-	// const rawFlowList = await db.select().from(flow).where(eq(flow.userId, uid));
-	// const flowList = await Promise.all(
-	// 	rawFlowList.map(async (flow) => {
-	// 		const flowTypeInfo = await db
-	// 			.select()
-	// 			.from(flowType)
-	// 			.where(eq(flowType.id, flow.flowId ?? 0));
-	// 		const stepsList = await db
-	// 			.select()
-	// 			.from(step)
-	// 			.where(eq(step.flowId, flow.flowId ?? 0));
-	// 		return {
-	// 			...flow,
-	// 			flowTypeInfo: { ...flowTypeInfo[0], steps: stepsList },
-	// 		};
-	// 	})
-	// );
-	const rawFlowList = await db.select().from(userFlow).innerJoin(flow, eq(userFlow.fkFlowId, flow.id)).where(eq(userFlow.fkUserId, uid));
-	return NextResponse.json(rawFlowList);
+	const raw = await db.select().from(userFlow).innerJoin(flow, eq(userFlow.fkFlowId, flow.id)).leftJoin(flowStep, eq(flowStep.fkFlowId, userFlow.fkFlowId)).where(eq(userFlow.fkUserId, uid));
+	const flowMap = new Map<number, displayUserFlow>();
+	raw.forEach((item) => {
+		const userFlowId = item.user_flow.id;
+	
+		if (!flowMap.has(userFlowId)) {
+		  flowMap.set(userFlowId, {
+			...item.user_flow,
+			title: item.flow.title,
+			steps: [] as fullStepType[],
+		  });
+		}
+	
+		if (item.flow_step) {
+		  flowMap.get(userFlowId)!.steps.push(item.flow_step as fullStepType);
+		}
+	  });
+	return NextResponse.json(Array.from(flowMap.values()));
 };

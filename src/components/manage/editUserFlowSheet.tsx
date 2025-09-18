@@ -22,7 +22,6 @@ export const EditUserFlowSheet = ({
 }) => {
   const { data: flowList } = useFlowListClient(userInfo.id as number);
   const [selectedFlow, setSelectedFlow] = useState<number>();
-
   return (
     <Sheet>
       <SheetTrigger>
