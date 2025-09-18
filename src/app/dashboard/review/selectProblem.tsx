@@ -1,7 +1,7 @@
-// import SelectProblem from '@/components/review/selectProblem';
-// import useFlowType from '@/hooks/useFlowType';
+import SelectProblem from '@/components/review/selectProblem';
+import { useFlowList } from '@/hooks/useFlowList';
 
-// export const SelectProblemServer = async () => {
-//   const flow = await useFlowType();
-//   return <SelectProblem flowTypes={flow} />;
-// };
+export const SelectProblemServer = async () => {
+  const flow = await useFlowList();
+  return <SelectProblem flowList={flow} />;
+};

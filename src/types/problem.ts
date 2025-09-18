@@ -4,6 +4,8 @@ import { z } from 'zod';
 
 export type insertProblemType = Omit<InferSelectModel<typeof problem>, 'id'>;
 
+export type displayProblemType = InferSelectModel<typeof problem>;
+
 export type problemType = {
   [problemClass: string]: Omit<InferSelectModel<typeof problem>, 'class'>[];
 };

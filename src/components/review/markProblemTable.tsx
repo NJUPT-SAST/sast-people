@@ -2,38 +2,36 @@
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
-import { insertExamMapType } from '@/types/examMap';
-import { batchUpsert } from '@/action/exam-map/batchUpsert';
-import { upsert } from '@/action/exam-map/upsert';
 import { useEffect, useState } from 'react';
 import { Label } from '../ui/label';
 import { RefreshCw, Save } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useLocalProblemList } from '@/hooks/useLocalProblemList';
 import { toast } from 'sonner';
+import { userPoint } from '@/db/schema';
+import { InferSelectModel } from 'drizzle-orm';
 
 export const MarkProblemTable = ({
   points,
-  flowStepId,
+  flowId,
 }: {
-  points: Array<insertExamMapType>;
-  flowStepId: number;
+  points: Array<InferSelectModel<typeof userPoint>>;
+  flowId: number;
 }) => {
   const studentId = useSearchParams().get('user');
 
   const [problemPoints, setProblemPoints] =
-    useState<Array<insertExamMapType>>(points);
+    useState<Array<InferSelectModel<typeof userPoint>>>(points);
   const problems = useLocalProblemList();
   useEffect(() => {
-    const newProblemPoints: Array<insertExamMapType> = [];
+    const newProblemPoints: Array<InferSelectModel<typeof userPoint>> = [];
     problems.forEach((e) => {
-      const index = points.findIndex((p) => p.problemId === e.id);
+      const index = points.findIndex((p) => p.fkProblemId === e.id);
       newProblemPoints.push({
-        flowStepId,
-        problemId: e.id,
-        score: index === -1 ? 0 : points[index].score,
-        judgerId: 0,
-        judgeTime: new Date(),
+        id: 0,
+        fkUserFlowId: flowId,
+        fkProblemId: e.id,
+        points: index === -1 ? 0 : points[index].points,
       });
     });
     if (newProblemPoints.length > 0) {
@@ -41,7 +39,7 @@ export const MarkProblemTable = ({
     }
   }, [problems]);
 
-  const handleSave = (problemPoints: Array<insertExamMapType>) => {
+  const handleSave = (problemPoints: Array<InferSelectModel<typeof userPoint>>) => {
     // toast.promise(batchUpsert(problemPoints), {
     //   loading: '保存中...',
     //   success: '保存成功',
@@ -59,7 +57,7 @@ export const MarkProblemTable = ({
 
   return (
     <div className="space-x-2">
-      <Card key={flowStepId}>
+      <Card key={flowId}>
         <CardHeader>
           <CardTitle className="flex justify-between">
             <p>正在批改：{studentId}</p>
@@ -67,7 +65,7 @@ export const MarkProblemTable = ({
               size="sm"
               onClick={async () => {
                 for( let i = 0; i < problemPoints.length; i++) {
-                  if (problemPoints[i].score < 0 || problemPoints[i].score > problems[i]?.maxPoint) {
+                  if (problemPoints[i].points < 0 || problemPoints[i].points > problems[i]?.maxPoint) {
                     toast.error(`更新失败，${problems[i]?.name}的得分必须在0到${problems[i]?.maxPoint}之间！`);
                     return;
                   }
@@ -96,10 +94,10 @@ export const MarkProblemTable = ({
                       type="number"
                       max={problems[index]?.maxPoint}
                       // min={0}
-                      value={problemPoint.score}
+                      value={problemPoint.points}
                       onChange={(e) => {
                         const newProblemPoints = [...problemPoints];
-                        newProblemPoints[index].score = Number(e.target.value);
+                        newProblemPoints[index].points = Number(e.target.value);
                         setProblemPoints(newProblemPoints);
                       }}
                     />
@@ -110,10 +108,10 @@ export const MarkProblemTable = ({
                       variant="outline"
                       onClick={
                         () => {
-                          if (problemPoints[index].score < 0 || problemPoints[index].score > problems[index]?.maxPoint) 
+                          if (problemPoints[index].points < 0 || problemPoints[index].points > problems[index]?.maxPoint)
                             toast.error(`更新失败，${problems[index]?.name}的得分必须在0到${problems[index]?.maxPoint}之间！`);
                           else {
-                            handleUpdate(index, problemPoints[index].score)
+                            handleUpdate(index, problemPoints[index].points)
                           }
                         }
                       }

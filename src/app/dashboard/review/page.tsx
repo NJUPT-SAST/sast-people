@@ -9,8 +9,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Input } from '@/components/ui/input';
-import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { MannualInput } from '@/components/review/mannualInput';
 import { SelectProblemServer } from './selectProblem';
@@ -32,7 +30,7 @@ const Review: React.FC = async () => {
               <SheetTitle>设置阅卷范围</SheetTitle>
             </SheetHeader>
             <Suspense fallback={<Loading />}>
-              {/* <SelectProblemServer /> */}
+              <SelectProblemServer />
             </Suspense>
           </SheetContent>
         </Sheet>

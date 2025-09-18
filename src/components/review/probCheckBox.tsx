@@ -1,14 +1,11 @@
 'use client';
 import { Checkbox } from '@/components/ui/checkbox';
-import { FormField, FormItem } from '../ui/form';
-import { Form } from '../ui/form';
-import { useForm } from 'react-hook-form';
-import { problemType, selectProbType } from '@/types/problem';
+import { displayProblemType, selectProbType } from '@/types/problem';
 import { Label } from '../ui/label';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Button } from '../ui/button';
 interface ProbCheckBoxProps {
-  probList: problemType;
+  probList: displayProblemType[];
   selectedProbs: selectProbType['problemList'];
   setSelectedProbs: Dispatch<SetStateAction<selectProbType['problemList']>>;
   handleSave: () => void;
@@ -26,11 +23,9 @@ const ProbCheckBox: React.FC<ProbCheckBoxProps> = ({
   return (
     <>
       <div className="mt-5 flex-column">
-        {Object.entries(probList).map(([key, value], index) => (
-          <div key={`probClass-${index}`}>
-            <p className="text-sm font-semibold mb-2">{key}</p>
+        {probList.map((prob, index) => (
+          <div key={`probClass-${index}`} className="mb-2">
             <div className="grid grid-cols-3 gap-3">
-              {value.map((prob) => (
                 <div
                   className="flex items-center gap-2"
                   key={`prob-${prob.id}`}
@@ -48,8 +43,8 @@ const ProbCheckBox: React.FC<ProbCheckBoxProps> = ({
                             ...prev,
                             {
                               id: prob.id,
-                              name: prob.name,
-                              maxPoint: prob.maxScore,
+                              name: prob.title,
+                              maxPoint: prob.score,
                             },
                           ];
                         }
@@ -57,12 +52,11 @@ const ProbCheckBox: React.FC<ProbCheckBoxProps> = ({
                       });
                     }}
                   />
-                  <Label>{prob.name}</Label>
+                  <Label>{prob.title}</Label>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
       <div className="mt-5">
         <Button onClick={handleSave}>提交</Button>

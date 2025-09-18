@@ -1,15 +1,13 @@
 import { MarkProblemTable } from '@/components/review/markProblemTable';
-import { useExamMapList } from '@/hooks/useExamMapList';
-import { useOngoingFlowStep } from '@/hooks/useOngoingFlowStep';
+import { useUserPointList } from '@/hooks/useUserPointList';
+import { useOngoingUserFlow } from '@/hooks/useOngoingUserFlow';
 
 export const MarkProblemTableServer = async ({ user }: { user: string }) => {
-  const flowStepId = await useOngoingFlowStep(user);
-  console.log('flowStepId', flowStepId);
-  const points = await useExamMapList(flowStepId);
-  console.log('points', points);
+  const flowId = await useOngoingUserFlow(user);
+  const points = await useUserPointList(flowId);
   return (
     <>
-      <MarkProblemTable points={points} flowStepId={flowStepId} />
+      <MarkProblemTable points={points} flowId={flowId} />
     </>
   );
 };

@@ -2,10 +2,10 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useExamMapList } from "@/hooks/useExamMapList";
+import { useUserPointList } from "@/hooks/useUserPointList";
 import { MarkProblemTable } from "@/components/review/markProblemTable";
 import { ArrowLeftIcon } from "lucide-react";
-import { useOngoingFlowStep } from "@/hooks/useOngoingFlowStep";
+import { useOngoingUserFlow } from "@/hooks/useOngoingUserFlow";
 import { MarkProblemTableServer } from "./markProblemTable";
 import { Loading } from "@/components/loading";
 
