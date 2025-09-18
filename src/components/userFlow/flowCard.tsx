@@ -15,9 +15,7 @@ AlertCircle,
 CircleDashed,
 } from "lucide-react";
 import { displayUserFlow } from "@/types/userflow";
-import useFlowInfo from "@/hooks/useFlowInfo";
 
-// TODO: v2 db 
 // 定义状态图标映射
 const statusIcons = {
 	pending: CircleDashed,
@@ -40,7 +38,7 @@ interface FlowCardProps {
 export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 	const { currentStepOrder } = flow;
 	// const flowInfo = await useFlowInfo(fkFlowId);
-	
+
 
 	// 根据状态确定颜色
 	const getStatusColor = (status: string) => {
@@ -64,14 +62,14 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 				</CardTitle>
 				<Badge
 					variant={
-						flow.status === 'ongoing'
+						flow.status === 'ongoing' || flow.status === 'pending'
 							? "secondary"
 							: flow.status === 'accepted'
 							? "default"
 							: "destructive"
 					}
 				>
-					{flow.status === 'ongoing'
+					{flow.status === 'ongoing' || flow.status === 'pending'
 						? "流程进行中"
 						: flow.status === 'accepted'
 						? "已通过考核"

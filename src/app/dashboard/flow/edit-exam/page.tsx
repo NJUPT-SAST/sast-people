@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-// import { EditProblemsServer } from "./editProblems";
+import { EditProblemsServer } from "./editProblems";
+import useFlowInfo from "@/hooks/useFlowInfo";
 
 export default async function EditExamPage({
   searchParams,
@@ -11,7 +12,7 @@ export default async function EditExamPage({
   searchParams: { id: string };
 }) {
   const awaitedSearchParams = await searchParams;
-  // const flowTypeInfo = await useFlowTypeInfo(Number(awaitedSearchParams.id));
+  const flowInfo = await useFlowInfo(Number(awaitedSearchParams.id));
   return (
     <>
       <div className="flex items-center justify-between">
@@ -22,11 +23,11 @@ export default async function EditExamPage({
             </h1>
           </Button>
         </Link>
-        {/* <p className="text-sm text-muted-foreground">{flowTypeInfo.name}</p> */}
+        <p className="text-sm text-muted-foreground">{flowInfo.title}</p>
       </div>
       <div>
         <Suspense fallback={<Loading />}>
-          {/* <EditProblemsServer id={awaitedSearchParams.id} /> */}
+          <EditProblemsServer id={awaitedSearchParams.id} />
         </Suspense>
       </div>
     </>

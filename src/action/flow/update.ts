@@ -7,12 +7,12 @@ import { verifyRole, verifySession } from '@/lib/dal';
 import { and, eq, notInArray } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { stepType } from '@/types/step';
+import { fullStepType } from '@/types/step';
 
 export const updateFlow = async (
   id: number,
   values: z.infer<typeof addFlowSchema>,
-  stepList: stepType[],
+  stepList: fullStepType[],
 ) => {
   await verifyRole(1);
   console.debug(stepList);

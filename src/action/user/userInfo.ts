@@ -18,6 +18,9 @@ export async function editBasicInfo(values: z.infer<typeof basicInfoSchema>) {
       updatedAt: new Date(),
     })
     .where(eq(user.id, session.uid));
+
+  revalidatePath("/dashboard");
+  return { success: true };
 }
 
 export async function editBasicInfoByUid(
@@ -39,7 +42,7 @@ export async function editBasicInfoByUid(
     })
     .where(eq(user.id, uid));
   revalidatePath("/dashboard/manage");
-  return true;
+  return { success: true };
 }
 
 // export async function editExperience(values: z.infer<typeof experienceSchema>) {

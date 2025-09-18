@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { fullFlowSchema } from '@/components/flow/add';
-import { stepType } from '@/types/step';
+import { fullStepType } from '@/types/step';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Copy, Navigation, Plus, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -26,6 +26,7 @@ import { updateFlow } from '@/action/flow/update';
 import { displayFlow } from '@/types/flow';
 import { useFlowStepsInfoClient } from '@/hooks/useFlowStepsInfoClient';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { batchUpdate } from '@/action/user-flow/edit';
 
 // 自定义步骤类型，与stepType兼容但使用string类型的type
 type CustomStepType = {
@@ -223,17 +224,15 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
                       variant="ghost"
                       className="m-0"
                       onClick={() => {
-                        // const stepData = stepList[index] as fullStepType;
-                        // const prevStep = index > 0 ? stepList[index - 1] as fullStepType : null;
-                        // toast.promise(
-                        //   batchUpdate(stepData.flowTypeId, stepData.id, prevStep?.id),
-                        //   {
-                        //     loading: '正在将所有人设置到该步骤',
-                        //     success: '设置成功',
-                        //     error: '设置失败',
-                        //   },
-                        // );
-
+                        const stepData = stepList[index] as fullStepType;
+                        toast.promise(
+                          batchUpdate(stepData.fkFlowId, stepData.order),
+                          {
+                            loading: '正在将所有人设置到该步骤',
+                            success: '设置成功',
+                            error: '设置失败',
+                          },
+                        );
                       }}
                     >
                       <Navigation size={18} />
@@ -282,7 +281,7 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
                 const typedStepList = stepList.map(step => ({
                   ...step,
                   type: step.type as any
-                })) as stepType[];
+                })) as fullStepType[];
                 console.debug(typedStepList);
                 toast.promise(
                   async () => {

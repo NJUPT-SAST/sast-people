@@ -173,9 +173,13 @@ export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
       </CardContent>
       <CardFooter>
         <Button
-          onClick={basicInfoForm.handleSubmit(async (val) => {
-            await editBasicInfo(val);
-            toast.success("个人信息保存成功");
+          onClick={basicInfoForm.handleSubmit(async () => {
+            const val = basicInfoForm.getValues();
+            toast.promise(editBasicInfo(val), {
+              loading: "正在保存",
+              success: "个人信息保存成功",
+              error: "个人信息保存失败",
+            });
           })}
           loading={isSubmitting}
           disabled={isSubmitting}
