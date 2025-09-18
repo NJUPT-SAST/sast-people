@@ -25,15 +25,25 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { useCollegeList } from "@/hooks/useCollegeList";
+import {
+  Select,
+  SelectItem,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+} from "../ui/select";
 
 export const fullUserSchema = createInsertSchema(user, {
   name: z.string().min(2, "姓名至少两个字符").trim(),
   studentId: z.string().min(1, "学号不能为空").trim().toUpperCase(),
   email: z.string().email("请输入正确的邮箱地址").trim().toLowerCase(),
-  phone: z.string().regex(
-    /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
-    "请输入正确的手机号码"
-  ),
+  phone: z
+    .string()
+    .regex(
+      /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+      "请输入正确的手机号码"
+    ),
   college: z.string().min(1, "学院不能为空").trim(),
   major: z.string().min(1, "专业不能为空").trim(),
 });
@@ -46,6 +56,7 @@ export const basicInfoSchema = fullUserSchema.pick({
   major: true,
 });
 export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
+  const collegeList = useCollegeList();
   const basicInfoForm = useForm<z.infer<typeof basicInfoSchema>>({
     resolver: zodResolver(basicInfoSchema),
     defaultValues: {
@@ -140,11 +151,18 @@ export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
                 <FormItem>
                   <FormLabel>学院</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="请填写你的学院"
-                      {...field}
-                      value={field.value || ""}
-                    />
+                    <Select {...field} value={field.value || ""}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="请选择你的学院" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {collegeList.map((college) => (
+                          <SelectItem key={college} value={college}>
+                            {college}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

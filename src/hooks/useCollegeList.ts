@@ -1,7 +1,3 @@
-// 'use server';
-// import { db } from '@/db/drizzle';
-// import { college } from '@/db/schema';
-// export const useCollegeList = async () => {
-//   const collegeList = await db.select().from(college).orderBy(college.id);
-//   return collegeList;
-// };
+export const useCollegeList = () => {
+  return ["通信与信息工程学院", "电子与光学工程学院、柔性电子（未来技术）学院", "集成电路科学与工程学院（产教融合学院）", "计算机学院、软件学院、网络空间安全学院", "自动化学院", "人工智能学院", "材料科学与工程学院", "化学与生命科学学院", "物联网学院", "理学院", "现代邮政学院", "传媒与艺术学院", "管理学院", "经济学院", "马克思主义学院", "社会与人口学院", "外国语学院", "教育科学与技术学院", "贝尔英才学院", "波特兰学院"];
+};
