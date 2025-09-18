@@ -1,9 +1,8 @@
 'use server';
 import { db } from '@/db/drizzle';
 import { problem, flowStep } from '@/db/schema';
-import { count, eq, sql } from 'drizzle-orm';
+import { eq, count } from 'drizzle-orm';
 
-// TODO: v2 db
 export const useStepWithProblem = async (flowId: number) => {
   // Join steps with problems and get count of problems for each step in one query
   const stepList = await db
@@ -13,7 +12,7 @@ export const useStepWithProblem = async (flowId: number) => {
       description: flowStep.description,
       fkFlowId: flowStep.fkFlowId,
       order: flowStep.order,
-      problemCount: sql<number>`COUNT(${problem.id})`,
+      problemCount: count(problem.id),
     })
     .from(flowStep)
     .leftJoin(problem, eq(problem.fkFlowStepId, flowStep.id))
@@ -23,7 +22,6 @@ export const useStepWithProblem = async (flowId: number) => {
   // Find the first step with a problem count greater than 0
   const stepWithProblem = stepList.find(step => step.problemCount > 0);
 
-  console.log(stepList, stepWithProblem);
   return {
     stepList,
     stepWithProblemId: stepWithProblem ? stepWithProblem.id : null,
