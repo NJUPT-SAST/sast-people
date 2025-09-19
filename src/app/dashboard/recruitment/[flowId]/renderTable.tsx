@@ -1,4 +1,4 @@
-import { calScore } from '@/action/exam-map/calScore';
+import { calScore } from '@/action/user-flow/user-point/calScore';
 import { columns } from '@/components/recruitment/columns';
 import { DataTable } from '@/components/recruitment/table';
 import React from 'react';

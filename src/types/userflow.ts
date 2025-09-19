@@ -1,4 +1,4 @@
-import { flowStep, userFlow } from '@/db/schema';
+import { userFlow } from '@/db/schema';
 import { fullStepType } from '@/types/step';
 import { InferSelectModel } from 'drizzle-orm';
 

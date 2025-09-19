@@ -1,5 +1,5 @@
 'use client';
-import { calScore } from '@/action/exam-map/calScore';
+import { calScore } from '@/action/user-flow/user-point/calScore';
 import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { Checkbox } from '../ui/checkbox';

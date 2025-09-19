@@ -1,7 +1,5 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
 import { useMyFlowList } from './useMyFlowList';
-import useSWR, { Fetcher } from 'swr';
+import useSWR from 'swr';
 import { fetcher } from '@/lib/utils';
 
 export const useFlowListClient = (uid: number) => {
