@@ -8,6 +8,7 @@ import {
   serial,
   text,
   timestamp,
+  unique,
   varchar
 } from "drizzle-orm/pg-core";
 
@@ -161,7 +162,9 @@ export const userPoint = pgTable("user_point", {
     .references(() => problem.id)
     .notNull(),
   points: integer("points").notNull(),
-});
+}, (table) => ({
+  userFlowProblemUnique: unique().on(table.fkUserFlowId, table.fkProblemId),
+}));
 
 // TODO: v2 db
 // export const examMap = pgTable(

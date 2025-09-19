@@ -28,14 +28,6 @@ import { useFlowStepsInfoClient } from '@/hooks/useFlowStepsInfoClient';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { batchUpdate } from '@/action/user-flow/edit';
 
-// 自定义步骤类型，与stepType兼容但使用string类型的type
-type CustomStepType = {
-  title: string;
-  type: string;
-  order: number;
-  description: string | null;
-};
-
 export const EditSteps = ({ data }: { data: displayFlow }) => {
   const editFlowForm = useForm<z.infer<typeof fullFlowSchema>>({
     resolver: zodResolver(fullFlowSchema),
@@ -48,29 +40,14 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
 
   const { isSubmitting } = editFlowForm.formState;
   const [openEdit, setOpenEdit] = useState(false);
-  const [stepList, setStepList] = useState<CustomStepType[]>([]);
   const { data: stepsData } = useFlowStepsInfoClient(data.id);
+  const [stepList, setStepList] = useState<fullStepType[]>([]);
 
-  // 当表单打开或者stepsData更新时，初始化stepList
   useEffect(() => {
-    if (openEdit && stepsData) {
-      // 将步骤数据转换为CustomStepType格式
-      const formattedSteps = stepsData.map(step => ({
-        title: step.title,
-        type: step.type,
-        order: step.order,
-        description: step.description,
-      }));
-      setStepList(formattedSteps);
-
-      // 重置表单数据
-      editFlowForm.reset({
-        title: data.title || '',
-        description: data.description || '',
-        id: data.id,
-      });
+    if (stepsData) {
+      setStepList(stepsData);
     }
-  }, [openEdit, stepsData, data, editFlowForm]);
+  }, [stepsData]);
 
   return (
     <Sheet open={openEdit} onOpenChange={setOpenEdit}>
@@ -133,6 +110,11 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
                       type: "registering",
                       order: prev.length + 1,
                       description: null,
+                      id: 0,
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      isDeleted: false,
+                      fkFlowId: data.id,
                     },
                   ]);
                 }}
@@ -161,7 +143,7 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
                           ...prev.slice(0, index),
                           {
                             ...prev[index],
-                            type: value,
+                            type: value as any,
                           },
                           ...prev.slice(index + 1),
                         ]);

@@ -1,5 +1,5 @@
 {
-  "id": "383fdae3-7108-4836-b497-c0028b0d2696",
+  "id": "2c3c8669-3577-4477-951b-5ac58a2f00fc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -514,7 +514,16 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "user_point_fk_user_flow_id_fk_problem_id_unique": {
+          "name": "user_point_fk_user_flow_id_fk_problem_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "fk_user_flow_id",
+            "fk_problem_id"
+          ]
+        }
+      }
     }
   },
   "enums": {

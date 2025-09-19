@@ -39,20 +39,54 @@ export const MarkProblemTable = ({
     }
   }, [problems]);
 
+  const batchUpsertPoint = async (values: Array<InferSelectModel<typeof userPoint>>) => {
+    const response = await fetch('/api/user-point', {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'batch',
+        data: values,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || '批量更新失败');
+    }
+
+    return response.json();
+  };
+
+  const upsertPoint = async (userFlowId: number, problemId: number, point: number) => {
+    const response = await fetch('/api/user-point', {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'single',
+        data: { userFlowId, problemId, point },
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || '更新失败');
+    }
+
+    return response.json();
+  };
+
   const handleSave = (problemPoints: Array<InferSelectModel<typeof userPoint>>) => {
-    // toast.promise(batchUpsert(problemPoints), {
-    //   loading: '保存中...',
-    //   success: '保存成功',
-    //   error: '保存失败',
-    // });
+    toast.promise(batchUpsertPoint(problemPoints), {
+      loading: '保存中...',
+      success: '保存成功',
+      error: '保存失败',
+    });
   };
 
   const handleUpdate = (index: number, score: number) => {
-    // toast.promise(upsert(flowStepId, problems[index].id, score, new Date()), {
-    //   loading: '更新中...',
-    //   success: '更新成功',
-    //   error: '更新失败',
-    // });
+    toast.promise(upsertPoint(flowId, problems[index].id, score), {
+      loading: '更新中...',
+      success: '更新成功',
+      error: '更新失败',
+    });
   };
 
   return (
@@ -93,7 +127,7 @@ export const MarkProblemTable = ({
                       id={`problem-score-${problems[index]?.id}`}
                       type="number"
                       max={problems[index]?.maxPoint}
-                      // min={0}
+                      min={0}
                       value={problemPoint.points}
                       onChange={(e) => {
                         const newProblemPoints = [...problemPoints];

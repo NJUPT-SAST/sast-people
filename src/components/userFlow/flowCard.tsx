@@ -78,7 +78,7 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 			</CardHeader>
 			<CardContent>
 				<div className="flex items-center justify-between relative my-5">
-					{/* 背景横线 */}
+					{/* TODO: 需要重新适配新数据结构 */}
 					<div className="absolute top-1/2 left-0 right-0 h-0.5 bg-muted z-10"></div>
 					{flow.steps.map((step, index) => {
 						const status = step?.order && step.order < currentStepOrder ? 'accepted' : step.order === currentStepOrder ? 'ongoing' : 'pending';
@@ -86,10 +86,7 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 							statusIcons[status as keyof typeof statusIcons] ||
 							AlertCircle;
 						const nextStatus =
-							index < currentStepOrder-1
-								? flow.status
-								: null;
-
+							flow.status === 'accepted' || flow.status === 'rejected' ? flow.status : step.order < currentStepOrder ? 'accepted' : 'pending';
 						return (
 							<React.Fragment key={`${flow.id}-${index}-step`}>
 								<HoverCard openDelay={100}>

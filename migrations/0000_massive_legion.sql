@@ -80,7 +80,8 @@ CREATE TABLE IF NOT EXISTS "user_point" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"fk_user_flow_id" integer NOT NULL,
 	"fk_problem_id" integer NOT NULL,
-	"points" integer NOT NULL
+	"points" integer NOT NULL,
+	CONSTRAINT "user_point_fk_user_flow_id_fk_problem_id_unique" UNIQUE("fk_user_flow_id","fk_problem_id")
 );
 --> statement-breakpoint
 DO $$ BEGIN

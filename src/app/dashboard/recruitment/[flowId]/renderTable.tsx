@@ -5,6 +5,7 @@ import React from 'react';
 
 export const RenderTable = async ({ flowId }: { flowId: string }) => {
   const data = await calScore(parseInt(flowId));
+  console.log(data);
   return (
     <>
       <p className="text-muted-foreground">

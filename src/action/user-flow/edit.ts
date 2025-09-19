@@ -4,7 +4,7 @@ import { db } from '@/db/drizzle';
 import { flow, flowStep, userFlow } from '@/db/schema';
 // TODO: for some status, send email to user
 // import eventManager from '@/event';
-import { verifyRole } from '@/lib/dal';
+import { verifyRole, verifySession } from '@/lib/dal';
 import { and, asc, desc, eq, gt, inArray, lt, lte, sql } from 'drizzle-orm';
 
 export const forward = async (
@@ -51,6 +51,8 @@ export const batchUpdate = async (
   currentStepOrder: number,
 ) => {
   await verifyRole(1);
+  const user = await verifySession();
+  console.log(user.name, "batchUpdate", flowId, currentStepOrder);
   await db.update(userFlow).set({currentStepOrder: currentStepOrder}).where(eq(userFlow.fkFlowId, flowId));
 };
 

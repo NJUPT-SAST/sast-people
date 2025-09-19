@@ -7,14 +7,15 @@ import { Loading } from '@/components/loading';
 const RegisteredPersonTable = async ({
   params,
 }: {
-  params: {
+  params: Promise<{
     flowId: string;
-  };
+  }>;
 }) => {
+  const { flowId } = await params;
   return (
     <>
       <Suspense fallback={<Loading />}>
-        <RenderTable flowId={params.flowId} />
+        <RenderTable flowId={flowId} />
       </Suspense>
     </>
   );
