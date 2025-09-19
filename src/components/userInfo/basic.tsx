@@ -151,7 +151,7 @@ export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
                 <FormItem>
                   <FormLabel>学院</FormLabel>
                   <FormControl>
-                    <Select {...field} value={field.value || ""}>
+                    <Select value={field.value || ""} onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue placeholder="请选择你的学院" />
                       </SelectTrigger>

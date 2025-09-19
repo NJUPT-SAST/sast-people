@@ -53,7 +53,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center pt-10 gap-3">
+      <div className="flex items-center gap-3">
         <Input
           placeholder="筛选分数线"
           value={

@@ -1,5 +1,5 @@
 'use client';
-import { editExperience } from '@/action/user/userInfo';
+// import { editExperience } from '@/action/user/userInfo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createInsertSchema } from 'drizzle-zod';
 import { Button } from '@/components/ui/button';
@@ -28,20 +28,20 @@ import { userType } from '@/types/user';
 import { toast } from 'sonner';
 
 export const fullUserSchema = createInsertSchema(user, {
-  github: z
-    .string()
-    .url()
-    .transform((arg) => (arg ? arg : null)),
-  blog: z
-    .string()
-    .url()
-    .transform((arg) => (arg ? arg : null)),
-  personalStatement: z.string().transform((arg) => (arg ? arg : null)),
+  // github: z
+  //   .string()
+  //   .url()
+  //   .transform((arg) => (arg ? arg : null)),
+  // blog: z
+  //   .string()
+  //   .url()
+  //   .transform((arg) => (arg ? arg : null)),
+  // personalStatement: z.string().transform((arg) => (arg ? arg : null)),
 });
 export const experienceSchema = fullUserSchema.pick({
-  github: true,
-  blog: true,
-  personalStatement: true,
+  // github: true,
+  // blog: true,
+  // personalStatement: true,
 });
 export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
   const basicInfoForm = useForm<z.infer<typeof experienceSchema>>({
@@ -62,7 +62,7 @@ export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...basicInfoForm}>
+        {/* <Form {...basicInfoForm}>
           <div className="space-y-2">
             <FormField
               control={basicInfoForm.control}
@@ -120,12 +120,12 @@ export const ExperienceInfo = ({ initialInfo }: { initialInfo: userType }) => {
               )}
             />
           </div>
-        </Form>
+        </Form> */}
       </CardContent>
       <CardFooter>
         <Button
           onClick={basicInfoForm.handleSubmit(async (val) => {
-            await editExperience(val);
+            // await editExperience(val);
             toast.success('个人信息保存成功');
           })}
           disabled={isSubmitting}

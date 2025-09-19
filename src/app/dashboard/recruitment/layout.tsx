@@ -1,7 +1,3 @@
-import { SelectFlow } from '@/components/recruitment/selectFlow';
-import { PageTitle } from '@/components/route';
-import { useFlowTypeList } from '@/hooks/useFlowList';
-
 const RecruitmentLayout = async ({
   children,
 }: {

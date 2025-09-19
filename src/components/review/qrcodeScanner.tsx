@@ -103,7 +103,7 @@ const QRCodeScanner = () => {
           </div>
         </div>
       )}
-      <video ref={ref} className="rounded-lg w-full h-full object-cover" />
+      <video ref={ref as React.RefObject<HTMLVideoElement>} className="rounded-lg w-full h-full object-cover" />
       <div
         onClick={() => setPaused(true)}
         className="absolute top-2 left-2 w-6 h-6 rounded-full flex items-center justify-center bg-white cursor-pointer opacity-50 hover:opacity-100"
