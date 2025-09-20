@@ -30,11 +30,20 @@ export const FlowTableColumns: ColumnDef<displayFlow>[] = [
     accessorFn: (data) => data.description,
   },
   {
-    accessorKey: 'createdAt',
-    header: '创建时间',
-    accessorFn: (data) => data.createdAt,
+    accessorKey: 'startedAt',
+    header: '开始时间',
+    accessorFn: (data) => data.startedAt,
     cell({ row }) {
-      const time = row.getValue('createdAt') as Date;
+      const time = row.getValue('startedAt') as Date;
+      return originalDayjs(time).format('YYYY-MM-DD HH:mm:ss');
+    },
+  },
+  {
+    accessorKey: 'endedAt',
+    header: '结束时间',
+    accessorFn: (data) => data.endedAt,
+    cell({ row }) {
+      const time = row.getValue('endedAt') as Date;
       return originalDayjs(time).format('YYYY-MM-DD HH:mm:ss');
     },
   },

@@ -14,6 +14,8 @@ export async function addFlow(values: z.infer<typeof addFlowSchema>) {
     title: values.title,
     description: values.description,
     ownerId: session.uid,
+    startedAt: values.startedAt,
+    endedAt: values.endedAt,
   });
 
   revalidatePath('/dashboard/flow');
