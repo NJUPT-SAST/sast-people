@@ -35,12 +35,12 @@ const menuItems = [
     path: '/manage',
   },
   {
-    title: '招新成绩管理',
+    title: '招新成绩',
     icon: ArrowDownWideNarrow,
     path: '/recruitment',
   },
   {
-    title: '流程类别管理',
+    title: '流程管理',
     icon: SquareChartGantt,
     path: '/flow',
   },

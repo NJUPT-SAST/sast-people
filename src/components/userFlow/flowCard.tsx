@@ -145,11 +145,11 @@ export const FlowCard: React.FC<FlowCardProps> = async ({ flow }) => {
 					})}
 				</div>
 				<p className="mt-4 text-sm text-muted-foreground">
-					当前步骤: {flow.steps[currentStepOrder-1].title}
+					当前步骤: {flow.steps[currentStepOrder-1]?.title || "（流程未开始）"}
 				</p>
 				<p className="mt-2 text-xs text-muted-foreground">
 					{flow.steps[currentStepOrder-1]?.description ||
-						"流程已结束"}
+						"前面的区域以后再来探索吧"}
 				</p>
 			</CardContent>
 		</Card>

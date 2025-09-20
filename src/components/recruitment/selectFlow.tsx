@@ -24,7 +24,7 @@ export const SelectFlow = ({
       defaultValue={defaultFlowTypeId}
     >
       <SelectTrigger className="w-[220px]">
-        <SelectValue placeholder="请选择需要操作的流程类别" />
+        <SelectValue placeholder="请选择需要操作的类别" />
       </SelectTrigger>
       <SelectContent>
         {flowTypes.map((flowType) => (

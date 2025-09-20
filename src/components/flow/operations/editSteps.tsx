@@ -22,10 +22,12 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { updateFlowStep } from '@/action/flow/flow-step/update';
 import { updateFlow } from '@/action/flow/update';
 import { displayFlow } from '@/types/flow';
 import { useFlowStepsInfoClient } from '@/hooks/useFlowStepsInfoClient';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DateTimeInput } from '@/components/ui/datetime-input';
 import { batchUpdate } from '@/action/user-flow/edit';
 
 export const EditSteps = ({ data }: { data: displayFlow }) => {
@@ -34,6 +36,8 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
     defaultValues: {
       title: data.title || '',
       description: data.description || '',
+      startedAt: data.startedAt,
+      endedAt: data.endedAt,
       id: data.id,
     },
   });
@@ -98,6 +102,57 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={editFlowForm.control}
+              name="startedAt"
+              disabled={isSubmitting}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>开始时间</FormLabel>
+                  <FormControl>
+                    <DateTimeInput {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={editFlowForm.control}
+              name="endedAt"
+              disabled={isSubmitting}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>结束时间</FormLabel>
+                  <FormControl>
+                    <DateTimeInput {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* 保存流程元数据按钮 */}
+            <div className="flex justify-end mt-4 gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={isSubmitting}
+                onClick={() => {
+                  const values = editFlowForm.getValues();
+                  toast.promise(
+                    updateFlow(values.id!, values),
+                    {
+                      loading: '正在保存流程信息',
+                      success: `${values.title} 的基本信息已保存`,
+                      error: '保存流程信息时出现问题，请稍后重试',
+                    },
+                  );
+                }}
+              >
+                保存流程信息
+              </Button>
+            </div>
+
             <div className="flex justify-end mt-4">
               <Button
                 size="sm"
@@ -259,7 +314,6 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
               disabled={isSubmitting || stepList.length === 0}
               onClick={() => {
                 const values = editFlowForm.getValues();
-                console.debug(values);
                 const typedStepList = stepList.map(step => ({
                   ...step,
                   type: step.type as any
@@ -267,49 +321,19 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
                 console.debug(typedStepList);
                 toast.promise(
                   async () => {
-                    await updateFlow(values.id!, values, typedStepList);
+                    await updateFlowStep(values.id!, typedStepList);
                     setOpenEdit(false);
                     editFlowForm.reset();
                   },
                   {
-                    loading: '正在编辑',
-                    success: `${values.title} 已修改成功`,
-                    error: '修改的时候出现了问题，请稍后重试',
+                    loading: '正在保存步骤',
+                    success: `流程步骤已保存成功`,
+                    error: '保存步骤时出现了问题，请稍后重试',
                   },
                 );
-                // toast.promise(
-                //   updateFlow(values.id!, values, stepList),
-                //   {
-                //     loading: '正在编辑',
-                //     success: `${values.title} 已修改成功`,
-                //     error: '修改的时候出现了问题，请稍后重试',
-                //   },
-                // );
               }}
-              // onClick={editFlowForm.handleSubmit(async (val) => {
-              //   console.debug(stepList);
-              //   // 转换stepList为stepType[]
-              //   const typedStepList = stepList.map(step => ({
-              //     ...step,
-              //     type: step.type as any
-              //   })) as stepType[];
-
-              //   toast.promise(
-              //     async () => {
-              //       await updateFlow(val.id!, val, typedStepList).then(() => {
-              //         setOpenEdit(false);
-              //         editFlowForm.reset();
-              //       });
-              //     },
-              //     {
-              //       loading: '正在编辑',
-              //       success: `${val.title} 已修改成功`,
-              //       error: '修改的时候出现了问题，请稍后重试',
-              //     },
-              //   );
-              // })}
             >
-              确认修改
+              保存步骤
             </Button>
           </SheetFooter>
         </Form>

@@ -8,6 +8,7 @@ import eventManager from "@/event";
 
 export const register = async (flowId: number, uid: number) => {
   return await db.transaction(async (tx) => {
+    // 检查用户是否已经报名
     const existingFlow = await db
       .select({ id: userFlow.id })
       .from(userFlow)
@@ -16,6 +17,32 @@ export const register = async (flowId: number, uid: number) => {
 
     if (existingFlow.length > 0) {
       throw new Error("您已经报名了这个流程");
+    }
+
+    // 检查流程时间限制
+    const flowInfo = await db
+      .select({ 
+        startedAt: flow.startedAt, 
+        endedAt: flow.endedAt,
+        title: flow.title 
+      })
+      .from(flow)
+      .where(eq(flow.id, flowId))
+      .limit(1);
+
+    if (flowInfo.length === 0) {
+      throw new Error("流程不存在");
+    }
+
+    const now = new Date();
+    const { startedAt, endedAt, title } = flowInfo[0];
+
+    if (now < startedAt) {
+      throw new Error(`流程"${title}"尚未开始，开始时间为 ${startedAt.toLocaleString('zh-CN')}`);
+    }
+
+    if (now > endedAt) {
+      throw new Error(`流程"${title}"已结束，结束时间为 ${endedAt.toLocaleString('zh-CN')}`);
     }
 
     const userPhoneNumber = (
