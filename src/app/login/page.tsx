@@ -1,15 +1,9 @@
-import { FeishuRedirect, FeishuSDKInject } from '@/components/feishuInject';
+import { FeishuRedirect } from '@/components/feishuInject';
+import { LinkLogin } from '@/components/linkLogin';
 import BlurIn from '@/components/magicui/blur-in';
 import FlickeringGrid from '@/components/magicui/flickering-grid';
 import { TestLogin } from '@/components/testLogin';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import Link from 'next/link';
-import { SHA256 } from 'crypto-js';
-import { cookies } from 'next/headers';
-import { getCurrentRedirectUri, useCodeChallenge } from '@/action/user/link';
-import { redirect } from 'next/navigation';
-import { LinkLogin } from '@/components/linkLogin';
 
 const Login = async () => {
   return (
@@ -48,7 +42,7 @@ const Login = async () => {
             <div className="text-2xl font-semibold">登录到 SAST Pass</div>
             <div className="text-sm text-gray-500">开启你的科协之旅</div>
           </div>
-          <LinkLogin />
+          <LinkLogin isBinding={false} />
           {process.env.NODE_ENV === 'development' && <TestLogin />}
         </div>
       </div>

@@ -101,6 +101,7 @@ export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
                       placeholder="请填写你的学号"
                       {...field}
                       value={field.value || ""}
+                      disabled
                     />
                   </FormControl>
                   <FormMessage />

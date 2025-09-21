@@ -3,7 +3,11 @@ import { loginFromX } from "@/action/user/auth";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { get_user_access_token, get_user_info } from "@/action/user/link";
+import {
+  bindingLinkAccount,
+  get_user_access_token,
+  get_user_info,
+} from "@/action/user/link";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -34,11 +38,17 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-  await loginFromX(
-    params.userId.toUpperCase(),
-    params.userId.toUpperCase(),
-    "link"
-  );
+  if (cookieStore.get("is_binding")?.value === "1") {
+    cookieStore.delete("is_binding");
+    await bindingLinkAccount(params.userId.toUpperCase());
+  } else {
+    await loginFromX(
+      params.userId.toUpperCase(),
+      params.userId.toUpperCase(),
+      "link"
+    );
+  }
+
   // } catch (err) {
   // 	return NextResponse.json(
   // 		{ message: "feishu auth failed" },

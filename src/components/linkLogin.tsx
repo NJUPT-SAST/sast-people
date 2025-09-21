@@ -4,12 +4,12 @@ import { Button } from './ui/button';
 import Image from 'next/image';
 import { redirectSASTLink } from '@/action/user/link';
 
-export const LinkLogin = () => {
+export const LinkLogin = ({ isBinding }: { isBinding: boolean }) => {
   return (
     <Button
       className="py-6 px-12 text-white"
-      onClick={async () => redirectSASTLink()}
-    >
+      onClick={async () => redirectSASTLink(isBinding)}
+   >
       <Image
         width={25}
         height={25}

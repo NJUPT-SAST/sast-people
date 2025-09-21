@@ -1,12 +1,16 @@
 "use server";
 
-import { SHA256 } from "crypto-js";
-import crypto from "node:crypto";
+import { db } from "@/db/drizzle";
+import { flow, user, userFlow } from "@/db/schema";
+import { verifyRole } from "@/lib/dal";
+import { userType } from "@/types/user";
+import { eq, or } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import crypto from "node:crypto";
 
-export async function redirectSASTLink() {
-  const code_challenge = await useCodeChallenge();
+export async function redirectSASTLink(isBinding: boolean) {
+  const code_challenge = await useCodeChallenge(isBinding);
   const redirect_uri = await getCurrentRedirectUri();
   const url = `https://link.sast.fun/auth?client_id=${
     process.env.LINK_CLIENT_ID
@@ -62,11 +66,14 @@ function sha256(buffer: Buffer | string) {
   return crypto.createHash("sha256").update(buffer).digest();
 }
 
-export async function useCodeChallenge() {
+export async function useCodeChallenge(isBinding: boolean) {
   const code_verifier = base64URLEncode(crypto.randomBytes(32));
   const cookieStore = await cookies();
   const code_challenge = base64URLEncode(sha256(code_verifier));
   cookieStore.set("link_code_verifier", code_verifier);
+  if (isBinding) {
+    cookieStore.set("is_binding", "1");
+  }
   return code_challenge;
 }
 
@@ -76,4 +83,95 @@ export async function getCurrentRedirectUri() {
       ? "http://localhost:3001"
       : "https://people.sast.fun") + "/api/auth/link"
   );
+}
+
+export async function bindingLinkAccount(studentId: string) {
+  const session = await verifyRole(1);
+  await db.transaction(async (tx) => {
+    console.debug("binding link account", studentId);
+    let uidList: Partial<userType>[] | null = null;
+    uidList = await tx
+      .select({
+        id: user.id,
+        linkOpenid: user.linkOpenid,
+        studentId: user.studentId,
+        email: user.email,
+        phone: user.phone,
+        college: user.college,
+        major: user.major,
+        isDeleted: user.isDeleted,
+        role: user.role,
+      })
+      .from(user)
+      .where(
+        or(eq(user.id, session?.uid as number), eq(user.linkOpenid, studentId))
+      );
+    if (!uidList || uidList.length === 0) {
+      throw new Error("User not found");
+    } else if (uidList.length === 1) {
+      if (uidList[0].id !== session?.uid) {
+        throw new Error("Unknown feishu user");
+      }
+      if (uidList[0].linkOpenid === studentId) {
+        console.debug("this link account has already been bound", studentId);
+        return;
+      }
+      if (uidList[0].linkOpenid === null) {
+        console.debug("binding link account update", studentId);
+        await tx
+          .update(user)
+          .set({
+            linkOpenid: studentId,
+            studentId: studentId,
+            updatedAt: new Date(),
+          })
+          .where(eq(user.id, uidList[0].id as number));
+      }
+    } else if (uidList.length === 2) {
+      console.debug("binding link account merge", studentId);
+      let feishuUser: Partial<userType> | null = null;
+      let linkUser: Partial<userType> | null = null;
+      if (uidList[0].linkOpenid === studentId) {
+        feishuUser = uidList[1];
+        linkUser = uidList[0];
+      } else {
+        feishuUser = uidList[0];
+        linkUser = uidList[1];
+      }
+      if (feishuUser.id !== session?.uid) {
+        throw new Error("Unknown feishu user");
+      }
+      const flowIds = await tx
+        .select()
+        .from(flow)
+        .where(eq(flow.ownerId, linkUser?.id as number));
+      if (flowIds.length > 0) {
+        throw new Error(
+          "This Link account has created flows, cannot be merged, please contact admin"
+        );
+      }
+      await tx
+        .update(userFlow)
+        .set({ fkUserId: feishuUser?.id as number })
+        .where(eq(userFlow.fkUserId, linkUser?.id as number));
+      await tx.delete(user).where(eq(user.id, linkUser?.id as number));
+      await tx
+        .update(user)
+        .set({
+          linkOpenid: studentId,
+          studentId: studentId,
+          email: linkUser.email,
+          phone: linkUser.phone,
+          college: linkUser.college,
+          major: linkUser.major,
+          updatedAt: new Date(),
+        })
+        .where(eq(user.id, session?.uid as number));
+    } else {
+      throw new Error(
+        "User merge error, too many users, please contact admin, uid:" +
+          session?.uid
+      );
+    }
+  });
 }

@@ -1,12 +1,11 @@
 "use server";
 import { basicInfoSchema } from "@/components/userInfo/basic";
-import { experienceSchema } from "@/components/userInfo/experience";
-import { verifyRole, verifySession } from "@/lib/dal";
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
+import { verifySession } from "@/lib/dal";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 export async function editBasicInfo(values: z.infer<typeof basicInfoSchema>) {
   const session = await verifySession();
@@ -14,7 +13,11 @@ export async function editBasicInfo(values: z.infer<typeof basicInfoSchema>) {
   await db
     .update(user)
     .set({
-      ...values,
+      name: values.name,
+      phone: values.phone,
+      email: values.email,
+      college: values.college,
+      major: values.major,
       updatedAt: new Date(),
     })
     .where(eq(user.id, session.uid));
@@ -37,7 +40,7 @@ export async function editBasicInfoByUid(
   await db
     .update(user)
     .set({
-			...values,
+      ...values,
       updatedAt: new Date(),
     })
     .where(eq(user.id, uid));

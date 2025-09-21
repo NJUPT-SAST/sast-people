@@ -27,7 +27,7 @@ export async function loginFromX(
           updatedAt: new Date(),
         })
         .returning({
-          uid: user.id,
+          id: user.id,
           isDeleted: user.isDeleted,
           role: user.role,
         });
@@ -59,7 +59,7 @@ export async function loginFromX(
           updatedAt: new Date(),
         })
         .returning({
-          uid: user.id,
+          id: user.id,
           isDeleted: user.isDeleted,
           role: user.role,
         });
