@@ -1,5 +1,6 @@
 "use server";
 
+import { IS_BINDING } from "@/const/cookie";
 import { db } from "@/db/drizzle";
 import { flow, user, userFlow } from "@/db/schema";
 import { verifyRole } from "@/lib/dal";
@@ -72,7 +73,7 @@ export async function useCodeChallenge(isBinding: boolean) {
   const code_challenge = base64URLEncode(sha256(code_verifier));
   cookieStore.set("link_code_verifier", code_verifier);
   if (isBinding) {
-    cookieStore.set("is_binding", "1");
+    cookieStore.set(IS_BINDING, "1");
   }
   return code_challenge;
 }

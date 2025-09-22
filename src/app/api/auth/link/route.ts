@@ -1,13 +1,14 @@
-import "server-only";
 import { loginFromX } from "@/action/user/auth";
-import { redirect } from "next/navigation";
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import {
   bindingLinkAccount,
   get_user_access_token,
   get_user_info,
 } from "@/action/user/link";
+import { IS_BINDING } from "@/const/cookie";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { NextRequest, NextResponse } from "next/server";
+import "server-only";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -38,8 +39,8 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-  if (cookieStore.get("is_binding")?.value === "1") {
-    cookieStore.delete("is_binding");
+  if (cookieStore.get(IS_BINDING)?.value === "1") {
+    cookieStore.delete(IS_BINDING);
     await bindingLinkAccount(params.userId.toUpperCase());
   } else {
     await loginFromX(

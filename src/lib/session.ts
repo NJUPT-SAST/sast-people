@@ -1,3 +1,4 @@
+import { SESSION } from "@/const/cookie";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import "server-only";
@@ -32,7 +33,10 @@ export async function decrypt(session: string | undefined = "") {
 }
 
 export async function createSession(uid: number, name: string, role: number) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  let expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  if (role === 0) {
+    expiresAt = new Date(Date.now() + 12 * 60 * 60 * 1000);
+  }
   const session = await encrypt({
     uid,
     expiresAt,
@@ -41,7 +45,7 @@ export async function createSession(uid: number, name: string, role: number) {
   });
 
   const cookieStore = await cookies();
-  cookieStore.set("session", session, {
+  cookieStore.set(SESSION, session, {
     httpOnly: httpOnly,
     secure: true,
     expires: expiresAt,
@@ -52,12 +56,12 @@ export async function createSession(uid: number, name: string, role: number) {
 
 export async function deleteSession() {
   const cookieStore = await cookies();
-  cookieStore.delete("session");
+  cookieStore.delete(SESSION);
 }
 
 export async function updateSession() {
   const cookieStore = await cookies();
-  const session = cookieStore.get("session")?.value;
+  const session = cookieStore.get(SESSION)?.value;
   const payload = await decrypt(session);
 
   if (!session || !payload) {
@@ -65,7 +69,7 @@ export async function updateSession() {
   }
 
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  cookieStore.set("session", session, {
+  cookieStore.set(SESSION, session, {
     httpOnly: true,
     secure: true,
     expires: expires,

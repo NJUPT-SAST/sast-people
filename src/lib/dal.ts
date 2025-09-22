@@ -4,10 +4,11 @@ import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
 import { cache } from "react";
 import { redirect } from "next/navigation";
+import { SESSION } from "@/const/cookie";
 
 export const verifySession = cache(async () => {
   const cookieStore = await cookies();
-  const cookie = cookieStore.get("session")?.value;
+  const cookie = cookieStore.get(SESSION)?.value;
   const session = await decrypt(cookie);
 
   if (!session?.uid) {

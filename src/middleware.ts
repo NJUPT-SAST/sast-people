@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/lib/session";
 import { cookies } from "next/headers";
+import { SESSION } from "./const/cookie";
 
 // 1. Specify protected and public routes
 const protectedRoutes = ["/dashboard"];
@@ -14,7 +15,7 @@ export default async function middleware(req: NextRequest) {
 
   // 3. Decrypt the session from the cookie
   const cookieStore = await cookies();
-  const cookie = cookieStore.get("session")?.value;
+  const cookie = cookieStore.get(SESSION)?.value;
   const session = await decrypt(cookie);
 
   // 4. Get more information about the request
