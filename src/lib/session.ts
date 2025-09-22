@@ -5,6 +5,8 @@ import "server-only";
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
+const httpOnly = process.env.NODE_ENV === "production" ? true : false;
+
 export async function encrypt(payload: {
   role: number;
   uid: number;
@@ -40,7 +42,7 @@ export async function createSession(uid: number, name: string, role: number) {
 
   const cookieStore = await cookies();
   cookieStore.set("session", session, {
-    httpOnly: true,
+    httpOnly: httpOnly,
     secure: true,
     expires: expiresAt,
     sameSite: "lax",
