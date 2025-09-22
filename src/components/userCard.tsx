@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from './ui/button';
-import { toast } from 'sonner';
 import {
   Card,
   CardHeader,
@@ -9,9 +8,6 @@ import {
   CardContent,
 } from './ui/card';
 import { verifySession } from '@/lib/dal';
-import { logout } from '@/action/user/auth';
-import { redirect } from 'next/navigation';
-import axios from 'axios';
 import Link from 'next/link';
 
 export const UserCard: React.FC = async () => {

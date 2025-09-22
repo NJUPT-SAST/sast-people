@@ -28,6 +28,7 @@ export async function loginFromX(
         })
         .returning({
           id: user.id,
+          name: user.name,
           isDeleted: user.isDeleted,
           role: user.role,
         });
@@ -37,6 +38,7 @@ export async function loginFromX(
     uidList = await db
       .select({
         id: user.id,
+        name: user.name,
         linkOpenid: user.linkOpenid,
         isDeleted: user.isDeleted,
         role: user.role,
@@ -60,6 +62,7 @@ export async function loginFromX(
         })
         .returning({
           id: user.id,
+          name: user.name,
           isDeleted: user.isDeleted,
           role: user.role,
         });
@@ -80,7 +83,7 @@ export async function loginFromX(
     console.debug('login success', uidList[0]);
     await createSession(
       uidList[0].id as number,
-      userIdentifier,
+      uidList[0].name || userIdentifier,
       uidList[0].role || 0,
     );
   } else {
