@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main # 当代码推送到 main 分支时触发
-      - cicd # 当代码推送到 cicd 分支时触发
+      - v2 # 当代码推送到 v2 分支时触发
 
 env:
   SERVICE_NAME: sast-people
