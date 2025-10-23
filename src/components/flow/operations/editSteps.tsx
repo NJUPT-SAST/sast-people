@@ -266,8 +266,8 @@ export const EditSteps = ({ data }: { data: displayFlow }) => {
                           batchUpdate(stepData.fkFlowId, stepData.order),
                           {
                             loading: '正在将所有人设置到该步骤',
-                            success: '设置成功',
-                            error: '设置失败',
+                            success: '所有人已设置到该步骤',
+                            error: '将所有人设置到该步骤时出错',
                           },
                         );
                       }}

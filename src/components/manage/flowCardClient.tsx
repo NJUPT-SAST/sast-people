@@ -225,7 +225,7 @@ export const FlowCard = ({ flow }: FlowCardProps) => {
             </p>
           </div>
           <div className="space-x-3">
-            {flow.status === 'ongoing' || flow.status === 'pending' ? (
+            {flow.status === 'accepted' || flow.status === 'rejected' ? (
               <Button
                 disabled={loading}
                 variant="secondary"
