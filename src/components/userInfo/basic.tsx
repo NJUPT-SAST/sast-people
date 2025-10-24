@@ -194,11 +194,19 @@ export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
         <Button
           onClick={basicInfoForm.handleSubmit(async () => {
             const val = basicInfoForm.getValues();
-            toast.promise(editBasicInfo(val), {
-              loading: "正在保存",
-              success: "个人信息保存成功",
-              error: "个人信息保存失败",
-            });
+            toast.promise(
+              (async () => {
+                const result = await editBasicInfo(val);
+                if (!result.success) {
+                  throw new Error("个人信息保存失败");
+                }
+              })(),
+              {
+                loading: "正在保存",
+                success: "个人信息保存成功",
+                error: "个人信息保存失败",
+              }
+            );
           })}
           loading={isSubmitting}
           disabled={isSubmitting}
