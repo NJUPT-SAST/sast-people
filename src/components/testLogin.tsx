@@ -19,14 +19,19 @@ export const TestLogin = () => {
         action={async (formdata) => {
           toast.promise(
             async () => {
-              await loginFromTest(formdata);
+              const result = await loginFromTest(formdata);
+              if (!result.success) {
+                throw new Error(result.error);
+              }
               router.push('/dashboard');
               return;
             },
             {
               loading: '登录中',
               success: '登录成功',
-              error: '登录失败, 请检查该学号是否已经拥有帐号',
+              error: (error) => {
+                return error instanceof Error ? error.message : '登录失败, 请检查该学号是否已经拥有帐号';
+              },
             },
           );
         }}

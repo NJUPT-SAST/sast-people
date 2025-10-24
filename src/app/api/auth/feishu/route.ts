@@ -10,24 +10,24 @@ export async function GET(request: NextRequest) {
   if (!code) {
     return NextResponse.json({ message: 'code is required' }, { status: 400 });
   }
-  // try {
-  const params = await get_user_access_token(code);
-  // const userInfoData = await get_user_info(
-  // 	params.user_access_token,
-  // 	params.open_id
-  // );
-  if (!params) {
+  
+  const paramsResult = await get_user_access_token(code);
+  if (!paramsResult.success) {
     return NextResponse.json(
-      { message: 'get user info failed' },
+      { message: paramsResult.error },
       { status: 500 },
     );
   }
-  await loginFromX(params.open_id, params?.name, 'feishu');
-  // } catch (err) {
-  // 	return NextResponse.json(
-  // 		{ message: "feishu auth failed" },
-  // 		{ status: 500 }
-  // 	);
-  // }
+  
+  const params = paramsResult.data;
+  
+  const loginResult = await loginFromX(params.open_id, params?.name, 'feishu');
+  if (!loginResult.success) {
+    return NextResponse.json(
+      { message: loginResult.error },
+      { status: 500 },
+    );
+  }
+  
   return redirect('/dashboard');
 }

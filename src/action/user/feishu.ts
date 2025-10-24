@@ -3,6 +3,7 @@ import * as lark from '@larksuiteoapi/node-sdk';
 import axios from 'axios';
 import SHA1 from 'crypto-js/sha1';
 import { cache } from 'react';
+import { ActionResult } from '@/types/action';
 const appId = process.env.APP_ID as string;
 const appSecret = process.env.APP_SECRET as string;
 const client = new lark.Client({
@@ -79,46 +80,53 @@ export async function getSignature(url: string) {
 export const get_user_access_token = cache(
   async (
     code: string,
-  ): Promise<{
+  ): Promise<ActionResult<{
     name: string;
     avatar: string;
     open_id: string;
     union_id: string;
     user_access_token: string;
-  }> => {
-    let data;
-    let appAccessToken = await getAppAccessToken();
-    await axios
-      .post(
-        'https://open.feishu.cn/open-apis/authen/v1/access_token',
-        {
-          grant_type: 'authorization_code',
-          code,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${appAccessToken}`,
+  }>> => {
+    try {
+      let data;
+      let appAccessToken = await getAppAccessToken();
+      await axios
+        .post(
+          'https://open.feishu.cn/open-apis/authen/v1/access_token',
+          {
+            grant_type: 'authorization_code',
+            code,
           },
-        },
-      )
-      .then((res) => {
-        // console.log(res.data)
-        data = {
-          name: res.data?.data?.name,
-          avatar: res.data?.data?.avatar_url,
-          open_id: res.data?.data?.open_id,
-          union_id: res.data?.data?.union_id,
-          user_access_token: res.data?.data?.access_token,
-        };
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    if (!data) {
-      throw new Error('get user access token failed');
+          {
+            headers: {
+              Authorization: `Bearer ${appAccessToken}`,
+            },
+          },
+        )
+        .then((res) => {
+          // console.log(res.data)
+          data = {
+            name: res.data?.data?.name,
+            avatar: res.data?.data?.avatar_url,
+            open_id: res.data?.data?.open_id,
+            union_id: res.data?.data?.union_id,
+            user_access_token: res.data?.data?.access_token,
+          };
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      if (!data) {
+        return { success: false, error: 'get user access token failed' };
+      }
+      console.log(data);
+      return { success: true, data };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'get user access token failed'
+      };
     }
-    console.log(data);
-    return data;
   },
 );
 
