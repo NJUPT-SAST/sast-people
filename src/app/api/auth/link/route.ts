@@ -35,12 +35,6 @@ export async function GET(request: NextRequest) {
   }
   
   const access_token = accessTokenResult.data;
-  if (!access_token) {
-    return NextResponse.json(
-      { message: "get user access token failed" },
-      { status: 500 }
-    );
-  }
   
   const params = await get_user_info(access_token);
   if (!params) {

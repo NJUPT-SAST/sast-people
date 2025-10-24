@@ -20,12 +20,6 @@ export async function GET(request: NextRequest) {
   }
   
   const params = paramsResult.data;
-  if (!params) {
-    return NextResponse.json(
-      { message: 'get user info failed' },
-      { status: 500 },
-    );
-  }
   
   const loginResult = await loginFromX(params.open_id, params?.name, 'feishu');
   if (!loginResult.success) {

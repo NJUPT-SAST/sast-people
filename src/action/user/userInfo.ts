@@ -9,22 +9,29 @@ import { z } from "zod";
 import { ActionResult } from "@/types/action";
 
 export async function editBasicInfo(values: z.infer<typeof basicInfoSchema>): Promise<ActionResult> {
-  const session = await verifySession();
+  try {
+    const session = await verifySession();
 
-  await db
-    .update(user)
-    .set({
-      name: values.name,
-      phone: values.phone,
-      email: values.email,
-      college: values.college,
-      major: values.major,
-      updatedAt: new Date(),
-    })
-    .where(eq(user.id, session.uid));
+    await db
+      .update(user)
+      .set({
+        name: values.name,
+        phone: values.phone,
+        email: values.email,
+        college: values.college,
+        major: values.major,
+        updatedAt: new Date(),
+      })
+      .where(eq(user.id, session.uid));
 
-  revalidatePath("/dashboard");
-  return { success: true };
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to update user info"
+    };
+  }
 }
 
 export async function editBasicInfoByUid(
