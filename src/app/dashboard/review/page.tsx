@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { MannualInput } from '@/components/review/mannualInput';
 import { SelectProblemServer } from './selectProblem';
 import { Loading } from '@/components/loading';
+import { SelectedRangeDisplay } from '@/components/review/selectedRangeDisplay';
 
 const Review: React.FC = async () => {
   return (
@@ -35,7 +36,12 @@ const Review: React.FC = async () => {
           </SheetContent>
         </Sheet>
       </div>
-      <div>
+      <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <SelectedRangeDisplay />
+          </CardHeader>
+        </Card>
         <Card>
           <CardHeader>
             <p className="text-muted-foreground text-sm">

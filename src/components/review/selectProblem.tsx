@@ -51,6 +51,7 @@ const SelectProblem = ({
     });
     if (res.success) {
       localStorage.setItem('people_selectedProbs', JSON.stringify(res.data));
+      window.dispatchEvent(new Event('reviewRangeUpdated'));
       toast.success('保存成功');
     } else {
       localStorage.removeItem('people_selectedProbs');

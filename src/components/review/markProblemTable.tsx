@@ -23,6 +23,7 @@ export const MarkProblemTable = ({
   const [problemPoints, setProblemPoints] =
     useState<Array<InferSelectModel<typeof userPoint>>>(points);
   const problems = useLocalProblemList();
+  
   useEffect(() => {
     const newProblemPoints: Array<InferSelectModel<typeof userPoint>> = [];
     problems.forEach((e) => {
@@ -37,7 +38,23 @@ export const MarkProblemTable = ({
     if (newProblemPoints.length > 0) {
       setProblemPoints(newProblemPoints);
     }
-  }, [problems]);
+  }, [problems, points, flowId]);
+
+  // If no problems selected, show message
+  if (problems.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>未设置阅卷范围</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">
+            请返回上一页设置阅卷范围后再开始阅卷。
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const batchUpsertPoint = async (values: Array<InferSelectModel<typeof userPoint>>) => {
     const response = await fetch('/api/user-point', {
