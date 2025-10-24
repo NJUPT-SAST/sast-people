@@ -198,13 +198,13 @@ export const BasicInfo = ({ initialInfo }: { initialInfo: userType }) => {
               (async () => {
                 const result = await editBasicInfo(val);
                 if (!result.success) {
-                  throw new Error("个人信息保存失败");
+                  throw new Error(result.error);
                 }
               })(),
               {
                 loading: "正在保存",
                 success: "个人信息保存成功",
-                error: "个人信息保存失败",
+                error: (err) => err instanceof Error ? err.message : "个人信息保存失败",
               }
             );
           })}
