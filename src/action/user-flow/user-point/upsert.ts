@@ -26,7 +26,12 @@ export const batchUpsertPoint = async (values: Array<InferInsertModel<typeof use
   const user = await verifySession();
   console.log(user.name, "batchUpsertPoint", values);
 
-  await db.insert(userPoint).values(values).onConflictDoUpdate({
+  // ignore id here to avoid (conflict but not exist)
+  await db.insert(userPoint).values(values.map(value => ({
+    fkUserFlowId: value.fkUserFlowId,
+    fkProblemId: value.fkProblemId,
+    points: value.points,
+  }))).onConflictDoUpdate({
     target: [userPoint.fkUserFlowId, userPoint.fkProblemId],
     set: {
       points: sql`excluded.points`
