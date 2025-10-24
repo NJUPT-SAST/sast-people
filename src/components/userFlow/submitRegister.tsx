@@ -35,25 +35,19 @@ const SubmitRegister = ({
       setIsSubmitting(true);
       toast.promise(
         (async () => {
-          try {
-            await register(selectedFlow, uid);
-            setOpen(false);
-            setSelectedFlow(null);
-          } catch (error) {
-            if (error instanceof Error) {
-              throw new Error(error.message);
-            } else {
-              throw new Error("报名失败，请稍后再试");
-            }
-          } finally {
-            setIsSubmitting(false);
+          const result = await register(selectedFlow, uid);
+          if (!result.success) {
+            throw new Error(result.error);
           }
+          setOpen(false);
+          setSelectedFlow(null);
+          setIsSubmitting(false);
         })(),
         {
           loading: '正在提交报名...',
           success: '报名成功',
           error: (error) => {
-            // 这里我们可以根据错误信息来显示不同的提示
+            setIsSubmitting(false);
             return error instanceof Error ? error.message : "报名失败，请稍后再试";
           },
         }

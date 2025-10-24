@@ -25,13 +25,23 @@ export async function GET(request: NextRequest) {
     );
   }
   cookieStore.delete("link_code_verifier");
-  const access_token = await get_user_access_token(code, code_verifier);
+  
+  const accessTokenResult = await get_user_access_token(code, code_verifier);
+  if (!accessTokenResult.success) {
+    return NextResponse.json(
+      { message: accessTokenResult.error },
+      { status: 500 }
+    );
+  }
+  
+  const access_token = accessTokenResult.data;
   if (!access_token) {
     return NextResponse.json(
       { message: "get user access token failed" },
       { status: 500 }
     );
   }
+  
   const params = await get_user_info(access_token);
   if (!params) {
     return NextResponse.json(
@@ -39,22 +49,29 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
+  
   if (cookieStore.get(IS_BINDING)?.value === "1") {
     cookieStore.delete(IS_BINDING);
-    await bindingLinkAccount(params.userId.toUpperCase());
+    const bindResult = await bindingLinkAccount(params.userId.toUpperCase());
+    if (!bindResult.success) {
+      return NextResponse.json(
+        { message: bindResult.error },
+        { status: 500 }
+      );
+    }
   } else {
-    await loginFromX(
+    const loginResult = await loginFromX(
       params.userId.toUpperCase(),
       params.userId.toUpperCase(),
       "link"
     );
+    if (!loginResult.success) {
+      return NextResponse.json(
+        { message: loginResult.error },
+        { status: 500 }
+      );
+    }
   }
 
-  // } catch (err) {
-  // 	return NextResponse.json(
-  // 		{ message: "feishu auth failed" },
-  // 		{ status: 500 }
-  // 	);
-  // }
   return redirect("/dashboard");
 }

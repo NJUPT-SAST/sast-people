@@ -166,11 +166,15 @@ export const EditUserInfoDialog = ({
           </DialogClose>
           <Button
             onClick={basicInfoForm.handleSubmit(async () => {
-              await editBasicInfoByUid(
+              const result = await editBasicInfoByUid(
                 userInfo.id as number,
                 basicInfoForm.getValues()
               );
-              toast.success(`${userInfo.name} 的信息保存成功`);
+              if (result.success) {
+                toast.success(`${userInfo.name} 的信息保存成功`);
+              } else {
+                toast.error(result.error);
+              }
             })}
             loading={isSubmitting}
             disabled={isSubmitting}
