@@ -41,6 +41,7 @@ const SelectProblem = ({
     setStepId(flowSteps.stepWithProblemId || 0);
     const probList = await useProblems(flowSteps.stepWithProblemId || 0);
     setProbList(probList);
+    setSelectedProbs([]);
   };
 
   const handleUpdateStorageProbs = () => {
