@@ -36,7 +36,10 @@ const SubmitRegister = ({
       toast.promise(
         (async () => {
           try {
-            await register(selectedFlow, uid);
+            const result = await register(selectedFlow, uid);
+            if ((result?.success ?? false) === false) {
+              throw Error(result?.error?.message ?? "服务器错误")
+            }
             setOpen(false);
             setSelectedFlow(null);
           } catch (error) {

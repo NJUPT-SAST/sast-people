@@ -16,33 +16,53 @@ export const register = async (flowId: number, uid: number) => {
       .limit(1);
 
     if (existingFlow.length > 0) {
-      throw new Error("您已经报名了这个流程");
+      return {
+        success: false,
+        error: {
+          message: "您已经报名了这个流程"
+        }
+      }
     }
 
     // 检查流程时间限制
     const flowInfo = await db
-      .select({ 
-        startedAt: flow.startedAt, 
+      .select({
+        startedAt: flow.startedAt,
         endedAt: flow.endedAt,
-        title: flow.title 
+        title: flow.title
       })
       .from(flow)
       .where(eq(flow.id, flowId))
       .limit(1);
 
     if (flowInfo.length === 0) {
-      throw new Error("流程不存在");
+      return {
+        success: false,
+        error: {
+          message: "流程不存在"
+        }
+      }
     }
 
     const now = new Date();
     const { startedAt, endedAt, title } = flowInfo[0];
 
     if (now < startedAt) {
-      throw new Error(`流程"${title}"尚未开始，开始时间为 ${startedAt.toLocaleString('zh-CN')}`);
+      return {
+        success: false,
+        error: {
+          message: `流程"${title}"尚未开始，开始时间为 ${startedAt.toLocaleString('zh-CN')}`
+        }
+      }
     }
 
     if (now > endedAt) {
-      throw new Error(`流程"${title}"已结束，结束时间为 ${endedAt.toLocaleString('zh-CN')}`);
+      return {
+        success: false,
+        error: {
+          message: `流程"${title}"已结束，结束时间为 ${endedAt.toLocaleString('zh-CN')}`
+        }
+      }
     }
 
     const userPhoneNumber = (
@@ -54,7 +74,12 @@ export const register = async (flowId: number, uid: number) => {
     )[0].phoneNumber;
 
     if (!userPhoneNumber) {
-      throw new Error("填写先个人信息");
+      return {
+        success: false,
+        error: {
+          message: "填写先个人信息"
+        }
+      }
     }
 
     const [newFlow] = await tx
@@ -69,5 +94,9 @@ export const register = async (flowId: number, uid: number) => {
 
     revalidatePath("/user-flow");
     eventManager.register(uid, flowId, newFlow.id);
+
+    return {
+      success: true
+    }
   });
 };
