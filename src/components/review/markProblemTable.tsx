@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { userPoint } from '@/db/schema';
 import { InferSelectModel } from 'drizzle-orm';
 
+// TODO: remove redundant variable `_` and relative logic to get it
 export const MarkProblemTable = ({
   points,
   flowId,
@@ -98,8 +99,8 @@ export const MarkProblemTable = ({
     });
   };
 
-  const handleUpdate = (index: number, score: number) => {
-    toast.promise(upsertPoint(flowId, problems[index].id, score), {
+  const handleUpdate = (flowId: number, problemId: number, score: number) => {
+    toast.promise(upsertPoint(flowId, problemId, score), {
       loading: '更新中...',
       success: '更新成功',
       error: '更新失败',
@@ -115,7 +116,7 @@ export const MarkProblemTable = ({
             <Button
               size="sm"
               onClick={async () => {
-                for( let i = 0; i < problemPoints.length; i++) {
+                for (let i = 0; i < problemPoints.length; i++) {
                   if (problemPoints[i].points < 0 || problemPoints[i].points > problems[i]?.maxPoint) {
                     toast.error(`更新失败，${problems[i]?.name}的得分必须在0到${problems[i]?.maxPoint}之间！`);
                     return;
@@ -138,7 +139,7 @@ export const MarkProblemTable = ({
                 <div className="flex flex-col gap-2">
                   <div>
                     <Label htmlFor={`problem-maxScore-${problems[index]?.id}`}>
-                    得分 (满分{problems[index]?.maxPoint}分)
+                      得分 (满分{problems[index]?.maxPoint}分)
                     </Label>
                     <Input
                       id={`problem-score-${problems[index]?.id}`}
@@ -162,7 +163,7 @@ export const MarkProblemTable = ({
                           if (problemPoints[index].points < 0 || problemPoints[index].points > problems[index]?.maxPoint)
                             toast.error(`更新失败，${problems[index]?.name}的得分必须在0到${problems[index]?.maxPoint}之间！`);
                           else {
-                            handleUpdate(index, problemPoints[index].points)
+                            handleUpdate(flowId, problems[index].id, problemPoints[index].points)
                           }
                         }
                       }

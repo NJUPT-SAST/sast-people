@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { checkUserWithSelectedProbs } from './checkUser';
 
 export const MannualInput = () => {
   const [studentId, setStudentId] = useState('');
@@ -41,9 +42,10 @@ export const MannualInput = () => {
         <div className="flex-none">
           <Button
             disabled={!studentId}
-            onClick={() =>
+            onClick={() => {
+              checkUserWithSelectedProbs(studentId);
               router.push(`/dashboard/review/marking?user=${studentId}`)
-            }
+            }}
             size="sm"
           >
             开始阅卷
