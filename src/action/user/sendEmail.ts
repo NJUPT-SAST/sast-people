@@ -1,11 +1,15 @@
-'use server';
-import { db } from '@/db/drizzle';
-import { flow, userFlow } from '@/db/schema';
-import event from '@/event';
-import { and, eq, inArray, isNull } from 'drizzle-orm';
+"use server";
+import { db } from "@/db/drizzle";
+import { flow, userFlow } from "@/db/schema";
+import event from "@/event";
+import { and, eq, ne, inArray, isNull } from "drizzle-orm";
 
-export const batchSendEmail = async (uid: number[], flowId: number, accept: boolean) => {
-  const flowIds = (
+export const batchSendEmail = async (
+  uid: number[],
+  flowId: number,
+  accept: boolean
+) => {
+  const userFlowIds = (
     await db
       .select()
       .from(userFlow)
@@ -13,11 +17,12 @@ export const batchSendEmail = async (uid: number[], flowId: number, accept: bool
         and(
           eq(userFlow.fkFlowId, flowId),
           inArray(userFlow.fkUserId, uid),
-          eq(userFlow.status, accept ? "ongoing" : "rejected"),
-        ),
+          ne(userFlow.status, "accepted"),
+          ne(userFlow.status, "rejected")
+        )
       )
   ).map((userFlow) => userFlow.id);
-  flowIds.forEach((flowId) => {
-    event.offer(flowId, accept);
+  userFlowIds.forEach((userFlowId) => {
+    event.offer(userFlowId, accept);
   });
 };

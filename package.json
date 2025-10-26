@@ -50,6 +50,7 @@
     "react-media-devices": "^1.2.1",
     "react-qr-code": "^2.0.16",
     "react-zxing": "^2.1.0",
+    "server-only": "^0.0.1",
     "sonner": "^1.7.4",
     "swr": "^2.3.4",
     "tailwind-merge": "^2.6.0",
