@@ -13,10 +13,10 @@ import { InferSelectModel } from 'drizzle-orm';
 
 export const MarkProblemTable = ({
   points,
-  flowId,
+  userFlowId: userFlowId,
 }: {
   points: Array<InferSelectModel<typeof userPoint>>;
-  flowId: number;
+  userFlowId: number;
 }) => {
   const studentId = useSearchParams().get('user');
 
@@ -30,7 +30,7 @@ export const MarkProblemTable = ({
       const index = points.findIndex((p) => p.fkProblemId === e.id);
       newProblemPoints.push({
         id: 0,
-        fkUserFlowId: flowId,
+        fkUserFlowId: userFlowId,
         fkProblemId: e.id,
         points: index === -1 ? 0 : points[index].points,
       });
@@ -38,7 +38,7 @@ export const MarkProblemTable = ({
     if (newProblemPoints.length > 0) {
       setProblemPoints(newProblemPoints);
     }
-  }, [problems, points, flowId]);
+  }, [problems, points, userFlowId]);
 
   // If no problems selected, show message
   if (problems.length === 0) {
@@ -99,7 +99,7 @@ export const MarkProblemTable = ({
   };
 
   const handleUpdate = (index: number, score: number) => {
-    toast.promise(upsertPoint(flowId, problems[index].id, score), {
+    toast.promise(upsertPoint(userFlowId, problems[index].id, score), {
       loading: '更新中...',
       success: '更新成功',
       error: '更新失败',
@@ -108,7 +108,7 @@ export const MarkProblemTable = ({
 
   return (
     <div className="space-x-2">
-      <Card key={flowId}>
+      <Card key={userFlowId}>
         <CardHeader>
           <CardTitle className="flex justify-between">
             <p>正在批改：{studentId}</p>
