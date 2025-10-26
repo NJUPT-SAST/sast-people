@@ -2,6 +2,7 @@
 import { db } from "@/db/drizzle";
 import { flow, userFlow } from "@/db/schema";
 import event from "@/event";
+import { verifyRole } from "@/lib/dal";
 import { and, eq, ne, inArray, isNull } from "drizzle-orm";
 
 export const batchSendEmail = async (
@@ -9,6 +10,7 @@ export const batchSendEmail = async (
   flowId: number,
   accept: boolean
 ) => {
+  await verifyRole(2)
   const userFlowIds = (
     await db
       .select()
