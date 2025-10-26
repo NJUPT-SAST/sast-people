@@ -62,6 +62,6 @@ export const batchEndByUid = async (
   statusStr: 'rejected' | 'accepted',
   uids: number[],
 ) => {
-  await verifyRole(1);
-  await db.update(userFlow).set({status: statusStr, currentStepOrder: currentStepOrder}).where(and(eq(userFlow.fkFlowId, flowId), inArray(userFlow.id, uids)));
+  await verifyRole(2);
+  await db.update(userFlow).set({status: statusStr, currentStepOrder: currentStepOrder}).where(and(eq(userFlow.fkFlowId, flowId), inArray(userFlow.fkUserId, uids)));
 };
