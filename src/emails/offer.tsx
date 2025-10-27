@@ -26,7 +26,7 @@ export const OfferEmail = ({ name, flowName, accept }: OfferEmailProps) => {
       <Body style={main}>
         <Container style={container}>
           <Img
-            src={`https://aliyun.sastimg.mxte.cc/images/2024/10/11/Frame-15341783402d1932190.png`}
+            src={`https://storage.sast.fun/sast-email-header.png`}
             width="300"
             alt="banner"
           />
@@ -35,34 +35,95 @@ export const OfferEmail = ({ name, flowName, accept }: OfferEmailProps) => {
             {accept ? (
               <>
                 <Text style={text}>
-                  恭喜你通过了 {flowName}
-                  &nbsp;，成功加入南京邮电大学大学生科学技术协会。我们看到了你对技术的热情，认可你的态度。希望在接下来的日子里，你能和志同道合的人在科协的丰富活动中做想做的事。
-                  今后，在这条路上，让我们一起学习共同进步，在自己所热爱的世界里闪闪发光。
+                  恭喜你顺利通过 {flowName}，正式成为南京邮电大学大学生科学技术协会的一员。
                 </Text>
                 <Text style={text}>
-                  请加入 SASTer 2024 新伙伴群：894545066 ，一起踏入新的旅途吧！
+                  我们欣赏你对技术的热情和积极的态度。在这里，希望你能与志同道合的伙伴们一起，将脑海中天马行空的创意变为现实，在项目实战中挑战自我，感受协同攻克难关的纯粹快乐。
                 </Text>
                 <Text style={text}>
-                  欢迎使用 SAST Evento 查看我们的日常授课与最新活动 &nbsp;
-                  <Link href="https://evento.sast.fun" style={anchor}>
-                    evento.sast.fun
+                  未来，让我们在这条路上共同学习、进步，在自己所热爱的世界里闪闪发光。
+                </Text>
+
+                <hr />
+
+                <Text style={importantText}>
+                  【重要步骤】<br />
+                  请注意：以下信息请勿向其他人分享
+                </Text>
+
+                <Text style={text}>
+                  1. 为完善你的成员信息，请务必在今日内填写社团管理系统成员信息收集表
+                </Text>
+                <Button
+                  style={button}
+                  href="https://njupt-sast.feishu.cn/share/base/form/shrcnfwRMIhYP8N2I1i4YaTNg9b">
+                  点击填写 成员信息收集表
+                </Button>
+
+                <Text style={text}>
+                  2. 请注册个人飞书账号（
+                  <Link href="https://www.feishu.cn/hc/zh-CN/articles/360045688853-%E6%B3%A8%E5%86%8C%E8%B4%A6%E5%8F%B7" style={anchor}>
+                    注册说明
                   </Link>
+                  ）并加入“SAST.2025 软多Family”飞书群，和学长及其他新成员一起交流
+                </Text>
+                <Button
+                  style={button}
+                  href="https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=1ack8f0f-dea7-494a-9d11-09873f28d150">
+                  点击加入 SAST.2025 软多Family
+                </Button>
+
+                <hr style={{ margin: '16px 0' }} />
+
+                <Text style={importantText}>
+                  【查看授课日历】
+                </Text>
+                <Text style={text}>
+                  通过个人飞书账号，订阅
+                  <Link href="https://www.feishu.cn/calendar/share/calendar?token=18E3hIfkra9WK2xhrs__6dsQmLD-cvf59shJz8ZEWoNQzRsv5VNz4ssCMIEaYP-yGTlM_or_eg==" style={anchor}>
+                    科协公开活动
+                  </Link>
+                  ，获取最新授课日历
+                </Text>
+
+                <hr />
+
+                <Text style={text}>
+                  我们真诚地欢迎你的加入！
                 </Text>
               </>
             ) : (
               <>
                 <Text style={text}>
-                  感谢你参加 {flowName}，你的卓越表现给我们留下了深刻的印象。
-                  经过慎重评估和综合考虑后，我们很遗憾地通知你，你未能通过我们的考核。这不代表我们否定你的技术能力，你的才华依然闪耀，
-                  我们同样在你身上看到了你对于技术的渴望和学习的热情。接下来的授课活动以及寒假的
-                  Winter of Code / Design
-                  活动依然向你开放。希望在接下来的日子里，你能保持对技术的热爱，再接再厉！
+                  感谢你参加 {flowName}，你在整个过程中的出色表现，以及展现出的技术才华和学习热情，给我们留下了深刻的印象。
                 </Text>
                 <Text style={text}>
-                  欢迎使用 SAST Evento 查看我们的日常授课与最新活动 &nbsp;
-                  <Link href="https://evento.sast.fun" style={anchor}>
-                    evento.sast.fun
+                  我们对每一位参与者都进行了慎重和综合的评估。经过艰难的抉择，我们很遗憾地通知你，本次未能通过我们的考核。我们深知这个结果可能会让你感到失望，但这绝非对你个人能力的否定，你的才华依然闪耀。
+                </Text>
+                <Text style={text}>
+                  我们希望这次经历不会影响你对技术的热爱，并诚挚地邀请你继续参加我们接下来的授课活动。此外，我们的“寒假大作战”活动也依然向你开放，这是你再次展示自己能力并加入我们的另一个机会。
+                </Text>
+                <Text style={text}>
+                  希望你能继续保持这份对技术的热忱，不断精进，再接再厉。我们期待在未来的活动中再次看到你的身影！
+                </Text>
+
+                <hr />
+
+                <Text style={importantText}>
+                  【查看授课日历】
+                </Text>
+                <Text style={text}>
+                  通过个人飞书账号，订阅
+                  <Link href="https://www.feishu.cn/calendar/share/calendar?token=18E3hIfkra9WK2xhrs__6dsQmLD-cvf59shJz8ZEWoNQzRsv5VNz4ssCMIEaYP-yGTlM_or_eg==" style={anchor}>
+                    科协公开活动
                   </Link>
+                  ，获取最新授课日历
+                </Text>
+
+                <hr />
+
+                <Text style={text}>
+                  再次感谢你的参与！
                 </Text>
               </>
             )}
@@ -80,7 +141,7 @@ export const OfferEmail = ({ name, flowName, accept }: OfferEmailProps) => {
             }}
           >
             <Img
-              src="https://aliyun.sastimg.mxte.cc/images/2023/07/21/Property-155f851395722ff55.png"
+              src="https://storage.sast.fun/sast-logo.png"
               width={70}
             />
           </Section>
@@ -118,17 +179,26 @@ const text = {
   lineHeight: '26px',
 };
 
+const importantText = {
+  fontSize: '16px',
+  fontFamily:
+    "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
+  fontWeight: '700',
+  color: '#404040',
+  lineHeight: '26px',
+};
+
 const button = {
   backgroundColor: '#17A34A',
-  borderRadius: '4px',
+  borderRadius: '12px',
   color: '#fff',
   fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
   fontSize: '15px',
   textDecoration: 'none',
   textAlign: 'center' as const,
   display: 'block',
-  width: '210px',
-  padding: '14px 7px',
+  width: 'fit-content',
+  padding: '14px 14px',
 };
 
 const anchor = {
